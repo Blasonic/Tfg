@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+* {
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.Contacto {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgba(0 0 0 / .8),rgba(0 0 0 / .8)),url(../../../public/imagenes/fotocontacto.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.contenedor{
+    display:grid;
+    grid-template-columns: repeat(2,50%);
+    padding:20px;
+    gap:10px;
+    width: 1000px;
+}
+
+.informacionContacto {
+    color:#fff;
+    display:flex;
+    flex-direction: column;
+    gap:50px;
+}
+
+.informacionContacto > h1 {
+    text-align: left;
+    letter-spacing: 5px;
+}
+
+
+.datosContacto {
+    display: flex;
+    flex-direction: column;
+    gap:25px
+}
+
+.datosContacto> p {
+    font-size: 1rem;
+}
+
+.datosContacto > p > i {
+    color:#AD8A1F;
+    margin-right: 10px;
+    font-size:25px;
+}
+
+
+
+.links {
+    display:flex;
+    gap:15px;
+}
+
+.links > a {
+    text-decoration: none;
+    color: #AD8A1F;
+    width: auto;
+    height: auto;
+    background: none;
+    text-align: center;
+    transition: .1s;
+}
+
+.links > a > i {
+    color:#AD8A1F;
+    line-height: 40px;
+    font-size: 20px;
+}
+
+form {
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+    gap:15px;
+}
+
+.input-box {
+    position:relative;
+}
+
+.input-box > input {
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    outline:none;
+    background: rgba(255 255 255 / .1);
+    border:3px solid transparent;
+    letter-spacing: 1px;
+    transition:.3s;
+    color:#fff;
+    
+}
+
+.input-box > input::placeholder,
+.input-box > textarea::placeholder {
+    color:#a3a3a3;
+    
+}
+
+.input-box > input:focus::placeholder,
+.input-box > textarea:focus::placeholder {
+    color:transparent;
+}
+
+.input-box > input:focus,
+.input-box > textarea:focus {
+    border-bottom:3px solid #AD8A1F;
+    animation: shake .2s;
+}
+
+.input-box > textarea {
+    width: 100%;
+    height: 130px;
+    padding: 10px;
+    background: rgba(255 255 255 / .1);
+    border:3px solid transparent;
+    letter-spacing: 1px;
+    outline: none;
+    transition:.3s;
+    color:#fff;
+    letter-spacing: 1.5px;
+}
+
+
+.input-box > i {
+    position:absolute;
+    top:50%;
+    transform: translateY(-50%);
+    right: 10px;
+    color:rgba(255 255 255 / .3);
+    transition: .3s;
+}
+
+.input-box > input:focus ~ i {
+    color:#AD8A1F;
+}
+
+form > button {
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    background: #AD8A1F;
+    color:#fff;
+    border:none;
+    transition: .1s;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+form > button:hover {
+    background: #7b6215;
+}
+.links > a:hover {
+    background: #d3bd7b;
+}

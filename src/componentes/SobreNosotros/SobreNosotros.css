@@ -1,0 +1,28 @@
+.sobre-nosotros {
+    background-color: #f9f9f9; 
+    color: black; 
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto; 
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    line-height: 1.6;
+  }
+  
+  .titulo-sobre-nosotros {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ad8a1f; 
+  }
+  
+  .parrafo-sobre-nosotros {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    text-align: justify;
+  }
+  
+  .parrafo-sobre-nosotros:last-child {
+    margin-bottom: 0;
+  }
