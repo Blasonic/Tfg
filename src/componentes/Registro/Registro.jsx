@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Registro.css';
 import { Link, useNavigate } from 'react-router-dom'; 
-import { registerUser } from '../../Serviciosback/servicio';
+import { registerUser } from '../../ServiciosBack/servicio';
 
 const Registro = () => {
   const navigate = useNavigate();
