@@ -1,0 +1,20 @@
+
+.zona-derecha ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .zona-derecha ul li {
+    margin-bottom: 10px;
+  }
+  
+  
+  .zona-derecha ul li button {
+    background-size: cover; 
+    font-size: 1em;
+    text-decoration: none;
+    font-weight: bold;
+    background: none; 
+    border: none;
+    color: rgb(24, 64, 61);
+  }

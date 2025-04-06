@@ -1,19 +1,17 @@
-import React from 'react'
-import './PoliticaCookies.css'
-import Header from '../Header/Header'
-import Nav from '../Nav/Nav'
-import Footer from '../Footer/Footer'
+import React from 'react';
+import './PoliticaCookies.css';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 function PoliticaCookies() {
   return (
     <div>
-        <Header/>
-        <Nav/>
+      <Header />
 
       <section className="politica-cookies">
-        <h1 className="titulo-politica-cookies">Política de Privacidad</h1>
+        <h1 className="titulo-politica-cookies">Política de Cookies</h1>
         <p className="parrafo-politica-cookies">
-          <strong>Zashop</strong>, informa al usuario de que, a través del presente sitio web, únicamente se tratan datos de
+          <strong>Planzo</strong>, informa al usuario de que, a través del presente sitio web, únicamente se tratan datos de
           carácter personal a los efectos de responder a las consultas remitidas por los usuarios y para gestionar la publicación
           de comentarios en nuestro blog. Al respecto:
         </p>
@@ -32,16 +30,15 @@ function PoliticaCookies() {
         </p>
         <p className="parrafo-politica-cookies">
           Si el usuario nos envía sus datos personales y profesionales a través del formulario o del correo electrónico, con la intención
-          de formar parte de los procesos de selección de personal de <strong>Zashop</strong>, los trataremos con esa finalidad durante un año.
-          La base jurídica también es el consentimiento.
+          de formar parte de los procesos de selección de personal de <strong>Planzo</strong>, los trataremos con esa finalidad durante un año.
         </p>
         <p className="parrafo-politica-cookies">
           En todos los casos, necesitamos ciertos datos para poder atender las solicitudes planteadas: los hemos señalado con un asterisco.
         </p>
         <p className="parrafo-politica-cookies">
           El usuario puede, en todo momento, retirar el consentimiento para el tratamiento de sus datos, así como ejercer los derechos de
-          acceso, rectificación, supresión, oposición, portabilidad y limitación del tratamiento, mediante un escrito dirigido a <strong>Zashop</strong>,
-          C/Goya, 12 1º Izqda, 28001 Madrid, o a la dirección de correo electrónico info@anibaldepablos.com. En caso de que tengamos dudas sobre
+          acceso, rectificación, supresión, oposición, portabilidad y limitación del tratamiento, mediante un escrito dirigido a <strong>Planzo</strong>,
+          C/Hortaleza, 12 7º Izqda, 28071 Madrid, o a la dirección de correo electrónico info@planzo.com. En caso de que tengamos dudas sobre
           su identidad, le podremos solicitar copia de su DNI u otro documento identificativo válido, para evitar el acceso a sus datos por parte
           de terceros. Asimismo, puede presentar una reclamación ante la Agencia Española de Protección de Datos.
         </p>
@@ -56,9 +53,9 @@ function PoliticaCookies() {
         <p className="parrafo-politica-cookies">Gracias por su colaboración.</p>
       </section>
 
-        <Footer/>
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default PoliticaCookies
+export default PoliticaCookies;

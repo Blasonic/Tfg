@@ -1,19 +1,20 @@
+
 .zona-izquierda ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .zona-izquierda ul li{
-    margin-bottom: 10px;
-  }
-  
-  
-  .zona-izquierda ul li  button {
-    background-size: cover; 
-    font-size: 1em;
-    text-decoration: none;
-    font-weight: bold;
-    background: none; 
-    border: none;
-    color: rgba(33, 73, 130, 0.808);
-  }
+  list-style: none;
+  padding: 0;
+}
+
+.zona-izquierda ul li {
+  margin-bottom: 10px;
+}
+
+
+.zona-izquierda ul li button {
+  background-size: cover; 
+  font-size: 1em;
+  text-decoration: none;
+  font-weight: bold;
+  background: none; 
+  border: none;
+  color: rgb(24, 64, 61);
+}
