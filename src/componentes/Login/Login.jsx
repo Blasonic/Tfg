@@ -103,7 +103,6 @@ const StyledWrapper = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f4f4f4;
 
   .form {
     display: flex;
@@ -113,7 +112,20 @@ const StyledWrapper = styled.div`
     padding: 30px;
     width: 450px;
     border-radius: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  ::placeholder {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .form button {
+    align-self: flex-end;
+  }
+
+  .flex-column > label {
+    color: #151717;
+    font-weight: 600;
   }
 
   .inputForm {
@@ -123,6 +135,19 @@ const StyledWrapper = styled.div`
     display: flex;
     align-items: center;
     padding-left: 10px;
+    transition: 0.2s ease-in-out;
+  }
+      .inputForm input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+  }
+
+  .inputForm input::placeholder {
+    color: #888;
+    opacity: 1;
   }
 
   .input {
@@ -133,8 +158,45 @@ const StyledWrapper = styled.div`
     height: 100%;
   }
 
+  .input:focus {
+    outline: none;
+  }
+
+  .inputForm:focus-within {
+    border: 1.5px solid #2d79f3;
+  }
+
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .flex-row > div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .flex-row > div > label {
+    font-size: 14px;
+    color: black;
+    font-weight: 400;
+  }
+
+  .span {
+    font-size: 14px;
+    margin-left: 5px;
+    color: #2d79f3;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
   .button-submit {
-    background-color: #151717;
+    margin: 20px 0 10px 0;
+    background-color:#A7C4B2;
     border: none;
     color: white;
     font-size: 15px;
@@ -149,9 +211,11 @@ const StyledWrapper = styled.div`
     text-align: center;
     color: black;
     font-size: 14px;
+    margin: 5px 0;
   }
 
   .btn {
+    margin-top: 10px;
     width: 100%;
     height: 50px;
     border-radius: 10px;
@@ -163,7 +227,14 @@ const StyledWrapper = styled.div`
     border: 1px solid #ededef;
     background-color: white;
     cursor: pointer;
+    transition: 0.2s ease-in-out;
+  }
+
+  .btn:hover {
+    border: 1px solid #A7C4B2;
   }
 `;
+
+
 
 export default Login;

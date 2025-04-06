@@ -1,76 +1,81 @@
-/* Estilos generales del menú */
-.barra-lateral {
-    position: relative;
-  }
-  
-  .menu-btn {
-    color: white;
-    font-size: 1.5rem;
-    padding: 10px;
-    background-color: #2d3748;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 1000;
-  }
-  
-  .menu-container {
-    position: absolute;
-    top: 50px;
-    left: 10px;
-    background-color: #2d3748;
-    width: 200px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    padding: 10px;
-    z-index: 999;
-  }
-  
-  /* Lista de enlaces */
-  .menu-list {
-    list-style: none; /* Quita los puntos */
-    padding: 0;
-    margin: 0;
-  }
-  
-  /* Estilos de cada ítem */
-  .menu-item {
-    margin-bottom: 5px;
-  }
-  
-  /* Estilos de los enlaces */
-  .menu-link {
-    display: block;
-    color: white;
-    text-decoration: none; /* Quita el subrayado */
-    padding: 8px 16px;
-    border-radius: 4px;
-    transition: background 0.3s;
-  }
-  
-  .menu-link:hover {
-    background-color: #4a5568;
-  }
-  
-  /* Submenú */
-  .sub-menu {
-    list-style: none; /* Quita los puntos del submenú */
-    padding-left: 15px;
-  }
-  
-  .sub-menu .menu-link {
-    font-size: 0.9rem;
-    padding-left: 20px;
-  }
-  
 
-  .menu-divider {
-    border: 0;
-    height: 1px;
-    background-color: #4a5568;
-    margin: 10px 0;
-  }
-  
+.barra-lateral {
+  position: relative;
+}
+
+.menu-btn {
+  color: white;
+  font-size: 1.5rem;
+  padding: 10px;
+  background-color: #A7C4B3;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.menu-container {
+  position: absolute;
+  margin-top: 5px;
+  top: 50px;
+  left: 10px;
+  background-color: #A7C4B2;
+  width: 180px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 999;
+}
+
+.menu-list {
+  list-style: none; 
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  margin-bottom: 5px;
+}
+
+
+.menu-link, .menu-button {
+  display: block;
+  color: black;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background 0.3s;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+
+.menu-link:hover, .menu-button:hover {
+  background-color: white;
+}
+
+
+.sub-menu {
+  list-style: none;
+  padding-left: 15px;
+}
+
+.sub-menu .menu-link {
+  font-size: 0.9rem;
+  padding-left: 20px;
+}
+
+
+.menu-divider {
+  border: 1;
+  height: 2px;
+  background-color: black;
+  margin: 10px 0;
+}

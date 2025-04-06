@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
-import './BarraLateral.css'; // Importar estilos desde CSS
+import './BarraLateral.css'; 
 
 const BarraLateral = () => {
   const [abierto, setAbierto] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setUserLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUserLoggedIn(false);
+    navigate("/"); 
+  };
 
   return (
     <div className="barra-lateral">
@@ -20,7 +33,7 @@ const BarraLateral = () => {
       {abierto && (
         <div className="menu-container">
           <ul className="menu-list">
-            <MenuLink to="/verPerfil" texto="Ver Perfil" />
+            <MenuLink to="/VerPerfil" texto="Ver Perfil" />
             <hr className="menu-divider" />
             <MenuLink to="/calendarioGlobal" texto="Calendario Global" />
             <MenuLink to="/fiestastra" texto="Fiestas Tradicionales" />
@@ -29,7 +42,13 @@ const BarraLateral = () => {
             <MenuLink to="/comentarios" texto="Comentarios" />
             <MenuLink to="/soporte" texto="Soporte" />
             <hr className="menu-divider" />
-            <MenuLink to="/logout" texto="Cerrar sesión" />
+            
+            {/* Botón de Cerrar sesión */}
+            {userLoggedIn && (
+              <button onClick={handleLogout} className="menu-button">
+                Cerrar sesión
+              </button>
+            )}
           </ul>
         </div>
       )}

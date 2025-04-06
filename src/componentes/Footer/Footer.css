@@ -1,0 +1,20 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgb(255,255,255);
+    background:  #A7C4B2 180%;
+    color: rgb(24, 64, 61);
+    padding: 20px;
+    font-weight: bold;
+  }
+  
+  .footer-seccion {
+    flex: 1;
+  }
+
+  
+  
+  
+  
+  
