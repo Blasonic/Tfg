@@ -2,41 +2,45 @@ import React, { useState, useEffect } from "react";
 import BarraLateral from '../BarraLateral/BarraLateral';
 import Logo from '../Logo/Logo';
 import Buscador from '../Buscador/Buscador';
-import { Link, useNavigate } from "react-router-dom";
-import { AiOutlineUser } from 'react-icons/ai';
+import { Link } from "react-router-dom";
 import './Header.css';
 
 function Header() {
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setUserLoggedIn(!!token);
-  }, []);
+    const loadUser = () => {
+      const storedUser = localStorage.getItem("user");
+      setUser(storedUser ? JSON.parse(storedUser) : null);
+    };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUserLoggedIn(false);
-    navigate("/"); 
-  };
+    loadUser();
+
+    // 🔁 Escuchar cambios en el localStorage
+    window.addEventListener("storage", loadUser);
+
+    return () => {
+      window.removeEventListener("storage", loadUser);
+    };
+  }, []);
 
   return (
     <div className="headerStyle">
       <div className="barraLateral">
         <BarraLateral />
       </div>
+
       <div className="headerContent">
         <Logo />
         <Buscador />
-        {userLoggedIn ? (
-          <div className="nav-item user-dropdown">
-            <div className="user-icon">
-              <AiOutlineUser />
-            </div>
-            <div className="dropdown-menu">
-              <button onClick={handleLogout}>Cerrar Sesión</button>
-            </div>
+
+        {user ? (
+          <div className="nav-item user-avatar">
+            <img
+              src={user.profilePicture || "/imagenes/avatares/avatar-en-blanco.webp"}
+              alt="Avatar"
+              className="avatar-img"
+            />
           </div>
         ) : (
           <Link to="/Login" className="linkStyle">Log-in</Link>

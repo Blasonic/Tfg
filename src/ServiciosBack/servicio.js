@@ -55,13 +55,13 @@ export const getUserProfile = async () => {
 export const updateUserProfile = async (updatedData) => {
   const token = localStorage.getItem('token');
 
-  const response = await fetch(`${API_URL}/perfil`, {
+  const response = await fetch(`http://localhost:5000/api/auth/perfil`, {
     method: 'PUT',
     headers: { 
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(updatedData),
+    body: JSON.stringify(updatedData), // updatedData debe contener solo { user, profilePicture }
   });
 
   if (!response.ok) throw new Error('Error al actualizar el perfil');

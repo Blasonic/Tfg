@@ -15,13 +15,14 @@ const BarraLateral = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user"); // 👈 también quitamos el usuario
+    window.dispatchEvent(new Event("storage")); // 🔔 notificar a otros componentes
     setUserLoggedIn(false);
     navigate("/"); 
   };
 
   return (
     <div className="barra-lateral">
-      {/* Botón para abrir/cerrar el menú */}
       <button 
         onClick={() => setAbierto(!abierto)}
         className="menu-btn"
@@ -29,7 +30,6 @@ const BarraLateral = () => {
         <FaBars />
       </button>
 
-      {/* Menú desplegable */}
       {abierto && (
         <div className="menu-container">
           <ul className="menu-list">
@@ -42,8 +42,7 @@ const BarraLateral = () => {
             <MenuLink to="/comentarios" texto="Comentarios" />
             <MenuLink to="/soporte" texto="Soporte" />
             <hr className="menu-divider" />
-            
-            {/* Botón de Cerrar sesión */}
+
             {userLoggedIn && (
               <button onClick={handleLogout} className="menu-button">
                 Cerrar sesión
@@ -56,7 +55,6 @@ const BarraLateral = () => {
   );
 };
 
-// Componente para cada enlace del menú
 const MenuLink = ({ to, texto }) => {
   return (
     <li className="menu-item">

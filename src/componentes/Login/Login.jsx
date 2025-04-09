@@ -16,20 +16,25 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
-
+  
     try {
       const response = await fetch("http://localhost:5000/api/auth/Login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
+  
       const data = await response.json();
+  
       if (response.ok) {
+        // Suponiendo que tu backend devuelve también el usuario junto con el token:
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user)); // 👈 AÑADIDO AQUÍ
+  
         setFormData({ email: "", password: "" });
-        navigate("/");
-        window.location.reload();
+  
+        navigate("/"); // Redirige
+        window.dispatchEvent(new Event("storage")); // 👈 Fuerza que Header escuche el cambio
       } else {
         setErrorMessage(data.message || "Correo o contraseña incorrectos");
       }
@@ -37,6 +42,7 @@ const Login = () => {
       setErrorMessage("Error al intentar iniciar sesión");
     }
   };
+  
 
   return (
     <StyledWrapper>
