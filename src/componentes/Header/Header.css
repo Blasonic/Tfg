@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   background: white;
-  background:  #A7C4B2 180%;
+  background: #A7C4B2 180%;
   padding: 5px 15px; 
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
@@ -18,14 +18,14 @@
   left: 0;
   top: 0;
   height: 76vh;
-  width: 250px; /* Ajusta el ancho según necesites */
+  width: 250px;
   color: white;
   padding: 20px;
   z-index: 1001;
 }
 
 .headerContent {
-  margin-left: 250px; /* Mismo ancho que la barra lateral */
+  margin-left: 250px;
   width: calc(100% - 250px);
   display: flex;
   align-items: center;
@@ -38,28 +38,21 @@
   align-items: center;
 }
 
-.user-dropdown {
-  position: relative;
+/* Nueva clase para mostrar el avatar */
+.user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.user-icon {
-  font-size: 24px;
-  cursor: pointer;
+/* Estilo para el avatar redondo */
+.avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  background-color: #f4f4f4;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
 }
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  border: 1px solid #ddd;
-  padding: 10px;
-
-}
-
-.user-dropdown:hover .dropdown-menu {
-  display: block;
-}
-
 
