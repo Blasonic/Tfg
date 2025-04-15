@@ -9,29 +9,29 @@ const registerUser = async (req, res) => {
   try {
     const { name, user, email, password } = req.body;
 
-   
+    // Verificar si el correo ya existe
     const emailExiste = await Usuario.findOne({ email });
     if (emailExiste) {
       return res.status(400).json({ message: 'El correo ya está registrado' });
     }
 
-    
+    // Verificar si el nombre de usuario ya existe
     const userExiste = await Usuario.findOne({ user });
     if (userExiste) {
       return res.status(400).json({ message: 'El nombre de usuario ya está en uso' });
     }
 
- 
     const hashedPassword = await bcrypt.hash(password, 10);
     const nuevoUsuario = new Usuario({ name, user, email, password: hashedPassword });
 
     await nuevoUsuario.save();
     res.status(201).json({ message: 'Usuario registrado correctamente' });
   } catch (error) {
-    console.error('❌ Error en registerUser:', error);
+    console.error("❌ Error en registerUser:", error);
     res.status(500).json({ message: 'Error en el servidor' });
   }
 };
+
 
 
 // 🔹 Login de usuario
