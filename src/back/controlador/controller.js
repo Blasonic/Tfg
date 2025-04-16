@@ -91,7 +91,15 @@ const updateUserProfile = async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar el perfil' });
   }
 };
+const getAllUsers = async (req, res) => {
+  try {
+    const usuarios = await Usuario.find({}, 'name user profilePicture');
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener los usuarios' });
+  }
+};
 
 
 
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };
+module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile, getAllUsers};

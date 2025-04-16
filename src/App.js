@@ -15,7 +15,9 @@ import IzquierdaFooter from './componentes/IzquierdaFooter/IzquierdaFooter';
 import AvisoLegal from './componentes/AvisoLegal/AvisoLegal';
 import PoliticaCookies from './componentes/PoliticaCookies/PoliticaCookies';
 import VerPerfil from './componentes/VerPerfil/VerPerfil';
-
+import { Navigate } from 'react-router-dom';
+import Admin from './componentes/Admin/Admin'; 
+const user = JSON.parse(localStorage.getItem("user"));
 function App() {
   return (
     <Router>
@@ -36,6 +38,18 @@ function App() {
           <Route path="/AvisoLegal" element={<AvisoLegal />} />
           <Route path="/PoliticaCookies" element={<PoliticaCookies />} />
           <Route path="/VerPerfil" element={<VerPerfil />} />
+          <Route
+  path="/admin"
+  element={
+    user?.email === process.env.REACT_APP_ADMIN_EMAIL ? (
+      <Admin token={localStorage.getItem("token")} user={user} />
+    ) : (
+      <Navigate to="/" />
+    )
+  }
+/>
+
+
 
         </Routes>
       </div>
