@@ -9,6 +9,12 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
 
+  const isAdmin = (email) => {
+    const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
+    console.log("📧 Comparando:", email, "===", adminEmail);
+    return email.trim().toLowerCase() === adminEmail.trim().toLowerCase();
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -16,33 +22,37 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
-  
+
     try {
       const response = await fetch("http://localhost:5000/api/auth/Login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
-        // Suponiendo que tu backend devuelve también el usuario junto con el token:
         localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user)); // 👈 AÑADIDO AQUÍ
-  
+        localStorage.setItem("user", JSON.stringify(data.user));
+
         setFormData({ email: "", password: "" });
-  
-        navigate("/"); // Redirige
-        window.dispatchEvent(new Event("storage")); // 👈 Fuerza que Header escuche el cambio
+
+        if (isAdmin(data.user.email)) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
+
+        window.dispatchEvent(new Event("storage"));
       } else {
         setErrorMessage(data.message || "Correo o contraseña incorrectos");
       }
     } catch (error) {
+      console.error("❌ Error en login:", error);
       setErrorMessage("Error al intentar iniciar sesión");
     }
   };
-  
 
   return (
     <StyledWrapper>
@@ -240,7 +250,5 @@ const StyledWrapper = styled.div`
     border: 1px solid #A7C4B2;
   }
 `;
-
-
 
 export default Login;
