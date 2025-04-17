@@ -11,7 +11,6 @@ const Login = () => {
 
   const isAdmin = (email) => {
     const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
-    console.log("📧 Comparando:", email, "===", adminEmail);
     return email.trim().toLowerCase() === adminEmail.trim().toLowerCase();
   };
 
@@ -33,17 +32,18 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        const userEmail = data.user.email;
 
-        setFormData({ email: "", password: "" });
-
-        if (isAdmin(data.user.email)) {
+        if (isAdmin(userEmail)) {
+          sessionStorage.setItem("admin-just-logged", "true");
           navigate("/admin");
         } else {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
           navigate("/");
         }
 
+        setFormData({ email: "", password: "" });
         window.dispatchEvent(new Event("storage"));
       } else {
         setErrorMessage(data.message || "Correo o contraseña incorrectos");
