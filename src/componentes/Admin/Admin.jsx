@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-
+import './Admin.css';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
-
 
 function Admin({ token, user }) {
   const [solicitudes, setSolicitudes] = useState([]);
@@ -9,6 +8,11 @@ function Admin({ token, user }) {
   const [loading, setLoading] = useState(true);
   const [verUsuarios, setVerUsuarios] = useState(false);
   const [usuarios, setUsuarios] = useState([]);
+
+  useEffect(() => {
+    // Limpiar la marca de admin logueado una vez se entra
+    sessionStorage.removeItem("admin-just-logged");
+  }, []);
 
   useEffect(() => {
     if (user?.email !== ADMIN_EMAIL) return;

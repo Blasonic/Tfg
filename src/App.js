@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import Home from './componentes/Home/Home';
 import Header from './componentes/Header/Header';
@@ -15,15 +15,28 @@ import IzquierdaFooter from './componentes/IzquierdaFooter/IzquierdaFooter';
 import AvisoLegal from './componentes/AvisoLegal/AvisoLegal';
 import PoliticaCookies from './componentes/PoliticaCookies/PoliticaCookies';
 import VerPerfil from './componentes/VerPerfil/VerPerfil';
-import { Navigate } from 'react-router-dom';
-import Admin from './componentes/Admin/Admin'; 
+import Admin from './componentes/Admin/Admin';
+
+// 🔐 Limpieza si el admin quedó guardado fuera de /admin y no es una sesión recién iniciada
 const user = JSON.parse(localStorage.getItem("user"));
+const token = localStorage.getItem("token");
+const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
+const adminJustLogged = sessionStorage.getItem("admin-just-logged");
+
+if (user?.email === adminEmail && window.location.pathname !== "/admin" && !adminJustLogged) {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+  window.location.href = "/Login";
+}
+
+const isAdmin = user?.email === adminEmail;
+
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={isAdmin ? <Navigate to="/admin" /> : <Home />} />
           <Route path="/Header" element={<Header />} />
           <Route path="/BarraLateral" element={<BarraLateral />} />
           <Route path="/Logo" element={<Logo />} />
@@ -37,20 +50,11 @@ function App() {
           <Route path="/SobreNosotros" element={<SobreNosotros />} />
           <Route path="/AvisoLegal" element={<AvisoLegal />} />
           <Route path="/PoliticaCookies" element={<PoliticaCookies />} />
-          <Route path="/VerPerfil" element={<VerPerfil />} />
+          <Route path="/VerPerfil" element={!isAdmin ? <VerPerfil /> : <Navigate to="/" />} />
           <Route
-  path="/admin"
-  element={
-    user?.email === process.env.REACT_APP_ADMIN_EMAIL ? (
-      <Admin token={localStorage.getItem("token")} user={user} />
-    ) : (
-      <Navigate to="/" />
-    )
-  }
-/>
-
-
-
+            path="/admin"
+            element={isAdmin ? <Admin token={token} user={user} /> : <Navigate to="/" />}
+          />
         </Routes>
       </div>
     </Router>
