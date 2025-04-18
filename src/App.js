@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import Home from './componentes/Home/Home';
 import Header from './componentes/Header/Header';
@@ -15,6 +15,20 @@ import IzquierdaFooter from './componentes/IzquierdaFooter/IzquierdaFooter';
 import AvisoLegal from './componentes/AvisoLegal/AvisoLegal';
 import PoliticaCookies from './componentes/PoliticaCookies/PoliticaCookies';
 import VerPerfil from './componentes/VerPerfil/VerPerfil';
+import Admin from './componentes/Admin/Admin';
+
+const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
+const sessionAdmin = sessionStorage.getItem("admin-just-logged") === "true";
+
+const token = sessionAdmin
+  ? sessionStorage.getItem("admin-token")
+  : localStorage.getItem("token");
+
+const user = sessionAdmin
+  ? { email: adminEmail }
+  : JSON.parse(localStorage.getItem("user"));
+
+const isAdmin = sessionAdmin;
 
 function App() {
   return (
@@ -22,11 +36,11 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Registro" element={<Registro />} />
           <Route path="/Header" element={<Header />} />
           <Route path="/BarraLateral" element={<BarraLateral />} />
           <Route path="/Logo" element={<Logo />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Registro" element={<Registro />} />
           <Route path="/Carrusel" element={<Carrusel />} />
           <Route path="/Section" element={<Section />} />
           <Route path="/TextoSection" element={<TextoSection />} />
@@ -35,8 +49,17 @@ function App() {
           <Route path="/SobreNosotros" element={<SobreNosotros />} />
           <Route path="/AvisoLegal" element={<AvisoLegal />} />
           <Route path="/PoliticaCookies" element={<PoliticaCookies />} />
-          <Route path="/VerPerfil" element={<VerPerfil />} />
-
+          <Route path="/VerPerfil" element={<VerPerfil /> } />
+          <Route
+            path="/admin"
+            element={
+              isAdmin ? (
+                <Admin token={token} user={user} />
+              ) : (
+                <Navigate to="/Login" />
+              )
+            }
+          />
         </Routes>
       </div>
     </Router>

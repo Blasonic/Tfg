@@ -22,7 +22,14 @@ const registerUser = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const nuevoUsuario = new Usuario({ name, user, email, password: hashedPassword });
+
+    const nuevoUsuario = new Usuario({
+      name,
+      user,
+      email,
+      password: hashedPassword,
+      profilePicture: '/imagenes/avatares/avatar-en-blanco.webp'
+    });
 
     await nuevoUsuario.save();
     res.status(201).json({ message: 'Usuario registrado correctamente' });
@@ -31,6 +38,7 @@ const registerUser = async (req, res) => {
     res.status(500).json({ message: 'Error en el servidor' });
   }
 };
+
 
 
 
@@ -91,7 +99,15 @@ const updateUserProfile = async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar el perfil' });
   }
 };
+const getAllUsers = async (req, res) => {
+  try {
+    const usuarios = await Usuario.find({}, 'name user profilePicture');
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener los usuarios' });
+  }
+};
 
 
 
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };
+module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile, getAllUsers};
