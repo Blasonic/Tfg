@@ -12,24 +12,69 @@ const Registro = () => {
     password: '',
     confirmPassword: ''
   });
+
   const [errorMessage, setErrorMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({
+    email: "",
+    user: ""
+  });
+  const [passwordErrors, setPasswordErrors] = useState([]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
+
     setFormData((prevData) => ({
       ...prevData,
       [id]: value
     }));
+
+    if (id === "email" || id === "user") {
+      setFieldErrors((prevErrors) => ({
+        ...prevErrors,
+        [id]: ""
+      }));
+    }
+
+
+    setErrorMessage("");
+  };
+
+  const validatePassword = (password) => {
+    const errors = [];
+
+    if (password.length < 8) {
+      errors.push("Debe tener al menos 8 caracteres");
+    }
+    if (!/[A-Z]/.test(password)) {
+      errors.push("Debe tener al menos una letra mayúscula");
+    }
+    if (!/[0-9]/.test(password)) {
+      errors.push("Debe tener al menos un número");
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errors.push("Debe tener al menos un carácter especial");
+    }
+
+    return errors;
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setErrorMessage("");
+    setFieldErrors({ email: "", user: "" });
 
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Las contraseñas no coinciden");
       return;
     }
+
+    const passwordValidation = validatePassword(formData.password);
+    if (passwordValidation.length > 0) {
+      setPasswordErrors(passwordValidation);
+      return;
+    }
+
+    setPasswordErrors([]); 
 
     const userData = {
       name: formData.name,
@@ -42,7 +87,23 @@ const Registro = () => {
       await registerUser(userData);
       navigate('/Login');
     } catch (error) {
-      setErrorMessage("Error al registrar la cuenta");
+      const message = error.message || "Error al registrar la cuenta";
+
+      const newFieldErrors = { email: "", user: "" };
+
+      if (message.toLowerCase().includes("correo")) {
+        newFieldErrors.email = message;
+      }
+
+      if (message.toLowerCase().includes("usuario")) {
+        newFieldErrors.user = message;
+      }
+
+      if (!newFieldErrors.email && !newFieldErrors.user) {
+        setErrorMessage(message);
+      }
+
+      setFieldErrors(newFieldErrors);
     }
   };
 
@@ -50,23 +111,47 @@ const Registro = () => {
     <StyledWrapper>
       <form className="form" onSubmit={handleRegister}>
         <h2>Crear Cuenta</h2>
+
         <div className="flex-column"><label>Nombre</label></div>
-        <div className="inputForm"><input type="text" id="name" placeholder="Ingresa tu nombre" value={formData.name} onChange={handleChange} required /></div>
-        
+        <div className="inputForm">
+          <input type="text" id="name" placeholder="Ingresa tu nombre" value={formData.name} onChange={handleChange} required />
+        </div>
+
         <div className="flex-column"><label>Nombre de Usuario</label></div>
-        <div className="inputForm"><input type="text" id="user" placeholder="Ingresa un nombre de usuario" value={formData.user} onChange={handleChange} required /></div>
-        
+        <div className="inputForm">
+          <input type="text" id="user" placeholder="Ingresa un nombre de usuario" value={formData.user} onChange={handleChange} required />
+        </div>
+        {fieldErrors.user && <p className="error-message">{fieldErrors.user}</p>}
+
         <div className="flex-column"><label>Correo Electrónico</label></div>
-        <div className="inputForm"><input type="email" id="email" placeholder="Ingresa tu correo" value={formData.email} onChange={handleChange} required /></div>
-        
+        <div className="inputForm">
+          <input type="email" id="email" placeholder="Ingresa tu correo" value={formData.email} onChange={handleChange} required />
+        </div>
+        {fieldErrors.email && <p className="error-message">{fieldErrors.email}</p>}
+
         <div className="flex-column"><label>Contraseña</label></div>
-        <div className="inputForm"><input type="password" id="password" placeholder="Ingresa tu contraseña" value={formData.password} onChange={handleChange} required /></div>
-        
+        <div className="inputForm">
+          <input type="password" id="password" placeholder="Ingresa tu contraseña" value={formData.password} onChange={handleChange} required />
+        </div>
+
+        {passwordErrors.length > 0 && (
+          <div className="password-error-box">
+            <p className="error-message">La contraseña no es válida:</p>
+            <ul className="password-error-list">
+              {passwordErrors.map((err, idx) => (
+                <li key={idx} className="error-message">{err}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <div className="flex-column"><label>Confirmar Contraseña</label></div>
-        <div className="inputForm"><input type="password" id="confirmPassword" placeholder="Repita tu contraseña" value={formData.confirmPassword} onChange={handleChange} required /></div>
-        
+        <div className="inputForm">
+          <input type="password" id="confirmPassword" placeholder="Repita tu contraseña" value={formData.confirmPassword} onChange={handleChange} required />
+        </div>
+
         {errorMessage && <p className="error-message">{errorMessage}</p>}
-        
+
         <button type="submit" className="button-submit">Registrarse</button>
         <p className="p">¿Ya tienes cuenta? <Link to="/Login" className="span">Inicia sesión</Link></p>
       </form>
@@ -127,7 +212,7 @@ const StyledWrapper = styled.div`
 
   .button-submit {
     margin: 20px 0 10px 0;
-    background-color:#A7C4B2;
+    background-color: #A7C4B2;
     border: none;
     color: white;
     font-size: 15px;
@@ -150,6 +235,25 @@ const StyledWrapper = styled.div`
     color: #2d79f3;
     font-weight: 500;
     cursor: pointer;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 13px;
+    margin: 4px 0 0 5px;
+  }
+
+  .password-error-box {
+    background-color: #ffe5e5;
+    border: 1px solid red;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 8px 0 10px 0;
+  }
+
+  .password-error-list {
+    padding-left: 20px;
+    margin: 0;
   }
 `;
 
