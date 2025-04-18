@@ -17,31 +17,30 @@ import PoliticaCookies from './componentes/PoliticaCookies/PoliticaCookies';
 import VerPerfil from './componentes/VerPerfil/VerPerfil';
 import Admin from './componentes/Admin/Admin';
 
-// 🔐 Limpieza si el admin quedó guardado fuera de /admin y no es una sesión recién iniciada
-const user = JSON.parse(localStorage.getItem("user"));
-const token = localStorage.getItem("token");
 const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
-const adminJustLogged = sessionStorage.getItem("admin-just-logged");
+const sessionAdmin = sessionStorage.getItem("admin-just-logged") === "true";
 
-if (user?.email === adminEmail && window.location.pathname !== "/admin" && !adminJustLogged) {
-  localStorage.removeItem("user");
-  localStorage.removeItem("token");
-  window.location.href = "/Login";
-}
+const token = sessionAdmin
+  ? sessionStorage.getItem("admin-token")
+  : localStorage.getItem("token");
 
-const isAdmin = user?.email === adminEmail;
+const user = sessionAdmin
+  ? { email: adminEmail }
+  : JSON.parse(localStorage.getItem("user"));
+
+const isAdmin = sessionAdmin;
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={isAdmin ? <Navigate to="/admin" /> : <Home />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Registro" element={<Registro />} />
           <Route path="/Header" element={<Header />} />
           <Route path="/BarraLateral" element={<BarraLateral />} />
           <Route path="/Logo" element={<Logo />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Registro" element={<Registro />} />
           <Route path="/Carrusel" element={<Carrusel />} />
           <Route path="/Section" element={<Section />} />
           <Route path="/TextoSection" element={<TextoSection />} />
@@ -50,10 +49,16 @@ function App() {
           <Route path="/SobreNosotros" element={<SobreNosotros />} />
           <Route path="/AvisoLegal" element={<AvisoLegal />} />
           <Route path="/PoliticaCookies" element={<PoliticaCookies />} />
-          <Route path="/VerPerfil" element={!isAdmin ? <VerPerfil /> : <Navigate to="/" />} />
+          <Route path="/VerPerfil" element={<VerPerfil /> } />
           <Route
             path="/admin"
-            element={isAdmin ? <Admin token={token} user={user} /> : <Navigate to="/" />}
+            element={
+              isAdmin ? (
+                <Admin token={token} user={user} />
+              ) : (
+                <Navigate to="/Login" />
+              )
+            }
           />
         </Routes>
       </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Admin.css';
+
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
 function Admin({ token, user }) {
@@ -8,11 +9,6 @@ function Admin({ token, user }) {
   const [loading, setLoading] = useState(true);
   const [verUsuarios, setVerUsuarios] = useState(false);
   const [usuarios, setUsuarios] = useState([]);
-
-  useEffect(() => {
-    // Limpiar la marca de admin logueado una vez se entra
-    sessionStorage.removeItem("admin-just-logged");
-  }, []);
 
   useEffect(() => {
     if (user?.email !== ADMIN_EMAIL) return;
@@ -57,30 +53,50 @@ function Admin({ token, user }) {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("admin-just-logged");
+    sessionStorage.removeItem("admin-token");
+    window.location.href = "/";
+  };
+
   if (!user || user.email !== ADMIN_EMAIL) return null;
   if (loading) return <p className="text-center mt-8">Cargando solicitudes...</p>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6 text-center">Solicitudes de Fiestas</h2>
+    <div className="admin-wrapper">
+      <h2 className="admin-title">Solicitudes de Fiestas</h2>
+
+      {/* Botón de logout */}
+      <div style={{ textAlign: "right", marginBottom: "1rem" }}>
+        <button
+          onClick={handleLogout}
+          className="btn btn-reject"
+        >
+          Cerrar sesión
+        </button>
+      </div>
 
       {verUsuarios ? (
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold mb-4">Perfiles de Usuarios</h3>
+        <>
+          <h3 className="admin-title" style={{ fontSize: "1.5rem" }}>Perfiles de Usuarios</h3>
           {usuarios.map(u => (
-            <div key={u._id} className="flex items-center gap-4 p-4 border rounded-lg shadow">
-              <img src={u.profilePicture || 'https://via.placeholder.com/50'} alt="perfil" className="w-12 h-12 rounded-full object-cover" />
-              <div>
+            <div key={u._id} className="user-card">
+              <img src={u.profilePicture || 'https://via.placeholder.com/50'} alt="perfil" className="user-avatar" />
+              <div className="user-info">
                 <p className="font-medium">{u.name}</p>
                 <p className="text-sm text-gray-500">@{u.user}</p>
               </div>
             </div>
           ))}
-          <button onClick={() => setVerUsuarios(false)} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Volver a Solicitudes</button>
-        </div>
+          <button onClick={() => setVerUsuarios(false)} className="btn btn-toggle">
+            Volver a Solicitudes
+          </button>
+        </>
       ) : (
         <>
-          <button onClick={cargarUsuarios} className="mb-6 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+          <button onClick={cargarUsuarios} className="btn btn-toggle">
             Ver Usuarios
           </button>
 
@@ -89,52 +105,53 @@ function Admin({ token, user }) {
           ) : (
             <div className="grid gap-6">
               {solicitudes.map((evento) => (
-                <div key={evento.id} className="p-5 border rounded-lg shadow-lg relative bg-white">
-                  <div className="flex items-center gap-4">
-                    <img
-                      src="https://source.unsplash.com/100x100/?festival"
-                      alt="fiesta"
-                      className="w-20 h-20 object-cover rounded-md"
-                    />
-                    <div>
-                      <h3 className="text-lg font-bold">{evento.titulo}</h3>
-                      <p className="text-gray-600 text-sm line-clamp-2">{evento.descripcion}</p>
-                      <p className="text-sm mt-1"><strong>Fecha:</strong> {evento.fecha} - <strong>Hora:</strong> {evento.hora}</p>
-                    </div>
-                  </div>
+                <div key={evento.id} className="event-card">
+                  <img
+                    src="https://source.unsplash.com/100x100/?festival"
+                    alt="fiesta"
+                    className="event-image"
+                  />
+                  <div className="event-info">
+                    <h3 className="text-lg font-bold">{evento.titulo}</h3>
+                    <p className="text-gray-600 text-sm">{evento.descripcion}</p>
+                    <p className="text-sm mt-1">
+                      <strong>Fecha:</strong> {evento.fecha} - <strong>Hora:</strong> {evento.hora}
+                    </p>
 
-                  {!selected || selected !== evento.id ? (
-                    <button
-                      onClick={() => setSelected(evento.id)}
-                      className="absolute top-2 right-2 text-sm text-blue-600 hover:underline"
-                    >
-                      Ver más
-                    </button>
-                  ) : (
-                    <div className="mt-4">
-                      <p><strong>Tipo:</strong> {evento.tipo}</p>
-                      <div className="flex gap-3 mt-3">
+                    {selected === evento.id && (
+                      <div className="event-actions">
+                        <p><strong>Tipo:</strong> {evento.tipo}</p>
                         <button
                           onClick={() => actualizarEstado(evento.id, 'aceptar')}
-                          className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                          className="btn btn-accept"
                         >
                           Aceptar
                         </button>
                         <button
                           onClick={() => actualizarEstado(evento.id, 'rechazar')}
-                          className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                          className="btn btn-reject"
                         >
                           Rechazar
                         </button>
                         <button
                           onClick={() => setSelected(null)}
-                          className="ml-auto text-sm text-gray-600 hover:underline"
+                          className="btn btn-secondary"
                         >
                           Ocultar
                         </button>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
+
+                  {!selected || selected !== evento.id ? (
+                    <button
+                      onClick={() => setSelected(evento.id)}
+                      className="btn btn-secondary"
+                      style={{ marginLeft: "auto" }}
+                    >
+                      Ver más
+                    </button>
+                  ) : null}
                 </div>
               ))}
             </div>
