@@ -14,11 +14,25 @@ const Registro = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [fieldErrors, setFieldErrors] = useState({
-    email: "",
-    user: ""
-  });
-  const [passwordErrors, setPasswordErrors] = useState([]);
+  const [fieldErrors, setFieldErrors] = useState({ email: "", user: "" });
+  const [passwordStatus, setPasswordStatus] = useState({});
+  const [emailValid, setEmailValid] = useState(null);
+
+  const passwordRules = {
+    length: "Al menos 8 caracteres",
+    uppercase: "Al menos una letra mayúscula",
+    number: "Al menos un número",
+    special: "Al menos un carácter especial",
+  };
+
+  const getPasswordStatus = (password) => {
+    return {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      number: /[0-9]/.test(password),
+      special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    };
+  };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -28,6 +42,15 @@ const Registro = () => {
       [id]: value
     }));
 
+    if (id === "password") {
+      setPasswordStatus(getPasswordStatus(value));
+    }
+
+    if (id === "email") {
+      const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      setEmailValid(isValidEmail);
+    }
+
     if (id === "email" || id === "user") {
       setFieldErrors((prevErrors) => ({
         ...prevErrors,
@@ -35,27 +58,7 @@ const Registro = () => {
       }));
     }
 
-
     setErrorMessage("");
-  };
-
-  const validatePassword = (password) => {
-    const errors = [];
-
-    if (password.length < 8) {
-      errors.push("Debe tener al menos 8 caracteres");
-    }
-    if (!/[A-Z]/.test(password)) {
-      errors.push("Debe tener al menos una letra mayúscula");
-    }
-    if (!/[0-9]/.test(password)) {
-      errors.push("Debe tener al menos un número");
-    }
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      errors.push("Debe tener al menos un carácter especial");
-    }
-
-    return errors;
   };
 
   const handleRegister = async (e) => {
@@ -63,18 +66,23 @@ const Registro = () => {
     setErrorMessage("");
     setFieldErrors({ email: "", user: "" });
 
+    if (!emailValid) {
+      setErrorMessage("El formato del correo es inválido");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Las contraseñas no coinciden");
       return;
     }
 
-    const passwordValidation = validatePassword(formData.password);
-    if (passwordValidation.length > 0) {
-      setPasswordErrors(passwordValidation);
+    const status = getPasswordStatus(formData.password);
+    const allValid = Object.values(status).every(Boolean);
+
+    if (!allValid) {
+      setErrorMessage("La contraseña no cumple con todos los requisitos");
       return;
     }
-
-    setPasswordErrors([]); 
 
     const userData = {
       name: formData.name,
@@ -127,6 +135,11 @@ const Registro = () => {
         <div className="inputForm">
           <input type="email" id="email" placeholder="Ingresa tu correo" value={formData.email} onChange={handleChange} required />
         </div>
+        {emailValid !== null && (
+          <p className={emailValid ? "valid-message" : "invalid-message"}>
+            {emailValid ? "✔ Formato de correo válido" : "✘ Correo inválido"}
+          </p>
+        )}
         {fieldErrors.email && <p className="error-message">{fieldErrors.email}</p>}
 
         <div className="flex-column"><label>Contraseña</label></div>
@@ -134,12 +147,14 @@ const Registro = () => {
           <input type="password" id="password" placeholder="Ingresa tu contraseña" value={formData.password} onChange={handleChange} required />
         </div>
 
-        {passwordErrors.length > 0 && (
-          <div className="password-error-box">
-            <p className="error-message">La contraseña no es válida:</p>
-            <ul className="password-error-list">
-              {passwordErrors.map((err, idx) => (
-                <li key={idx} className="error-message">{err}</li>
+        {formData.password && (
+          <div className="password-status-box">
+            <p>La contraseña debe cumplir con:</p>
+            <ul className="password-status-list">
+              {Object.entries(passwordRules).map(([key, label]) => (
+                <li key={key} className={passwordStatus[key] ? "valid" : "invalid"}>
+                  {passwordStatus[key] ? "✔" : "✘"} {label}
+                </li>
               ))}
             </ul>
           </div>
@@ -243,17 +258,44 @@ const StyledWrapper = styled.div`
     margin: 4px 0 0 5px;
   }
 
-  .password-error-box {
-    background-color: #ffe5e5;
-    border: 1px solid red;
+  .valid-message {
+    color: green;
+    font-size: 13px;
+    margin: 4px 0 0 5px;
+  }
+
+  .invalid-message {
+    color: red;
+    font-size: 13px;
+    margin: 4px 0 0 5px;
+  }
+
+  .password-status-box {
+    background-color: #f1f1f1;
     border-radius: 8px;
     padding: 10px;
     margin: 8px 0 10px 0;
+    font-size: 14px;
   }
 
-  .password-error-list {
-    padding-left: 20px;
-    margin: 0;
+  .password-status-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 5px 0 0 0;
+  }
+
+  .password-status-list li {
+    margin-bottom: 4px;
+  }
+
+  .valid {
+    color: green;
+    font-weight: 500;
+  }
+
+  .invalid {
+    color: red;
+    font-weight: 500;
   }
 `;
 
