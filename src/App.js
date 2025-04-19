@@ -16,6 +16,7 @@ import AvisoLegal from './componentes/AvisoLegal/AvisoLegal';
 import PoliticaCookies from './componentes/PoliticaCookies/PoliticaCookies';
 import VerPerfil from './componentes/VerPerfil/VerPerfil';
 import Admin from './componentes/Admin/Admin';
+import CalendarioGlobal from './componentes/Calendario/CalendarioGlobal';
 
 const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
 const sessionAdmin = sessionStorage.getItem("admin-just-logged") === "true";
@@ -50,6 +51,7 @@ function App() {
           <Route path="/AvisoLegal" element={<AvisoLegal />} />
           <Route path="/PoliticaCookies" element={<PoliticaCookies />} />
           <Route path="/VerPerfil" element={<VerPerfil /> } />
+          <Route path="/CalendarioGlobal" element={<CalendarioGlobal /> } />
           <Route
             path="/admin"
             element={
