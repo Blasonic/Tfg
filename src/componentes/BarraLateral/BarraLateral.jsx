@@ -36,7 +36,7 @@ const BarraLateral = () => {
             <MenuLink to="/VerPerfil" texto="Ver Perfil" />
             <hr className="menu-divider" />
             <MenuLink to="/CalendarioGlobal" texto="Calendario Global" />
-            <MenuLink to="/fiestastra" texto="Fiestas Tradicionales" />
+            <MenuLink to="/fiestastra" texto="Fiestas Locales" />
             <MenuLink to="/metricas" texto="Fiestas Patronales" />
             <hr className="menu-divider" />
             <MenuLink to="/comentarios" texto="Comentarios" />

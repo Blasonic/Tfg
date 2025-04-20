@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Admin.css';
-
+ import { Navigate } from 'react-router-dom';
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
 function Admin({ token, user }) {
@@ -54,14 +54,23 @@ function Admin({ token, user }) {
   };
 
   const handleLogout = () => {
+    // Limpia todo
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    sessionStorage.removeItem("admin-just-logged");
-    sessionStorage.removeItem("admin-token");
+    localStorage.removeItem("admin-just-logged");
+    localStorage.removeItem("admin-token");
+    localStorage.removeItem("admin-user");
+  
+    // Redirige a login
     window.location.href = "/";
   };
+  
+  
 
-  if (!user || user.email !== ADMIN_EMAIL) return null;
+  if (!user) return <Navigate to="/Login" />;
+  if (!ADMIN_EMAIL) return <p>Error: admin email no definido</p>;
+  if (user.email !== ADMIN_EMAIL) return <Navigate to="/" />;
+
   if (loading) return <p className="text-center mt-8">Cargando solicitudes...</p>;
 
   return (
