@@ -5,8 +5,7 @@ import './Calendario.css';
 import Eventos from './Eventos';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-
-import FormularioAnadir from './FormularioAnadir';
+import FormularioAnadir from '../Calendario/FormularioAnadir';
 
 const CalendarioGlobal = () => {
   const [eventos, setEventos] = useState([]);
@@ -18,16 +17,17 @@ const CalendarioGlobal = () => {
     fetch('http://localhost:3000/api/fiestas/aceptadas')
       .then(res => res.json())
       .then(data => {
-        setEventos(data);
+        const eventosOrdenados = data.sort((a, b) => a.titulo.localeCompare(b.titulo));
+        setEventos(eventosOrdenados);
       })
-      .catch(error => {
-        console.error('Error cargando eventos:', error);
-      });
+      .catch(error => console.error('Error cargando eventos:', error));
   }, []);
 
   const obtenerEventosDelDia = (date) => {
     const dia = date.toISOString().split('T')[0];
-    return eventos.filter(ev => ev.fecha === dia);
+    return eventos
+      .filter(ev => ev.fecha === dia)
+      .sort((a, b) => a.hora.localeCompare(b.hora));
   };
 
   const tileContent = ({ date, view }) => {
@@ -37,38 +37,29 @@ const CalendarioGlobal = () => {
     }
   };
 
+ 
   return (
     <>
       <Header />
 
       <div className="calendario-container">
         <div className="calendario-panel">
-          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-            <h2>Calendario Global</h2>
-            {usuario && (
-              <button onClick={() => setMostrarFormulario(!mostrarFormulario)} className="btn-nuevo-evento">
-                {mostrarFormulario ? 'Cerrar' : 'Añadir evento'}
-              </button>
-            )}
-          </div>
-
           <Calendar
             onClickDay={setFechaSeleccionada}
             tileContent={tileContent}
           />
-
-          {mostrarFormulario && (
-            <FormularioAnadir
-              onSubmit={(data) => {
-                console.log("📨 Evento enviado:", data);
-                setMostrarFormulario(false);
-              }}
-            />
-          )}
         </div>
 
         <div className="eventos-panel">
-          <h3>Eventos del día</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3>Eventos del día</h3>
+            {usuario && (
+              <button onClick={() => setMostrarFormulario(true)} className="btn-nuevo-evento">
+                Añadir evento
+              </button>
+            )}
+          </div>
+
           {fechaSeleccionada && (
             <Eventos
               fecha={fechaSeleccionada}
@@ -78,6 +69,43 @@ const CalendarioGlobal = () => {
           )}
         </div>
       </div>
+
+      {mostrarFormulario && (
+  <FormularioAnadir
+    onSubmit={async (data) => {
+      if (!data) {
+        // Si se cierra con la ❌ o clic fuera
+        setMostrarFormulario(false);
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('http://localhost:3000/api/fiestas/solicitar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(data)
+        });
+
+        const respuesta = await res.json();
+
+        if (res.ok) {
+          alert('🎉 Evento enviado correctamente para revisión.');
+          setMostrarFormulario(false);
+        } else {
+          alert(`❌ Error: ${respuesta.message}`);
+        }
+      } catch (err) {
+        console.error('❌ Error al enviar el evento:', err);
+        alert('Error al enviar el evento.');
+      }
+    }}
+  />
+)}
+
 
       <Footer />
     </>

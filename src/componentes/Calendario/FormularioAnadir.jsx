@@ -5,165 +5,216 @@ const FormularioAnadir = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
     titulo: '',
     descripcion: '',
-    fecha: '',
-    hora: '',
+    fecha_inicio: '',
+    fecha_fin: '',
+    hora_inicio: '',
+    hora_fin: '',
     tipo: 'evento',
     imagen: '',
     provincia: 'Madrid',
-    direccion: ''
+    direccion: '',
+    imagenArchivo: null
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value, files } = e.target;
+    if (name === 'imagenArchivo') {
+      const file = files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFormData({ ...formData, imagen: reader.result, imagenArchivo: file });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setFormData({ ...formData, imagen: '', imagenArchivo: null });
+      }
+    } else if (name === 'imagen') {
+      setFormData({ ...formData, imagen: value, imagenArchivo: null });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (onSubmit) onSubmit(formData);
+  const handleClose = () => {
+    if (onSubmit) onSubmit(null);
   };
 
   return (
-    <StyledWrapper>
-      <form className="formulario-evento" onSubmit={handleSubmit}>
-        <h2>Solicitar Evento</h2>
-
-        <input
-          type="text"
-          name="titulo"
-          placeholder="Título"
-          value={formData.titulo}
-          onChange={handleChange}
-          required
-        />
-
-        <textarea
-          name="descripcion"
-          placeholder="Descripción"
-          value={formData.descripcion}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="date"
-          name="fecha"
-          value={formData.fecha}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="time"
-          name="hora"
-          value={formData.hora}
-          onChange={handleChange}
-          required
-        />
-
-        <select
-          name="tipo"
-          value={formData.tipo}
-          onChange={handleChange}
-          required
+    <StyledWrapper onClick={handleClose}>
+      <div className="modal-inner" onClick={(e) => e.stopPropagation()}>
+        <form
+          className="formulario-evento"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (onSubmit) onSubmit(formData);
+          }}
         >
-          <option value="evento">Evento</option>
-          <option value="local">Local</option>
-          <option value="patronal">Patronal</option>
-        </select>
+          <button className="cerrar-btn izquierda" type="button" onClick={handleClose}>✖</button>
+          <h2>Solicitar Evento</h2>
 
-        <input
-          type="text"
-          name="provincia"
-          placeholder="Provincia"
-          value={formData.provincia}
-          onChange={handleChange}
-        />
+          <input type="text" name="titulo" placeholder="Título" value={formData.titulo} onChange={handleChange} required />
 
-        <input
-          type="text"
-          name="direccion"
-          placeholder="Dirección"
-          value={formData.direccion}
-          onChange={handleChange}
-        />
+          <textarea className="descripcion" name="descripcion" placeholder="Descripción" value={formData.descripcion} onChange={handleChange} required />
 
-        <input
-          type="text"
-          name="imagen"
-          placeholder="URL de imagen"
-          value={formData.imagen}
-          onChange={handleChange}
-        />
+          <label>Fecha de inicio</label>
+          <input type="date" name="fecha_inicio" value={formData.fecha_inicio} onChange={handleChange} required />
 
-        <button type="submit">Enviar solicitud</button>
-      </form>
+          <label>Fecha de fin</label>
+          <input type="date" name="fecha_fin" value={formData.fecha_fin} onChange={handleChange} required />
+
+          <label>Hora de inicio</label>
+          <input type="time" name="hora_inicio" value={formData.hora_inicio} onChange={handleChange} required />
+
+          <label>Hora de fin</label>
+          <input type="time" name="hora_fin" value={formData.hora_fin} onChange={handleChange} required />
+
+          <select name="tipo" value={formData.tipo} onChange={handleChange} required>
+            <option value="evento">Evento</option>
+            <option value="local">Local</option>
+            <option value="patronal">Patronal</option>
+          </select>
+
+          <input type="text" name="provincia" placeholder="Provincia" value={formData.provincia} onChange={handleChange} />
+          <input type="text" name="direccion" placeholder="Dirección" value={formData.direccion} onChange={handleChange} />
+
+          <div className="imagen-inputs">
+            <input
+              type="text"
+              name="imagen"
+              placeholder="URL de imagen"
+              value={formData.imagenArchivo ? '' : formData.imagen}
+              onChange={handleChange}
+              disabled={formData.imagenArchivo}
+            />
+            <label className="file-btn">
+              Seleccionar archivo
+              <input
+                type="file"
+                name="imagenArchivo"
+                accept="image/*"
+                onChange={handleChange}
+                disabled={formData.imagen !== ''}
+              />
+            </label>
+          </div>
+
+          <button type="submit" className='btn-enviar'>Enviar solicitud</button>
+        </form>
+      </div>
     </StyledWrapper>
   );
 };
 
 const StyledWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+
+  .modal-inner {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    position: relative;
+  }
 
   .formulario-evento {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     background-color: #ffffff;
-    padding: 30px;
-    width: 450px;
-    border-radius: 20px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 24px 20px;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 18px;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .cerrar-btn {
+    position: absolute;
+    right: 15px;
+    top: 24px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
   }
 
   .formulario-evento h2 {
-    text-align: center;
-    color: #333;
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    display: inline-block;
   }
 
-  .formulario-evento input,
-  .formulario-evento textarea,
-  .formulario-evento select {
-    border: 1.5px solid #ecedec;
-    border-radius: 10px;
-    height: 45px;
-    padding: 0 10px;
-    font-size: 14px;
-    background-color: transparent;
-    outline: none;
+  label {
+    font-size: 12px;
   }
 
-  .formulario-evento textarea {
-    height: 80px;
+  input,
+  textarea,
+  select {
+    height: 42px;
     padding: 10px;
-    resize: none;
+    box-sizing: border-box;
+    width: 100%;
   }
 
-  .formulario-evento input:focus,
-  .formulario-evento textarea:focus,
-  .formulario-evento select:focus {
-    border-color: #2d79f3;
+  textarea {
+    resize: vertical;
+    min-height: 42px;
   }
 
-  .formulario-evento button {
-    margin-top: 20px;
+  .imagen-inputs {
+    display: flex;
+    gap: 8px;
+  }
+
+  .imagen-inputs input {
+    flex: 1;
+  }
+
+  .btn-enviar, .file-btn {
     background-color: #A7C4B2;
-    border: none;
     color: white;
-    font-size: 15px;
-    font-weight: 500;
+    padding: 10px;
     border-radius: 10px;
-    height: 50px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
     transition: background-color 0.3s ease;
+    display: inline-block;
+    position: relative;
+    border: none;
   }
 
-  .formulario-evento button:hover {
+  .btn-enviar:hover, .file-btn:hover {
     background-color: #8cab99;
   }
+
+  .file-btn input[type=\"file\"] {
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
 `;
+
 
 export default FormularioAnadir;
