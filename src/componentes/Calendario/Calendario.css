@@ -142,6 +142,22 @@ body {
   line-height: 1.4;
 }
 
+.btn-nuevo-evento {
+  background-color: #A7C4B2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-nuevo-evento:hover {
+  background-color: #8cab99;
+}
+
+
 @media (max-width: 768px) {
   .calendario-container {
     flex-direction: column;

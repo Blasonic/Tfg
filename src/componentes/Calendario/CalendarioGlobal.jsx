@@ -6,12 +6,16 @@ import Eventos from './Eventos';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 
+import FormularioAnadir from './FormularioAnadir';
+
 const CalendarioGlobal = () => {
   const [eventos, setEventos] = useState([]);
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const usuario = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/fiestas/aceptadas') 
+    fetch('http://localhost:3000/api/fiestas/aceptadas')
       .then(res => res.json())
       .then(data => {
         setEventos(data);
@@ -36,16 +40,33 @@ const CalendarioGlobal = () => {
   return (
     <>
       <Header />
-  
+
       <div className="calendario-container">
         <div className="calendario-panel">
-          
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+            <h2>Calendario Global</h2>
+            {usuario && (
+              <button onClick={() => setMostrarFormulario(!mostrarFormulario)} className="btn-nuevo-evento">
+                {mostrarFormulario ? 'Cerrar' : 'Añadir evento'}
+              </button>
+            )}
+          </div>
+
           <Calendar
             onClickDay={setFechaSeleccionada}
             tileContent={tileContent}
           />
+
+          {mostrarFormulario && (
+            <FormularioAnadir
+              onSubmit={(data) => {
+                console.log("📨 Evento enviado:", data);
+                setMostrarFormulario(false);
+              }}
+            />
+          )}
         </div>
-  
+
         <div className="eventos-panel">
           <h3>Eventos del día</h3>
           {fechaSeleccionada && (
@@ -57,7 +78,7 @@ const CalendarioGlobal = () => {
           )}
         </div>
       </div>
-  
+
       <Footer />
     </>
   );
