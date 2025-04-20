@@ -19,18 +19,22 @@ import Admin from './componentes/Admin/Admin';
 import CalendarioGlobal from './componentes/Calendario/CalendarioGlobal';
 import FormularioAnadir from './componentes/Calendario/FormularioAnadir';
 
-const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
-const sessionAdmin = sessionStorage.getItem("admin-just-logged") === "true";
+const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
-const token = sessionAdmin
-  ? sessionStorage.getItem("admin-token")
-  : localStorage.getItem("token");
+const rawUser =
+  localStorage.getItem("admin-just-logged") === "true"
+    ? localStorage.getItem("admin-user")
+    : localStorage.getItem("user");
 
-const user = sessionAdmin
-  ? { email: adminEmail }
-  : JSON.parse(localStorage.getItem("user"));
+const user = rawUser ? JSON.parse(rawUser) : null;
 
-const isAdmin = sessionAdmin;
+const token =
+  localStorage.getItem("admin-just-logged") === "true"
+    ? localStorage.getItem("admin-token")
+    : localStorage.getItem("token");
+
+// Verificación estricta del email del admin
+const isAdmin = user && user.email === ADMIN_EMAIL;
 
 function App() {
   return (
@@ -51,9 +55,9 @@ function App() {
           <Route path="/SobreNosotros" element={<SobreNosotros />} />
           <Route path="/AvisoLegal" element={<AvisoLegal />} />
           <Route path="/PoliticaCookies" element={<PoliticaCookies />} />
-          <Route path="/VerPerfil" element={<VerPerfil /> } />
-          <Route path="/CalendarioGlobal" element={<CalendarioGlobal /> } />
-          <Route path="/FormularioAnadir" element={<FormularioAnadir /> } />
+          <Route path="/VerPerfil" element={<VerPerfil />} />
+          <Route path="/CalendarioGlobal" element={<CalendarioGlobal />} />
+          <Route path="/FormularioAnadir" element={<FormularioAnadir />} />
           <Route
             path="/admin"
             element={

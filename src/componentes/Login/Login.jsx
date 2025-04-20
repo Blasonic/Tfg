@@ -35,13 +35,19 @@ const Login = () => {
         const userEmail = data.user.email;
 
         if (isAdmin(userEmail)) {
-          sessionStorage.setItem("admin-just-logged", "true");
+          localStorage.setItem("admin-just-logged", "true");
+          localStorage.setItem("admin-token", data.token);
+          localStorage.setItem("admin-user", JSON.stringify(data.user));
           navigate("/admin");
-        } else {
+        }
+        
+        
+        else {
           localStorage.setItem("token", data.token);
           localStorage.setItem("user", JSON.stringify(data.user));
           navigate("/");
         }
+        
 
         setFormData({ email: "", password: "" });
         window.dispatchEvent(new Event("storage"));
