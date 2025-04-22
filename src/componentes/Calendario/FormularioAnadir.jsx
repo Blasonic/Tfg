@@ -64,10 +64,10 @@ const FormularioAnadir = ({ onSubmit }) => {
           <input type="date" name="fecha_fin" value={formData.fecha_fin} onChange={handleChange} required />
 
           <label>Hora de inicio</label>
-          <input type="time" name="hora_inicio" value={formData.hora_inicio} onChange={handleChange} required />
+          <input type="time" name="hora_inicio" value={formData.hora_inicio} onChange={handleChange}  />
 
           <label>Hora de fin</label>
-          <input type="time" name="hora_fin" value={formData.hora_fin} onChange={handleChange} required />
+          <input type="time" name="hora_fin" value={formData.hora_fin} onChange={handleChange}  />
 
           <select name="tipo" value={formData.tipo} onChange={handleChange} required>
             <option value="evento">Evento</option>

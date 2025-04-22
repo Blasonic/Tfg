@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Admin.css';
- import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+
 const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
 
 function Admin({ token, user }) {
@@ -12,12 +13,18 @@ function Admin({ token, user }) {
 
   useEffect(() => {
     if (user?.email !== ADMIN_EMAIL) return;
+
     fetch('http://localhost:3000/api/fiestas/pendientes', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
       .then(data => {
-        setSolicitudes(data);
+        console.log('📦 Respuesta de /pendientes:', data);
+        if (Array.isArray(data)) {
+          setSolicitudes(data);
+        } else {
+          setSolicitudes([]); // evita que se rompa
+        }
         setLoading(false);
       })
       .catch(err => {
@@ -29,14 +36,19 @@ function Admin({ token, user }) {
   const actualizarEstado = async (id, accion) => {
     const url = `http://localhost:3000/api/fiestas/${accion}/${id}`;
     try {
-      await fetch(url, {
+      const res = await fetch(url, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
       });
-      setSolicitudes(solicitudes.filter(ev => ev.id !== id));
+
+      const result = await res.json();
+      console.log(`✔️ Resultado de ${accion}:`, result);
+
+      // Quitar del estado la solicitud ya procesada
+      setSolicitudes(prev => prev.filter(ev => ev.id !== id));
       setSelected(null);
     } catch (error) {
-      console.error(`Error al ${accion} evento`, error);
+      console.error(`❌ Error al ${accion} evento`, error);
     }
   };
 
@@ -54,37 +66,25 @@ function Admin({ token, user }) {
   };
 
   const handleLogout = () => {
-    // Limpia todo
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("admin-just-logged");
     localStorage.removeItem("admin-token");
     localStorage.removeItem("admin-user");
-  
-    // Redirige a login
     window.location.href = "/";
   };
-  
-  
 
   if (!user) return <Navigate to="/Login" />;
   if (!ADMIN_EMAIL) return <p>Error: admin email no definido</p>;
   if (user.email !== ADMIN_EMAIL) return <Navigate to="/" />;
-
   if (loading) return <p className="text-center mt-8">Cargando solicitudes...</p>;
 
   return (
     <div className="admin-wrapper">
       <h2 className="admin-title">Solicitudes de Fiestas</h2>
 
-      {/* Botón de logout */}
       <div style={{ textAlign: "right", marginBottom: "1rem" }}>
-        <button
-          onClick={handleLogout}
-          className="btn btn-reject"
-        >
-          Cerrar sesión
-        </button>
+        <button onClick={handleLogout} className="btn btn-reject">Cerrar sesión</button>
       </div>
 
       {verUsuarios ? (
@@ -109,9 +109,7 @@ function Admin({ token, user }) {
             Ver Usuarios
           </button>
 
-          {solicitudes.length === 0 ? (
-            <p className="text-center">No hay solicitudes pendientes.</p>
-          ) : (
+          {Array.isArray(solicitudes) && solicitudes.length > 0 ? (
             <div className="grid gap-6">
               {solicitudes.map((evento) => (
                 <div key={evento.id} className="event-card">
@@ -124,7 +122,7 @@ function Admin({ token, user }) {
                     <h3 className="text-lg font-bold">{evento.titulo}</h3>
                     <p className="text-gray-600 text-sm">{evento.descripcion}</p>
                     <p className="text-sm mt-1">
-                      <strong>Fecha:</strong> {evento.fecha} - <strong>Hora:</strong> {evento.hora}
+                      <strong>Fecha:</strong> {evento.fecha_inicio} - <strong>Hora:</strong> {evento.hora_inicio}
                     </p>
 
                     {selected === evento.id && (
@@ -164,6 +162,8 @@ function Admin({ token, user }) {
                 </div>
               ))}
             </div>
+          ) : (
+            <p className="text-center">No hay solicitudes pendientes.</p>
           )}
         </>
       )}
