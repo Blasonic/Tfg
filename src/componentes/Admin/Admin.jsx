@@ -32,22 +32,33 @@ function Admin({ token, user }) {
   }, [token, user]);
 
   const actualizarEstado = async (id, accion) => {
-    const url = `http://localhost:3000/api/fiestas/${accion}/${id}`;
+    let url = '';
+    let method = '';
+  
+    if (accion === 'aceptar') {
+      url = `http://localhost:3000/api/fiestas/aceptar/${id}`;
+      method = 'PUT';
+    } else if (accion === 'rechazar') {
+      url = `http://localhost:3000/api/fiestas/${id}`;
+      method = 'DELETE';
+    }
+  
     try {
       const res = await fetch(url, {
-        method: 'PUT',
+        method,
         headers: { Authorization: `Bearer ${token}` },
       });
-
+  
       const result = await res.json();
       console.log(`✔️ Resultado de ${accion}:`, result);
-
+  
       setSolicitudes(prev => prev.filter(ev => ev.id !== id));
       setSelected(null);
     } catch (error) {
       console.error(`❌ Error al ${accion} evento`, error);
     }
   };
+  
 
   const cargarUsuarios = async () => {
     try {

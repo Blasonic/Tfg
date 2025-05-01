@@ -6,9 +6,7 @@ import BarraLateral from './componentes/BarraLateral/BarraLateral';
 import Logo from './componentes/Logo/Logo';
 import Login from './componentes/Login/Login';
 import Registro from './componentes/Registro/Registro';
-
 import Section from './componentes/Section/Section';
-
 import Footer from './componentes/Footer/Footer';
 import SobreNosotros from './componentes/SobreNosotros/SobreNosotros';
 import IzquierdaFooter from './componentes/IzquierdaFooter/IzquierdaFooter';
@@ -19,7 +17,7 @@ import Admin from './componentes/Admin/Admin';
 import CalendarioGlobal from './componentes/Calendario/CalendarioGlobal';
 import FormularioAnadir from './componentes/Calendario/FormularioAnadir';
 
-const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
+
 
 const rawUser =
   localStorage.getItem("admin-just-logged") === "true"
@@ -33,8 +31,10 @@ const token =
     ? localStorage.getItem("admin-token")
     : localStorage.getItem("token");
 
+
 // Verificación estricta del email del admin
-const isAdmin = user && user.email === ADMIN_EMAIL;
+const isAdmin = user && user.role === "admin";
+
 
 function App() {
   return (
