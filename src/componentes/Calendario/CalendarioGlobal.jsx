@@ -13,14 +13,27 @@ const CalendarioGlobal = () => {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const usuario = JSON.parse(localStorage.getItem('user'));
 
+  // 🔁 Función para cargar eventos aceptados
+  const cargarEventosAceptados = async () => {
+    try {
+      const res = await fetch('http://localhost:3000/api/fiestas/aceptadas');
+      const data = await res.json();
+      const eventosOrdenados = data.sort((a, b) => a.titulo.localeCompare(b.titulo));
+      setEventos(eventosOrdenados);
+    } catch (error) {
+      console.error('Error cargando eventos:', error);
+    }
+  };
+
+  // 🕒 Cargar eventos al montar y luego cada 10 segundos
   useEffect(() => {
-    fetch('http://localhost:3000/api/fiestas/aceptadas')
-      .then(res => res.json())
-      .then(data => {
-        const eventosOrdenados = data.sort((a, b) => a.titulo.localeCompare(b.titulo));
-        setEventos(eventosOrdenados);
-      })
-      .catch(error => console.error('Error cargando eventos:', error));
+    cargarEventosAceptados();
+
+    const interval = setInterval(() => {
+      cargarEventosAceptados();
+    }, 10000); // cada 10 segundos
+
+    return () => clearInterval(interval); // limpiar al desmontar
   }, []);
 
   const obtenerEventosDelDia = (date) => {
@@ -37,7 +50,6 @@ const CalendarioGlobal = () => {
     }
   };
 
- 
   return (
     <>
       <Header />
@@ -71,41 +83,39 @@ const CalendarioGlobal = () => {
       </div>
 
       {mostrarFormulario && (
-  <FormularioAnadir
-    onSubmit={async (data) => {
-      if (!data) {
-        // Si se cierra con la ❌ o clic fuera
-        setMostrarFormulario(false);
-        return;
-      }
+        <FormularioAnadir
+          onSubmit={async (data) => {
+            if (!data) {
+              setMostrarFormulario(false);
+              return;
+            }
 
-      try {
-        const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:3000/api/fiestas/solicitar', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify(data)
-        });
+            try {
+              const token = localStorage.getItem('token');
+              const res = await fetch('http://localhost:3000/api/fiestas/solicitar', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(data)
+              });
 
-        const respuesta = await res.json();
+              const respuesta = await res.json();
 
-        if (res.ok) {
-          alert('🎉 Evento enviado correctamente para revisión.');
-          setMostrarFormulario(false);
-        } else {
-          alert(`❌ Error: ${respuesta.message}`);
-        }
-      } catch (err) {
-        console.error('❌ Error al enviar el evento:', err);
-        alert('Error al enviar el evento.');
-      }
-    }}
-  />
-)}
-
+              if (res.ok) {
+                alert('🎉 Evento enviado correctamente para revisión.');
+                setMostrarFormulario(false);
+              } else {
+                alert(`❌ Error: ${respuesta.message}`);
+              }
+            } catch (err) {
+              console.error('❌ Error al enviar el evento:', err);
+              alert('Error al enviar el evento.');
+            }
+          }}
+        />
+      )}
 
       <Footer />
     </>
