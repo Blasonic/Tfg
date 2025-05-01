@@ -6,9 +6,9 @@ import BarraLateral from './componentes/BarraLateral/BarraLateral';
 import Logo from './componentes/Logo/Logo';
 import Login from './componentes/Login/Login';
 import Registro from './componentes/Registro/Registro';
-import Carrusel from './componentes/Carrusel/Carrusel';
+
 import Section from './componentes/Section/Section';
-import TextoSection from './componentes/TextoSection/TextoSection';
+
 import Footer from './componentes/Footer/Footer';
 import SobreNosotros from './componentes/SobreNosotros/SobreNosotros';
 import IzquierdaFooter from './componentes/IzquierdaFooter/IzquierdaFooter';
@@ -47,9 +47,8 @@ function App() {
           <Route path="/Header" element={<Header />} />
           <Route path="/BarraLateral" element={<BarraLateral />} />
           <Route path="/Logo" element={<Logo />} />
-          <Route path="/Carrusel" element={<Carrusel />} />
           <Route path="/Section" element={<Section />} />
-          <Route path="/TextoSection" element={<TextoSection />} />
+
           <Route path="/Footer" element={<Footer />} />
           <Route path="/IzquierdaFooter" element={<IzquierdaFooter />} />
           <Route path="/SobreNosotros" element={<SobreNosotros />} />

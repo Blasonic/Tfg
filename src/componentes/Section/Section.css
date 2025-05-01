@@ -1,0 +1,139 @@
+.section-container {
+    background-color: #b7d1c2;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .section-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    z-index: 2;
+  }
+  
+  /* Polaroids agrupadas a la izquierda */
+  .polaroid-layout {
+    position: relative;
+    width: 800px;
+    height: 400px;
+    margin-top: 0;
+    margin-left: 0;
+  }
+  
+  .polaroid {
+    width: 250px;
+    background: white;
+    padding: 0.5rem;
+    border-radius: 6px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    position: absolute;
+  }
+  
+  .polaroid img {
+    width: 100%;
+    border-radius: 4px;
+  }
+  
+  .polaroid-1 {
+    top: 0;
+    left: 0;
+    transform: rotate(-10deg);
+    z-index: 1;
+  }
+  
+  .polaroid-2 {
+    top: 80px;      /* antes 60px */
+    left: 180px;    /* antes 140px */
+    transform: rotate(5deg);
+    z-index: 2;
+  }
+  
+  .polaroid-3 {
+    top: 160px;     /* antes 120px */
+    left: 360px;    /* antes 280px */
+    transform: rotate(-5deg);
+    z-index: 3;
+  }
+  
+  .polaroid-4 {
+    top: 240px;     /* antes 180px */
+    left: 540px;    /* antes 420px */
+    transform: rotate(10deg);
+    z-index: 4;
+  }
+  
+  
+  
+  /* Texto a la derecha */
+  .text-block {
+    width: 300px;
+    text-align: left;
+    margin-top: 0; /* alineado arriba */
+    z-index: 3;
+    position: relative;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .highlight {
+    font-style: italic;
+    font-weight: bold;
+    color: #facc15;
+  }
+  
+  .subtitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #facc15;
+    margin-top: 1rem;
+  }
+  
+  .paragraph {
+    color: black;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+    line-height: 1.5;
+  }
+  
+  /* Cámara decorativa arriba derecha */
+  .decor-camara {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 100px;
+    z-index: 3;
+    opacity: 0.9;
+  }
+  
+  /* Mapa decorativo */
+  .decor-map {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    opacity: 0.5;
+    z-index: 1;
+  }
+  
+  .decor-avion {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 800px;
+    transform: rotate(-8deg) translateY(20px);
+    z-index: 0;
+    opacity: 0.4;
+    pointer-events: none;
+
+  }
+  
+  
