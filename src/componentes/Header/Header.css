@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   background: white;
-  background: #A7C4B2 180%;
+  background: white 180%;
   padding: 5px 15px; 
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
@@ -27,20 +27,57 @@
   width: calc(100% - 250px);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px;
+  padding: 10px 30px;
+  gap: 1rem;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
 }
+.logo-container {
+  margin-right: auto;
+  margin-left: -15px; /* pega el logo a la barra lateral */
+  display: flex;
+  align-items: center;
+  transform: scale(1.2); /* agranda el logo */
+}
+
+
+/* Buscador centrado visualmente y más grande */
+.search-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.search-container input {
+  width: 100%;
+  max-width: 500px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Log-in o avatar más grande y separado a la derecha */
+.login-btn {
+  margin-left: auto;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #A7C4B2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+}
 
 /* Nueva clase para mostrar el avatar */
 .user-avatar {
+  margin-left: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 /* Estilo para el avatar redondo */
