@@ -9,13 +9,11 @@ const registerUser = async (req, res) => {
   try {
     const { name, user, email, password } = req.body;
 
-    // Verificar si el correo ya existe
     const emailExiste = await Usuario.findOne({ email });
     if (emailExiste) {
       return res.status(400).json({ message: 'El correo ya está registrado' });
     }
 
-    // Verificar si el nombre de usuario ya existe
     const userExiste = await Usuario.findOne({ user });
     if (userExiste) {
       return res.status(400).json({ message: 'El nombre de usuario ya está en uso' });
@@ -28,7 +26,8 @@ const registerUser = async (req, res) => {
       user,
       email,
       password: hashedPassword,
-      profilePicture: '/imagenes/avatares/avatar-en-blanco.webp'
+      profilePicture: '/imagenes/avatares/avatar-en-blanco.webp',
+      role: 'user'  // 👈 AÑADIDO
     });
 
     await nuevoUsuario.save();
@@ -38,6 +37,7 @@ const registerUser = async (req, res) => {
     res.status(500).json({ message: 'Error en el servidor' });
   }
 };
+
 
 
 
@@ -53,12 +53,28 @@ const loginUser = async (req, res) => {
     const match = await bcrypt.compare(password, usuario.password);
     if (!match) return res.status(400).json({ message: 'Correo o contraseña incorrectos' });
 
-    const token = jwt.sign({ id: usuario._id }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token, user: { id: usuario._id, name: usuario.name, email: usuario.email, user: usuario.user, profilePicture: usuario.profilePicture || '' } });
+    const token = jwt.sign(
+      { id: usuario._id, email: usuario.email, role: usuario.role }, // 👈 AÑADIDO role
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({ 
+      token,
+      user: {
+        id: usuario._id,
+        name: usuario.name,
+        email: usuario.email,
+        user: usuario.user,
+        profilePicture: usuario.profilePicture || '',
+        role: usuario.role  // 👈 AÑADIDO role en respuesta
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error en el servidor' });
   }
 };
+
 
 const getUserProfile = async (req, res) => {
   try {

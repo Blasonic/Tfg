@@ -9,11 +9,6 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
 
-  const isAdmin = (email) => {
-    const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
-    return email.trim().toLowerCase() === adminEmail.trim().toLowerCase();
-  };
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -32,22 +27,16 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        const userEmail = data.user.email;
+        // Guardar token y usuario
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
 
-        if (isAdmin(userEmail)) {
-          localStorage.setItem("admin-just-logged", "true");
-          localStorage.setItem("admin-token", data.token);
-          localStorage.setItem("admin-user", JSON.stringify(data.user));
+        // 🔥 Redirigir según el role
+        if (data.user.role === 'admin') {
           navigate("/admin");
-        }
-        
-        
-        else {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
+        } else {
           navigate("/");
         }
-        
 
         setFormData({ email: "", password: "" });
         window.dispatchEvent(new Event("storage"));

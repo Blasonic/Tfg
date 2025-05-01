@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './Admin.css';
 import { Navigate } from 'react-router-dom';
 
-const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
-
 function Admin({ token, user }) {
   const [solicitudes, setSolicitudes] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -12,7 +10,7 @@ function Admin({ token, user }) {
   const [usuarios, setUsuarios] = useState([]);
 
   useEffect(() => {
-    if (user?.email !== ADMIN_EMAIL) return;
+    if (!user || user.role !== 'admin') return; // 🔥 Comprobamos por role
 
     fetch('http://localhost:3000/api/fiestas/pendientes', {
       headers: { Authorization: `Bearer ${token}` },
@@ -23,7 +21,7 @@ function Admin({ token, user }) {
         if (Array.isArray(data)) {
           setSolicitudes(data);
         } else {
-          setSolicitudes([]); // evita que se rompa
+          setSolicitudes([]);
         }
         setLoading(false);
       })
@@ -44,7 +42,6 @@ function Admin({ token, user }) {
       const result = await res.json();
       console.log(`✔️ Resultado de ${accion}:`, result);
 
-      // Quitar del estado la solicitud ya procesada
       setSolicitudes(prev => prev.filter(ev => ev.id !== id));
       setSelected(null);
     } catch (error) {
@@ -66,17 +63,13 @@ function Admin({ token, user }) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("admin-just-logged");
-    localStorage.removeItem("admin-token");
-    localStorage.removeItem("admin-user");
+    localStorage.clear();
     window.location.href = "/";
   };
 
+  // 🔥 Protecciones
   if (!user) return <Navigate to="/Login" />;
-  if (!ADMIN_EMAIL) return <p>Error: admin email no definido</p>;
-  if (user.email !== ADMIN_EMAIL) return <Navigate to="/" />;
+  if (user.role !== 'admin') return <Navigate to="/" />;
   if (loading) return <p className="text-center mt-8">Cargando solicitudes...</p>;
 
   return (
