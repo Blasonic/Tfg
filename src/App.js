@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import './App.css';
 import Home from './componentes/Home/Home';
 import Header from './componentes/Header/Header';
@@ -16,24 +16,11 @@ import VerPerfil from './componentes/VerPerfil/VerPerfil';
 import Admin from './componentes/Admin/Admin';
 import CalendarioGlobal from './componentes/Calendario/CalendarioGlobal';
 import FormularioAnadir from './componentes/Calendario/FormularioAnadir';
+import ProtegerAdmin from './componentes/Admin/ProtegerAdmin';
 
 
 
-const rawUser =
-  localStorage.getItem("admin-just-logged") === "true"
-    ? localStorage.getItem("admin-user")
-    : localStorage.getItem("user");
 
-const user = rawUser ? JSON.parse(rawUser) : null;
-
-const token =
-  localStorage.getItem("admin-just-logged") === "true"
-    ? localStorage.getItem("admin-token")
-    : localStorage.getItem("token");
-
-
-// Verificación estricta del email del admin
-const isAdmin = user && user.role === "admin";
 
 
 function App() {
@@ -58,15 +45,14 @@ function App() {
           <Route path="/CalendarioGlobal" element={<CalendarioGlobal />} />
           <Route path="/FormularioAnadir" element={<FormularioAnadir />} />
           <Route
-            path="/admin"
-            element={
-              isAdmin ? (
-                <Admin token={token} user={user} />
-              ) : (
-                <Navigate to="/Login" />
-              )
-            }
-          />
+  path="/admin"
+  element={
+    <ProtegerAdmin>
+      <Admin />
+    </ProtegerAdmin>
+  }
+/>
+
         </Routes>
       </div>
     </Router>
