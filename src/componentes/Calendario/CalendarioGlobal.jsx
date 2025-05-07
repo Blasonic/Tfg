@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './Calendario.css';
-import Eventos from './Eventos';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import FormularioAnadir from '../Calendario/FormularioAnadir';
+import EventoCard from './EventoCard';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CalendarioGlobal = () => {
   const [eventos, setEventos] = useState([]);
-  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date()); // ✅ Fecha actual seleccionada por defecto
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const usuario = JSON.parse(localStorage.getItem('user'));
 
-  // 🔁 Función para cargar eventos aceptados
   const cargarEventosAceptados = async () => {
     try {
       const res = await fetch('http://localhost:3000/api/fiestas/aceptadas');
@@ -22,25 +24,43 @@ const CalendarioGlobal = () => {
       setEventos(eventosOrdenados);
     } catch (error) {
       console.error('Error cargando eventos:', error);
+      toast.error('Error al cargar los eventos');
     }
   };
 
-  // 🕒 Cargar eventos al montar y luego cada 10 segundos
   useEffect(() => {
     cargarEventosAceptados();
-
     const interval = setInterval(() => {
       cargarEventosAceptados();
-    }, 10000); // cada 10 segundos
-
-    return () => clearInterval(interval); // limpiar al desmontar
+    }, 10000);
+    return () => clearInterval(interval);
   }, []);
 
+  const formatearFecha = (fecha) => {
+    const d = new Date(fecha);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const obtenerEventosDelDia = (date) => {
-    const dia = date.toISOString().split('T')[0];
+    const diaSeleccionado = formatearFecha(date);
+
     return eventos
-      .filter(ev => ev.fecha === dia)
-      .sort((a, b) => a.hora.localeCompare(b.hora));
+      .filter(ev => {
+        const inicio = formatearFecha(ev.fecha_inicio);
+        const fin = formatearFecha(ev.fecha_fin);
+        return diaSeleccionado >= inicio && diaSeleccionado <= fin;
+      })
+      .sort((a, b) => {
+        const horaA = a.hora_inicio ? 0 : 1;
+        const horaB = b.hora_inicio ? 0 : 1;
+        if (horaA !== horaB) return horaA - horaB;
+        const horaTextoA = a.hora_inicio || '';
+        const horaTextoB = b.hora_inicio || '';
+        return horaTextoA.localeCompare(horaTextoB);
+      });
   };
 
   const tileContent = ({ date, view }) => {
@@ -59,6 +79,7 @@ const CalendarioGlobal = () => {
           <Calendar
             onClickDay={setFechaSeleccionada}
             tileContent={tileContent}
+            value={fechaSeleccionada}
           />
         </div>
 
@@ -72,12 +93,34 @@ const CalendarioGlobal = () => {
             )}
           </div>
 
-          {fechaSeleccionada && (
-            <Eventos
-              fecha={fechaSeleccionada}
-              eventos={obtenerEventosDelDia(fechaSeleccionada)}
-              onClose={() => setFechaSeleccionada(null)}
-            />
+          {fechaSeleccionada ? (() => {
+            const eventosDelDia = obtenerEventosDelDia(fechaSeleccionada);
+
+            if (eventosDelDia.length === 0) {
+              return <p>No hay eventos para este día.</p>;
+            }
+
+            const eventosPorTipo = eventosDelDia.reduce((acc, evento) => {
+              const tipo = evento.tipo || 'otros';
+              if (!acc[tipo]) acc[tipo] = [];
+              acc[tipo].push(evento);
+              return acc;
+            }, {});
+
+            return (
+              <>
+                {Object.entries(eventosPorTipo).map(([tipo, eventos]) => (
+                  <div key={tipo} style={{ marginBottom: '24px' }}>
+                    <h4 style={{ textTransform: 'capitalize', borderBottom: '1px solid #ccc' }}>{tipo}</h4>
+                    {eventos.map(ev => (
+                      <EventoCard key={ev.id} evento={ev} />
+                    ))}
+                  </div>
+                ))}
+              </>
+            );
+          })() : (
+            <p>Selecciona un día para ver los eventos.</p>
           )}
         </div>
       </div>
@@ -104,19 +147,20 @@ const CalendarioGlobal = () => {
               const respuesta = await res.json();
 
               if (res.ok) {
-                alert('🎉 Evento enviado correctamente para revisión.');
+                toast.success('🎉 Evento enviado correctamente para revisión.');
                 setMostrarFormulario(false);
               } else {
-                alert(`❌ Error: ${respuesta.message}`);
+                toast.error(`❌ Error: ${respuesta.message}`);
               }
             } catch (err) {
               console.error('❌ Error al enviar el evento:', err);
-              alert('Error al enviar el evento.');
+              toast.error('Error al enviar el evento.');
             }
           }}
         />
       )}
 
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} />
       <Footer />
     </>
   );
