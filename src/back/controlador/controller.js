@@ -3,8 +3,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'Qca200@';
+const API_KEY = process.env.INTERNAL_API_KEY || 'clave-interna-segura'; // para proteger el resumen
 
-
+// ✅ Registro
 const registerUser = async (req, res) => {
   try {
     const { name, user, email, password } = req.body;
@@ -27,7 +28,7 @@ const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       profilePicture: '/imagenes/avatares/avatar-en-blanco.webp',
-      role: 'user'  // 👈 AÑADIDO
+      role: 'user'
     });
 
     await nuevoUsuario.save();
@@ -38,11 +39,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-
-
-
-
-// 🔹 Login de usuario
+// ✅ Login
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -54,12 +51,12 @@ const loginUser = async (req, res) => {
     if (!match) return res.status(400).json({ message: 'Correo o contraseña incorrectos' });
 
     const token = jwt.sign(
-      { id: usuario._id, email: usuario.email, role: usuario.role }, // 👈 AÑADIDO role
+      { id: usuario._id, email: usuario.email, role: usuario.role },
       JWT_SECRET,
       { expiresIn: '1h' }
     );
 
-    res.json({ 
+    res.json({
       token,
       user: {
         id: usuario._id,
@@ -67,7 +64,7 @@ const loginUser = async (req, res) => {
         email: usuario.email,
         user: usuario.user,
         profilePicture: usuario.profilePicture || '',
-        role: usuario.role  // 👈 AÑADIDO role en respuesta
+        role: usuario.role
       }
     });
   } catch (error) {
@@ -75,14 +72,13 @@ const loginUser = async (req, res) => {
   }
 };
 
-
+// ✅ Perfil
 const getUserProfile = async (req, res) => {
   try {
     const token = req.header('Authorization').replace('Bearer ', '');
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    const usuario = await Usuario.findById(decoded.id).select('-password'); // Excluir la contraseña
-
+    const usuario = await Usuario.findById(decoded.id).select('-password');
     if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
 
     res.json(usuario);
@@ -91,6 +87,7 @@ const getUserProfile = async (req, res) => {
   }
 };
 
+// ✅ Actualizar perfil
 const updateUserProfile = async (req, res) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -115,6 +112,8 @@ const updateUserProfile = async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar el perfil' });
   }
 };
+
+// ✅ Obtener todos los usuarios
 const getAllUsers = async (req, res) => {
   try {
     const usuarios = await Usuario.find({}, 'name user profilePicture');
@@ -124,6 +123,29 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+// ✅ NUEVO: Obtener resumen del usuario (para el backend de fiestas)
+const getUserResumen = async (req, res) => {
+  const key = req.header('x-api-key');
+  if (key !== API_KEY) {
+    return res.status(403).json({ message: 'Acceso no autorizado' });
+  }
 
+  try {
+    const usuario = await Usuario.findById(req.params.id).select('user profilePicture role');
+    if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
 
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile, getAllUsers};
+    res.json(usuario);
+  } catch (error) {
+    console.error('❌ Error en getUserResumen:', error);
+    res.status(500).json({ message: 'Error al obtener datos del usuario' });
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  getUserProfile,
+  updateUserProfile,
+  getAllUsers,
+  getUserResumen // 👈 Exportado aquí
+};
