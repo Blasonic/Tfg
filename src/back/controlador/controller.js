@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'Qca200@';
-const API_KEY = process.env.INTERNAL_API_KEY || 'clave-interna-segura'; // para proteger el resumen
+
 
 // ✅ Registro
 const registerUser = async (req, res) => {
@@ -125,11 +125,6 @@ const getAllUsers = async (req, res) => {
 
 // ✅ NUEVO: Obtener resumen del usuario (para el backend de fiestas)
 const getUserResumen = async (req, res) => {
-  const key = req.header('x-api-key');
-  if (key !== API_KEY) {
-    return res.status(403).json({ message: 'Acceso no autorizado' });
-  }
-
   try {
     const usuario = await Usuario.findById(req.params.id).select('user profilePicture role');
     if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
@@ -140,6 +135,9 @@ const getUserResumen = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener datos del usuario' });
   }
 };
+
+
+
 
 module.exports = {
   registerUser,
