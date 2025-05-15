@@ -1,0 +1,106 @@
+.comentarios-panel {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 900px;
+  margin: 2rem auto;
+}
+
+.comentarios-panel h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #2c3e50;
+}
+
+.comentarios-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.comentarios-tabs button {
+  background-color: #e9f0ec;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.comentarios-tabs button:hover {
+  background-color: #d5e6dd;
+}
+
+.tab-activa {
+  background-color: #a7c4b2 !important;
+  color: white !important;
+}
+
+.comentario-card {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 2px solid #a7c4b2;
+  background-color: #f9fbfa;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+}
+
+.comentario-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+.comentario-contenido {
+  flex: 1;
+}
+
+.comentario-contenido h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.comentario-contenido p {
+  margin: 0.2rem 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.comentario-estrellas {
+  font-size: 1.1rem;
+  color: #f4c542;
+  margin-top: 0.3rem;
+}
+
+.comentario-fecha {
+  font-size: 0.85rem;
+  color: #999;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .comentario-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .comentario-avatar {
+    margin-bottom: 0.5rem;
+  }
+
+  .comentario-contenido {
+    align-items: center;
+  }
+}

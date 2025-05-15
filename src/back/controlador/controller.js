@@ -137,8 +137,6 @@ const getUserResumen = async (req, res) => {
 };
 
 
-
-
 module.exports = {
   registerUser,
   loginUser,
