@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const CalendarioGlobal = () => {
   const [eventos, setEventos] = useState([]);
-  const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date()); // ✅ Fecha actual seleccionada por defecto
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const usuario = JSON.parse(localStorage.getItem('user'));
 
@@ -84,10 +84,20 @@ const CalendarioGlobal = () => {
         </div>
 
         <div className="eventos-panel">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3>Eventos del día</h3>
+          {/* Título centrado con botón a la derecha */}
+          <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
+            <h3 style={{ textAlign: 'center', margin: 0 }}>Planes hoy</h3>
             {usuario && (
-              <button onClick={() => setMostrarFormulario(true)} className="btn-nuevo-evento">
+              <button
+                onClick={() => setMostrarFormulario(true)}
+                className="btn-nuevo-evento"
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  top: '50%',
+                  transform: 'translateY(-50%)'
+                }}
+              >
                 Añadir evento
               </button>
             )}
@@ -111,7 +121,7 @@ const CalendarioGlobal = () => {
               <>
                 {Object.entries(eventosPorTipo).map(([tipo, eventos]) => (
                   <div key={tipo} style={{ marginBottom: '24px' }}>
-                    <h4 style={{ textTransform: 'capitalize', borderBottom: '1px solid #ccc' }}>{tipo}</h4>
+                    <h4>{tipo}</h4>
                     {eventos.map(ev => (
                       <EventoCard key={ev.id} evento={ev} />
                     ))}
