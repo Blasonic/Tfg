@@ -31,21 +31,26 @@ function Header() {
       </div>
 
       <div className="headerContent">
-        <Logo />
-        <Buscador />
+  <div className="logo-container">
+    <Logo />
+  </div>
 
-        {user ? (
-          <div className="nav-item user-avatar">
-            <img
-              src={user.profilePicture || "/imagenes/avatares/avatar-en-blanco.webp"}
-              alt="Avatar"
-              className="avatar-img"
-            />
-          </div>
-        ) : (
-          <Link to="/Login" className="linkStyle">Log-in</Link>
-        )}
-      </div>
+  <div className="search-container">
+    <Buscador />
+  </div>
+
+  {user ? (
+    <div className="nav-item user-avatar">
+      <img
+        src={user.profilePicture || "/imagenes/avatares/avatar-en-blanco.webp"}
+        alt="Avatar"
+        className="avatar-img"
+      />
+    </div>
+  ) : (
+    <Link to="/Login" className="login-btn">Log-in</Link>
+  )}
+</div>
     </div>
   );
 }

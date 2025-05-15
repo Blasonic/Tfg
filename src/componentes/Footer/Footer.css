@@ -1,20 +1,21 @@
 .footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgb(255,255,255);
-    background:  #A7C4B2 180%;
-    color: rgb(24, 64, 61);
-    padding: 20px;
-    font-weight: bold;
-  }
-  
-  .footer-seccion {
-    flex: 1;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  color:black;
+  padding: 20px 40px;
+  font-weight: bold;
+  margin: 0;
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
 
-  
-  
-  
-  
-  
+.footer * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.footer-seccion {
+  flex: 1;
+}

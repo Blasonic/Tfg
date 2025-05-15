@@ -4,10 +4,10 @@
 }
 
 .menu-btn {
-  color: white;
+  color: black;
   font-size: 1.5rem;
   padding: 10px;
-  background-color: #A7C4B3;
+  background-color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -22,9 +22,9 @@
   margin-top: 5px;
   top: 50px;
   left: 10px;
-  background-color: #A7C4B2;
+  background-color: white;
   width: 180px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 6px black;
   border-radius: 5px;
   padding: 10px;
   z-index: 999;
@@ -34,6 +34,7 @@
   list-style: none; 
   padding: 0;
   margin: 0;
+  font-weight: bold;
 }
 
 .menu-item {
@@ -59,6 +60,7 @@
 
 .menu-link:hover, .menu-button:hover {
   background-color: white;
+  width: auto;
 }
 
 

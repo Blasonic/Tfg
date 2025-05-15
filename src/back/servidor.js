@@ -7,29 +7,20 @@ const app = express();
 
 // 🔹 Configurar CORS
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: "*", // puedes poner el frontend o el backend de fiestas si quieres limitarlo
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
 }));
-
 
 app.use(express.json());
 
-
+// 🔹 Conectar a MongoDB
 conectarDB();
 
-
-const authRoutes = require("./ruta/routes");
-app.use("/api/auth", authRoutes);
-
-
+// 🔹 Importar rutas y montarlas en /api
+const userRoutes = require("./ruta/routes");
+app.use("/api", userRoutes); // ✅ Aquí se monta el prefijo /api para todas las rutas
 
 // 🔹 Iniciar servidor
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Servidor corriendo en el puerto ${PORT}`));
-
-
-
-
-
-
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`✅ Backend de usuarios corriendo en http://localhost:${PORT}`));

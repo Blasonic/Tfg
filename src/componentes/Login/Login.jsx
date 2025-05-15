@@ -8,11 +8,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
-
-  const isAdmin = (email) => {
-    const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
-    return email.trim().toLowerCase() === adminEmail.trim().toLowerCase();
-  };
+  const [adminRedirecting, setAdminRedirecting] = useState(false); // NUEVO
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -32,14 +28,17 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        const userEmail = data.user.email;
+        // Guardar token y usuario
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
 
-        if (isAdmin(userEmail)) {
-          sessionStorage.setItem("admin-just-logged", "true");
-          navigate("/admin");
+        // 🔥 Redirigir según el role
+        if (data.user.role === 'admin') {
+          setAdminRedirecting(true); // mostramos mensaje de carga
+          setTimeout(() => {
+            navigate("/admin");
+          }, 3000); // 3 segundos
         } else {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
           navigate("/");
         }
 
@@ -53,6 +52,15 @@ const Login = () => {
       setErrorMessage("Error al intentar iniciar sesión");
     }
   };
+
+  // 💬 Mostrar carga si es admin
+  if (adminRedirecting) {
+    return (
+      <StyledWrapper>
+        <h2 style={{ textAlign: 'center' }}>Cargando panel de administración...</h2>
+      </StyledWrapper>
+    );
+  }
 
   return (
     <StyledWrapper>
@@ -153,7 +161,8 @@ const StyledWrapper = styled.div`
     padding-left: 10px;
     transition: 0.2s ease-in-out;
   }
-      .inputForm input {
+
+  .inputForm input {
     width: 100%;
     border: none;
     outline: none;

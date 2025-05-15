@@ -65,55 +65,58 @@ const Registro = () => {
     e.preventDefault();
     setErrorMessage("");
     setFieldErrors({ email: "", user: "" });
-
+  
     if (!emailValid) {
       setErrorMessage("El formato del correo es inválido");
       return;
     }
-
+  
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Las contraseñas no coinciden");
       return;
     }
-
+  
     const status = getPasswordStatus(formData.password);
     const allValid = Object.values(status).every(Boolean);
-
+  
     if (!allValid) {
       setErrorMessage("La contraseña no cumple con todos los requisitos");
       return;
     }
-
+  
     const userData = {
       name: formData.name,
       user: formData.user,
       email: formData.email,
       password: formData.password,
     };
-
+  
     try {
       await registerUser(userData);
+      // 🔥 SIN alert: simplemente redirigimos
       navigate('/Login');
     } catch (error) {
       const message = error.message || "Error al registrar la cuenta";
-
+  
       const newFieldErrors = { email: "", user: "" };
-
+  
       if (message.toLowerCase().includes("correo")) {
         newFieldErrors.email = message;
       }
-
+  
       if (message.toLowerCase().includes("usuario")) {
         newFieldErrors.user = message;
       }
-
+  
       if (!newFieldErrors.email && !newFieldErrors.user) {
         setErrorMessage(message);
       }
-
+  
       setFieldErrors(newFieldErrors);
     }
   };
+  
+  
 
   return (
     <StyledWrapper>

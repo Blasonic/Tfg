@@ -15,8 +15,8 @@ const BarraLateral = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user"); // 👈 también quitamos el usuario
-    window.dispatchEvent(new Event("storage")); // 🔔 notificar a otros componentes
+    localStorage.removeItem("user"); 
+    window.dispatchEvent(new Event("storage")); 
     setUserLoggedIn(false);
     navigate("/"); 
   };
@@ -35,9 +35,9 @@ const BarraLateral = () => {
           <ul className="menu-list">
             <MenuLink to="/VerPerfil" texto="Ver Perfil" />
             <hr className="menu-divider" />
-            <MenuLink to="/calendarioGlobal" texto="Calendario Global" />
-            <MenuLink to="/fiestastra" texto="Fiestas Tradicionales" />
-            <MenuLink to="/metricas" texto="Fiestas Patronales" />
+            <MenuLink to="/CalendarioGlobal" texto="Calendario Global" />
+            <MenuLink to="/CalendarioLocal" texto="Fiestas Locales" />
+            <MenuLink to="/CalendarioPatronal" texto="Fiestas Patronales" />
             <hr className="menu-divider" />
             <MenuLink to="/comentarios" texto="Comentarios" />
             <MenuLink to="/soporte" texto="Soporte" />
