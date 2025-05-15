@@ -19,6 +19,7 @@ import FormularioAnadir from './componentes/Calendario/FormularioAnadir';
 import ProtegerAdmin from './componentes/Admin/ProtegerAdmin';
 import CalendarioPatronal from './componentes/Calendario/CalendarioPatronal';
 import CalendarioLocal from './componentes/Calendario/CalendarioLocal';
+import ComentariosPanel from './componentes/Comentarios/Comentarios';
 
 
 
@@ -43,6 +44,7 @@ function App() {
           <Route path="/AvisoLegal" element={<AvisoLegal />} />
           <Route path="/PoliticaCookies" element={<PoliticaCookies />} />
           <Route path="/VerPerfil" element={<VerPerfil />} />
+           <Route path="/comentarios" element={<ComentariosPanel />} />
           <Route path="/CalendarioGlobal" element={<CalendarioGlobal />} />
          <Route path="/CalendarioLocal" element={<CalendarioLocal />} />
          <Route path="/CalendarioPatronal" element={<CalendarioPatronal />} />
