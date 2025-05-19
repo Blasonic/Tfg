@@ -40,7 +40,7 @@ const BarraLateral = () => {
             <MenuLink to="/CalendarioPatronal" texto="Fiestas Patronales" />
             <hr className="menu-divider" />
             <MenuLink to="/comentarios" texto="Comentarios" />
-            <MenuLink to="/soporte" texto="Soporte" />
+            <MenuLink to="/Soporte" texto="Soporte" />
             <hr className="menu-divider" />
 
             {userLoggedIn && (
