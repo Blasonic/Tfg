@@ -126,7 +126,7 @@ const getAllUsers = async (req, res) => {
 // ✅ NUEVO: Obtener resumen del usuario (para el backend de fiestas)
 const getUserResumen = async (req, res) => {
   try {
-    const usuario = await Usuario.findById(req.params.id).select('user profilePicture role');
+   const usuario = await Usuario.findById(req.params.id).select('user profilePicture role email');
     if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
 
     res.json(usuario);

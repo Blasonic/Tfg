@@ -8,34 +8,44 @@ const ComentariosPanel = () => {
   const [tab, setTab] = useState('recibidos');
   const [recibidos, setRecibidos] = useState([]);
   const [enviados, setEnviados] = useState([]);
-  const usuario = JSON.parse(localStorage.getItem('user'));
+  const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
+    const user = localStorage.getItem('user');
     const token = localStorage.getItem('token');
+    const parsedUser = user ? JSON.parse(user) : null;
+    setUsuario(parsedUser);
 
     const cargarComentarios = async () => {
       try {
-        const [resRecibidos, resEnviados] = await Promise.all([
-          fetch('http://localhost:3000/api/fiestas/comentarios/mis-fiestas', {
-            headers: { Authorization: `Bearer ${token}` }
-          }),
-          fetch('http://localhost:3000/api/fiestas/comentarios/enviados', {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-        ]);
+        if (parsedUser) {
+          const [resRecibidos, resEnviados] = await Promise.all([
+            fetch('http://localhost:3000/api/fiestas/comentarios/mis-fiestas', {
+              headers: { Authorization: `Bearer ${token}` }
+            }),
+            fetch('http://localhost:3000/api/fiestas/comentarios/enviados', {
+              headers: { Authorization: `Bearer ${token}` }
+            })
+          ]);
 
-        const dataRecibidos = await resRecibidos.json();
-        const dataEnviados = await resEnviados.json();
+          const dataRecibidos = await resRecibidos.json();
+          const dataEnviados = await resEnviados.json();
 
-        setRecibidos(dataRecibidos);
-        setEnviados(dataEnviados);
+          setRecibidos(Array.isArray(dataRecibidos) ? dataRecibidos : []);
+          setEnviados(Array.isArray(dataEnviados) ? dataEnviados : []);
+        } else {
+          // Cargar los comentarios top si no hay usuario
+          const resTop = await fetch('http://localhost:3000/api/fiestas/comentarios/top');
+          const dataTop = await resTop.json();
+          setRecibidos(Array.isArray(dataTop) ? dataTop : []);
+        }
       } catch (error) {
         console.error('Error cargando comentarios:', error);
       }
     };
 
-    if (usuario) cargarComentarios();
-  }, [usuario]);
+    cargarComentarios();
+  }, []);
 
   const calcularResumen = (comentarios) => {
     const total = comentarios.length;
@@ -53,7 +63,7 @@ const ComentariosPanel = () => {
   const resumen = calcularResumen(recibidos);
 
   const renderComentarios = (lista, tipo) => {
-    if (lista.length === 0) {
+    if (!Array.isArray(lista) || lista.length === 0) {
       return <p>No hay comentarios {tipo === 'recibidos' ? 'recibidos' : 'enviados'}.</p>;
     }
 
@@ -63,7 +73,7 @@ const ComentariosPanel = () => {
           src={
             tipo === 'recibidos'
               ? comentario.autor_avatar || '/imagenes/default-user.jpg'
-              : usuario.profilePicture || '/imagenes/default-user.jpg'
+              : usuario?.profilePicture || '/imagenes/default-user.jpg'
           }
           alt="avatar"
           className="comentario-avatar"
@@ -91,7 +101,7 @@ const ComentariosPanel = () => {
             <p style={{ fontSize: '1.1rem' }}>
               ⭐ Valoración promedio: <strong>{resumen.media}</strong> / 5
             </p>
-            <p>Total de comentarios recibidos: <strong>{resumen.total}</strong></p>
+            <p>Total de comentarios: <strong>{resumen.total}</strong></p>
             <div style={{ width: '100%', height: 250, marginTop: '1rem' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={resumen.conteo} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -105,29 +115,33 @@ const ComentariosPanel = () => {
             </div>
           </>
         ) : (
-          <p style={{ fontSize: '1rem' }}>Aún no has recibido valoraciones.</p>
+          <p style={{ fontSize: '1rem' }}>Aún no hay valoraciones.</p>
         )}
       </div>
 
-      <div className="comentarios-tabs">
-        <button
-          className={tab === 'recibidos' ? 'tab-activa' : ''}
-          onClick={() => setTab('recibidos')}
-        >
-          Recibidos
-        </button>
-        <button
-          className={tab === 'enviados' ? 'tab-activa' : ''}
-          onClick={() => setTab('enviados')}
-        >
-          Enviados
-        </button>
-      </div>
+      {usuario && (
+        <div className="comentarios-tabs">
+          <button
+            className={tab === 'recibidos' ? 'tab-activa' : ''}
+            onClick={() => setTab('recibidos')}
+          >
+            Recibidos
+          </button>
+          <button
+            className={tab === 'enviados' ? 'tab-activa' : ''}
+            onClick={() => setTab('enviados')}
+          >
+            Enviados
+          </button>
+        </div>
+      )}
 
       <div style={{ marginTop: '2rem' }}>
-        {tab === 'recibidos'
-          ? renderComentarios(recibidos, 'recibidos')
-          : renderComentarios(enviados, 'enviados')}
+        {usuario
+          ? tab === 'recibidos'
+            ? renderComentarios(recibidos, 'recibidos')
+            : renderComentarios(enviados, 'enviados')
+          : renderComentarios(recibidos, 'recibidos')}
       </div>
     </div>
   );

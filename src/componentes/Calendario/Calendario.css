@@ -6,6 +6,7 @@ body {
   background-color: #f5f7f6;
 }
 
+/* ===== Layout Principal ===== */
 .calendario-container {
   display: flex;
   flex-direction: row;
@@ -65,7 +66,7 @@ body {
   margin-top: 1rem;
 }
 
-/* Calendario */
+/* ===== Calendario ===== */
 .react-calendar {
   font-size: 1.2rem;
 }
@@ -83,7 +84,7 @@ body {
   margin-top: 4px;
 }
 
-/* Evento Card */
+/* ===== Evento Card ===== */
 .evento-card {
   display: flex;
   flex-direction: row;
@@ -101,7 +102,6 @@ body {
   transform: scale(1.01);
 }
 
-/* Borde por tipo */
 .evento-card.evento {
   border-color: #A7C4B2;
 }
@@ -114,14 +114,12 @@ body {
   border-color: #FF7043;
 }
 
-/* Imagen lateral */
 .evento-imagen-lateral {
   width: 200px;
   height: 100%;
   object-fit: cover;
 }
 
-/* Contenido */
 .evento-info-lateral {
   padding: 1rem;
   flex: 1;
@@ -149,7 +147,7 @@ body {
   line-height: 1.4;
 }
 
-/* Creador en esquina superior */
+/* ===== Creador Info Superior ===== */
 .evento-creador-superior {
   position: absolute;
   top: 10px;
@@ -178,7 +176,7 @@ body {
   color: #222;
 }
 
-/* Botón nuevo evento */
+/* ===== Botón nuevo evento / comentar ===== */
 .btn-nuevo-evento {
   background-color: #A7C4B2;
   color: white;
@@ -194,7 +192,7 @@ body {
   background-color: #8cab99;
 }
 
-/* Toast personalizado */
+/* ===== Toastify Custom ===== */
 .Toastify__toast--success {
   background-color: #a7c4b2;
   color: #fff;
@@ -211,7 +209,60 @@ body {
   background-color: rgba(255, 255, 255, 0.7);
 }
 
-/* Responsive */
+/* ===== Modal con Desenfoque ===== */
+.modal-comentarios-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-comentarios-contenido {
+  background: white;
+  padding: 2rem;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+.cerrar-modal {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #444;
+  cursor: pointer;
+  z-index: 10;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
   .calendario-container {
     flex-direction: column;
@@ -228,32 +279,44 @@ body {
     flex-direction: column;
   }
 
- .evento-imagen-wrapper {
-  height: 100%;
-  display: flex;
-  align-items: stretch;
-}
+  .evento-imagen-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+  }
 
-.evento-imagen-lateral {
-  width: 100%;
-  object-fit: cover;
-  height: 100%;
-}
-
+  .evento-imagen-lateral {
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+  }
 
   .evento-creador-superior {
     top: 10px;
     right: 10px;
     transform: scale(0.9);
   }
+
   .evento-card-expandido {
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  margin-bottom: 2rem;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  background: #fff;
-  position: relative;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    background: #fff;
+    position: relative;
+  }
+
+  .modal-comentarios-contenido {
+    padding: 1.2rem;
+    max-height: 90vh;
+  }
+
+  .cerrar-modal {
+    font-size: 1.3rem;
+  }
+  .estrellas-selector span:hover {
+  transform: scale(1.2);
 }
 
 }
