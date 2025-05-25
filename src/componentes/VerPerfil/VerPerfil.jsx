@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getUserProfile, updateUserProfile } from '../../ServiciosBack/servicio';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const avatarList = [
   'imagenes/avatares/avatar1.png',
@@ -16,19 +18,33 @@ const avatarList = [
   'imagenes/avatares/avatar10.png',
 ];
 
-const PerfilUnificado = () => {
+const VerPerfil = () => {
   const [userData, setUserData] = useState({ name: '', user: '', email: '', profilePicture: '' });
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getUserProfile()
-      .then((data) => {
-        setUserData(data);
-      })
-      .catch((err) => {
-        console.error('Error al obtener el perfil:', err);
-      });
-  }, []);
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const token = localStorage.getItem("token");
+
+      if (!storedUser || !token) {
+        toast.warning("Es necesario iniciar sesión para acceder al perfil.");
+        setTimeout(() => navigate("/Login"), 2000);
+        return;
+      }
+
+      getUserProfile()
+        .then((data) => {
+          setUserData(data);
+        })
+        .catch((err) => {
+          console.error("Error al obtener el perfil:", err);
+        });
+    } catch {
+      toast.error("Error al leer los datos de sesión.");
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -119,6 +135,8 @@ const PerfilUnificado = () => {
         <button type="submit" className="button-submit">Guardar Cambios</button>
         <Link to="/" className="button-link">← Volver al Home</Link>
       </form>
+
+      <ToastContainer />
     </StyledWrapper>
   );
 };
@@ -223,4 +241,4 @@ const StyledWrapper = styled.div`
   }
 `;
 
-export default PerfilUnificado;
+export default VerPerfil;
