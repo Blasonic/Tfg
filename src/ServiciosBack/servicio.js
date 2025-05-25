@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api/auth';
+const API_URL = 'http://localhost:5000/api';
 
 // 🔹 Registro con manejo de errores por status
 export const registerUser = async (userData) => {

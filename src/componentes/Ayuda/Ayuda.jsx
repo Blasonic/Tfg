@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import Header from '../Header/Header';
-import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 import './Ayuda.css';
 
 function Ayuda() {
     const faqData = [
         {
-            category: 'Productos',
+            category: 'Añadir Eventos',
             questions: [
                 { 
                     question: '¿Cómo sé cuál es mi talla correcta?',
@@ -32,7 +31,7 @@ function Ayuda() {
             ],
         },
         {
-            category: 'Envíos y Devoluciones',
+            category: 'Soporte',
             questions: [
                 { 
                     question: '¿Hacen envíos internacionales?',
@@ -61,7 +60,7 @@ function Ayuda() {
             ],
         },
         {
-            category: 'Pagos',
+            category: 'Comentarios',
             questions: [
                 { 
                     question: '¿Es seguro comprar en su tienda?',
@@ -86,7 +85,7 @@ function Ayuda() {
             ],
         },
         {
-            category: 'Cuenta',
+            category: 'Iicio de sesión y Cuenta',
             questions: [
                 { 
                     question: '¿Cómo puedo crear una cuenta?',
@@ -102,19 +101,7 @@ function Ayuda() {
                 },
             ],
         },
-        {
-            category: 'Ofertas y Promociones',
-            questions: [
-                { 
-                    question: '¿Tienen promociones o descuentos especiales?',
-                    answer: 'Sí, contamos con promociones periódicas. Te invitamos a suscribirte a nuestra newsletter para estar al tanto de todas las ofertas y descuentos.'
-                },
-                { 
-                    question: '¿Cómo puedo aplicar un código de descuento?',
-                    answer: 'Al realizar tu compra, podrás ingresar un código de descuento en el apartado correspondiente durante el proceso de pago.'
-                },
-            ],
-        },
+        
     ];
 
     const [openIndex, setOpenIndex] = useState(null);
@@ -126,7 +113,6 @@ function Ayuda() {
     return (
         <div>
             <Header />
-            <Nav />
             <div className="ayuda-container">
                 <h1>Centro de Ayuda</h1>
                 {faqData.map((section, index) => (
