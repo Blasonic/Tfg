@@ -13,16 +13,16 @@ export default function Section() {
         {/* Imágenes Polaroid posicionadas con niveles */}
         <div className="polaroid-layout">
           <div className="polaroid polaroid-1">
-            <img src="/imagenes/carrusel1.jpg" alt="Imagen 1" />
+            <img src="/imagenes/foto1.jpg" alt="Imagen 1" />
           </div>
           <div className="polaroid polaroid-2">
-            <img src="/imagenes/carrusel2.jpg" alt="Imagen 2" />
+            <img src="/imagenes/foto2.jpg" alt="Imagen 2" />
           </div>
           <div className="polaroid polaroid-3">
-            <img src="/imagenes/carrusel3.jpg" alt="Imagen 3" />
+            <img src="/imagenes/foto3.webp" alt="Imagen 3" />
           </div>
           <div className="polaroid polaroid-4">
-            <img src="/imagenes/carrusel4.jpg" alt="Imagen 4" />
+            <img src="/imagenes/foto4.jpg" alt="Imagen 4" />
           </div>
         </div>
 
@@ -33,8 +33,9 @@ export default function Section() {
           </h2>
           <h3 className="subtitle">LLEVA UN DIARIO</h3>
           <p className="paragraph">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            et dolore magna aliqua. Et malesuada fames ac turpis egestas maecenas.
+          Descubre rincones únicos, planea nuevas aventuras y redescubre lo que te rodea.
+          Cada salida es una oportunidad para sorprenderte, conocer personas increíbles y crear recuerdos. 
+          ¡Empieza hoy tu viaje cerca de casa!
           </p>
         </div>
       </div>
