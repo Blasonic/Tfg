@@ -21,7 +21,7 @@ const EventoCard = ({ evento }) => {
   useEffect(() => {
     const cargarComentarios = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/fiestas/comentarios/por-evento/${evento.id}`);
+        const res = await fetch(`http://localhost:3000/api/comentarios/por-evento/${evento.id}`);
         const data = await res.json();
         setComentarios(Array.isArray(data) ? data : []);
       } catch (error) {
@@ -39,7 +39,7 @@ const EventoCard = ({ evento }) => {
     }
 
     try {
-      const res = await fetch('http://localhost:3000/api/fiestas/comentarios', {
+      const res = await fetch('http://localhost:3000/api/comentarios', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
