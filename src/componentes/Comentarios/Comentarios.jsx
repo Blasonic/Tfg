@@ -20,10 +20,10 @@ const ComentariosPanel = () => {
       try {
         if (parsedUser) {
           const [resRecibidos, resEnviados] = await Promise.all([
-            fetch('http://localhost:3000/api/fiestas/comentarios/mis-fiestas', {
+            fetch('http://localhost:3000/api/comentarios/mis-fiestas', {
               headers: { Authorization: `Bearer ${token}` }
             }),
-            fetch('http://localhost:3000/api/fiestas/comentarios/enviados', {
+            fetch('http://localhost:3000/api/comentarios/enviados', {
               headers: { Authorization: `Bearer ${token}` }
             })
           ]);
@@ -35,7 +35,7 @@ const ComentariosPanel = () => {
           setEnviados(Array.isArray(dataEnviados) ? dataEnviados : []);
         } else {
           // Cargar los comentarios top si no hay usuario
-          const resTop = await fetch('http://localhost:3000/api/fiestas/comentarios/top');
+          const resTop = await fetch('http://localhost:3000/api/comentarios/top');
           const dataTop = await resTop.json();
           setRecibidos(Array.isArray(dataTop) ? dataTop : []);
         }
