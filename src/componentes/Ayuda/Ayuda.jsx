@@ -6,102 +6,90 @@ import './Ayuda.css';
 function Ayuda() {
     const faqData = [
         {
-            category: 'Añadir Eventos',
+            category: 'Eventos',
             questions: [
-                { 
-                    question: '¿Cómo sé cuál es mi talla correcta?',
-                    answer: 'Puedes usar nuestra guía de tallas, disponible en la página de cada producto. También te recomendamos medir tu pie para mayor precisión.'
+                {
+                    question: '¿Cómo puedo añadir un nuevo evento?',
+                    answer: 'Haz clic en "Añadir evento" en la página principal del calendario. Completa el formulario con los datos del evento y envíalo para su revisión.'
                 },
-                { 
-                    question: '¿Tienen tallas para niños o tallas especiales?',
-                    answer: 'Sí, contamos con una amplia gama de tallas, incluyendo tallas para niños y opciones de ancho especial.'
+                {
+                    question: '¿Por qué mi evento no aparece de inmediato?',
+                    answer: 'Todos los eventos enviados deben ser aprobados por un moderador. Una vez aprobado, se mostrará en el calendario.'
                 },
-                { 
-                    question: '¿Cómo puedo verificar la disponibilidad de un modelo en mi talla?',
-                    answer: 'Puedes seleccionar tu talla en la página del producto, y te indicaremos si está disponible o no.'
+                {
+                    question: '¿Cómo puedo ver los detalles de un evento?',
+                    answer: 'Haz clic en un día del calendario. Aparecerán los eventos programados para ese día y podrás ver sus detalles.'
                 },
-                { 
-                    question: '¿Cómo sé si el producto que quiero está disponible?',
-                    answer: 'Los productos disponibles estarán marcados como “En stock”. Si no está disponible, podrás registrarte para recibir una notificación cuando vuelva a estar disponible.'
-                },
-                { 
-                    question: '¿Cómo puedo ver las características y materiales de las zapatillas?',
-                    answer: 'Cada producto tiene una sección donde podrás ver todos los detalles, materiales, características técnicas y más.'
-                },
-            ],
+                {
+                    question: '¿Puedo editar o eliminar un evento que creé?',
+                    answer: 'Por el momento, no es posible editar o eliminar eventos desde la interfaz. Contacta con el soporte si necesitas hacer cambios.'
+                }
+            ]
         },
         {
-            category: 'Soporte',
+            category: 'Cuenta de Usuario',
             questions: [
-                { 
-                    question: '¿Hacen envíos internacionales?',
-                    answer: 'Sí, realizamos envíos a la mayoría de los países. Los costos y tiempos de entrega varían según la ubicación.'
+                {
+                    question: '¿Necesito estar registrado para ver los eventos?',
+                    answer: 'No, puedes ver los eventos sin registrarte. Sin embargo, necesitas una cuenta para añadir eventos o comentar.'
                 },
-                { 
-                    question: '¿Qué hago si mi pedido no llega?',
-                    answer: 'Por favor, contáctanos a través de nuestro formulario de soporte para que podamos rastrear tu pedido y resolver cualquier problema.'
+                {
+                    question: '¿Cómo me registro?',
+                    answer: 'Haz clic en "Crear cuenta" en la parte superior del sitio y completa el formulario de registro.'
                 },
-                { 
-                    question: '¿El envío tiene algún costo?',
-                    answer: 'El envío es gratuito para pedidos superiores a 50€. Para pedidos menores, el costo se calcula al finalizar la compra.'
-                },
-                { 
-                    question: '¿Cómo puedo hacer un seguimiento de mi pedido?',
-                    answer: 'Te proporcionamos un número de seguimiento para que puedas ver el estado de tu envío en tiempo real desde la página de seguimiento.'
-                },
-                { 
-                    question: '¿Cómo devuelvo un producto?',
-                    answer: 'Si no estás satisfecho con tu compra, puedes devolver el producto dentro de los 30 días posteriores a la compra. Asegúrate de que esté en su estado original.'
-                },
-                { 
-                    question: '¿Puedo cambiar un producto por otro?',
-                    answer: 'Sí, puedes realizar un cambio siempre que el producto no haya sido usado y se encuentre en su embalaje original.'
-                },
-            ],
+                {
+                    question: '¿Qué pasa si olvido mi contraseña?',
+                    answer: 'En la página de inicio de sesión, haz clic en “¿Olvidaste tu contraseña?” y sigue las instrucciones para restablecerla.'
+                }
+            ]
         },
         {
             category: 'Comentarios',
             questions: [
-                { 
-                    question: '¿Es seguro comprar en su tienda?',
-                    answer: 'Sí, nuestra tienda utiliza cifrado SSL para proteger tus datos y garantizar una experiencia de compra segura.'
+                {
+                    question: '¿Cómo puedo dejar un comentario en un evento?',
+                    answer: 'Haz clic en el evento y luego en "Comentar este evento". Selecciona una puntuación y escribe tu opinión.'
                 },
-                { 
-                    question: '¿Ofrecen opciones de financiamiento o pago a plazos?',
-                    answer: 'Sí, ofrecemos la opción de pagar a plazos a través de nuestros socios financieros. Consulta los detalles al finalizar la compra.'
+                {
+                    question: '¿Puedo editar o borrar mi comentario?',
+                    answer: 'Actualmente no es posible editar ni eliminar comentarios una vez enviados.'
                 },
-                { 
-                    question: '¿Puedo pagar contra reembolso?',
-                    answer: 'Actualmente no ofrecemos la opción de pago contra reembolso.'
-                },
-                { 
-                    question: '¿Cuáles son los métodos de pago aceptados?',
-                    answer: 'Aceptamos tarjetas de crédito y débito, PayPal, y otros métodos de pago como Stripe.'
-                },
-                { 
-                    question: '¿Se puede aplicar un cupón de descuento en la compra?',
-                    answer: 'Sí, si tienes un código de descuento, puedes ingresarlo en la sección de pago para obtener el descuento en tu pedido.'
-                },
-            ],
+                {
+                    question: '¿Por qué no puedo comentar en algunos eventos?',
+                    answer: 'Solo los usuarios registrados pueden comentar. Además, no puedes comentar en eventos que tú mismo creaste.'
+                }
+            ]
         },
         {
-            category: 'Iicio de sesión y Cuenta',
+            category: 'Problemas Técnicos',
             questions: [
-                { 
-                    question: '¿Cómo puedo crear una cuenta?',
-                    answer: 'Puedes crear una cuenta fácilmente haciendo clic en “Crear cuenta” en la parte superior derecha de la página y completando los campos necesarios.'
+                {
+                    question: 'El calendario no carga, ¿qué hago?',
+                    answer: 'Asegúrate de tener conexión a internet. Si el problema persiste, intenta recargar la página o borrar la caché del navegador.'
                 },
-                { 
-                    question: '¿Cómo restablezco mi contraseña?',
-                    answer: 'Si olvidaste tu contraseña, ve a la sección de “Olvidé mi contraseña” en la página de inicio de sesión y sigue las instrucciones para restablecerla.'
-                },
-                { 
-                    question: '¿Puedo eliminar mi cuenta?',
-                    answer: 'Sí, si deseas eliminar tu cuenta, puedes ponerte en contacto con nuestro equipo de soporte para que lo gestionen.'
-                },
-            ],
+                {
+                    question: 'No se envía el formulario del evento, ¿qué puede estar mal?',
+                    answer: 'Verifica que todos los campos obligatorios estén completos y que tengas sesión iniciada. Si el error persiste, contacta con soporte.'
+                }
+            ]
         },
-        
+        {
+            category: 'Privacidad y Seguridad',
+            questions: [
+                {
+                    question: '¿Qué datos míos son públicos al crear un evento?',
+                    answer: 'Solo se muestra tu nombre y foto de perfil. Tu dirección de correo y otros datos personales no son visibles públicamente.'
+                },
+                {
+                    question: '¿Cómo puedo eliminar mi cuenta?',
+                    answer: 'Para eliminar tu cuenta, contacta con nuestro equipo de soporte indicando tu nombre de usuario y correo registrado.'
+                },
+                {
+                    question: '¿Mis comentarios pueden ser vistos por otros usuarios?',
+                    answer: 'Sí, los comentarios son públicos y visibles para cualquier persona que acceda al evento.'
+                }
+            ]
+        }
     ];
 
     const [openIndex, setOpenIndex] = useState(null);
@@ -123,11 +111,11 @@ function Ayuda() {
                                 <li key={idx} className="faq-item">
                                     <div 
                                         className="faq-question" 
-                                        onClick={() => toggleAnswer(idx)}
+                                        onClick={() => toggleAnswer(index + '-' + idx)}
                                     >
                                         <h3>{q.question}</h3>
                                     </div>
-                                    {openIndex === idx && (
+                                    {openIndex === index + '-' + idx && (
                                         <div className="faq-answer">
                                             <p>{q.answer}</p>
                                         </div>
