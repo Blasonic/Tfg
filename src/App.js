@@ -9,7 +9,6 @@ import Registro from './componentes/Registro/Registro';
 import Section from './componentes/Section/Section';
 import Footer from './componentes/Footer/Footer';
 import SobreNosotros from './componentes/SobreNosotros/SobreNosotros';
-import IzquierdaFooter from './componentes/IzquierdaFooter/IzquierdaFooter';
 import AvisoLegal from './componentes/AvisoLegal/AvisoLegal';
 import PoliticaCookies from './componentes/PoliticaCookies/PoliticaCookies';
 import VerPerfil from './componentes/VerPerfil/VerPerfil';
@@ -41,7 +40,7 @@ function App() {
           <Route path="/Logo" element={<Logo />} />
           <Route path="/Section" element={<Section />} />
           <Route path="/Footer" element={<Footer />} />
-          <Route path="/IzquierdaFooter" element={<IzquierdaFooter />} />
+
           <Route path="/SobreNosotros" element={<SobreNosotros />} />
           <Route path="/AvisoLegal" element={<AvisoLegal />} />
           <Route path="/PoliticaCookies" element={<PoliticaCookies />} />

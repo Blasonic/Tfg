@@ -16,7 +16,7 @@ function Header() {
 
     loadUser();
 
-    // 🔁 Escuchar cambios en el localStorage
+
     window.addEventListener("storage", loadUser);
 
     return () => {
@@ -25,15 +25,14 @@ function Header() {
   }, []);
 
   return (
-    <div className="headerStyle">
+   <div className="headerStyle">
       <div className="barraLateral">
+        <Logo /> {/* <-- Logo ahora está dentro de la barra lateral */}
         <BarraLateral />
       </div>
 
       <div className="headerContent">
-  <div className="logo-container">
-    <Logo />
-  </div>
+ 
 
   <div className="search-container">
     <Buscador />
