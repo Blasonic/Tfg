@@ -9,7 +9,7 @@ const EventoCard = ({ evento }) => {
   const [estrellas, setEstrellas] = useState(0);
 
   const usuario = JSON.parse(localStorage.getItem('user'));
-  const esCreador = usuario?.id === evento.creado_por;
+  const esCreador = evento.creado_por && usuario?.id === evento.creado_por;
   const mostrarCreador = evento.creador_rol === 'user';
 
   const horaFormateada = evento.hora_inicio

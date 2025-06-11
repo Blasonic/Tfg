@@ -1,4 +1,27 @@
-.logo{
+.logo {
   width: 120px;
-  height: 100%;
+  height: auto;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+/* ===== Móviles (≤480px) ===== */
+@media (max-width: 480px) {
+  .logo {
+    width: 100px;
+  }
+}
+
+/* ===== Tablets (481px – 1024px) ===== */
+@media (max-width: 1024px) and (min-width: 481px) {
+  .logo {
+    width: 110px;
+  }
+}
+
+/* ===== Pantallas grandes (≥1440px) ===== */
+@media (min-width: 1440px) {
+  .logo {
+    width: 150px;
+  }
 }

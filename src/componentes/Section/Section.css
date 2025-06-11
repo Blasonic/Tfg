@@ -136,4 +136,45 @@
 
   }
   
-  
+ @media (max-width: 768px) {
+  .section-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .polaroid-layout {
+    display: none; /* ❌ oculta las polaroids en móvil para no colapsar el layout */
+  }
+
+  .text-block {
+    width: 90%;
+    max-width: 350px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .paragraph {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .decor-camara {
+    width: 60px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .decor-map {
+    width: 60px;
+  }
+}
+ 

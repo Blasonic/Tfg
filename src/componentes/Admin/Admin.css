@@ -1,102 +1,187 @@
+/* ===== Estilo base (pantallas grandes por defecto) ===== */
+
 .admin-wrapper {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.user-card,
+.event-card {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s ease;
+  flex-wrap: wrap;
+}
+
+.user-card:hover,
+.event-card:hover {
+  transform: translateY(-2px);
+}
+
+.user-avatar,
+.event-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.event-image {
+  border-radius: 10px;
+}
+
+.user-info,
+.event-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.event-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-accept {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-accept:hover {
+  background-color: #218838;
+}
+
+.btn-reject {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-reject:hover {
+  background-color: #c82333;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #007bff;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  text-decoration: underline;
+}
+
+.btn-toggle {
+  background-color: #6610f2;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-toggle:hover {
+  background-color: #520dc2;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+/* ===== Responsive para tablets (481px - 768px) ===== */
+
+@media (max-width: 768px) {
+  .admin-wrapper {
+    padding: 1rem;
   }
-  
+
   .admin-title {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
+    font-size: 1.6rem;
+  }
+
+  .user-card,
+  .event-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .user-avatar,
+  .event-image {
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+  }
+
+  .event-actions {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
     text-align: center;
   }
-  
-  .user-card, .event-card {
-    background-color: #fff;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    transition: transform 0.2s ease;
-  }
-  
-  .user-card:hover, .event-card:hover {
-    transform: translateY(-2px);
-  }
-  
-  .user-avatar, .event-image {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .event-image {
-    border-radius: 10px;
-  }
-  
-  .user-info, .event-info {
-    flex: 1;
-  }
-  
-  .event-actions {
-    margin-top: 1rem;
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-  
-  .btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .btn-accept {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .btn-accept:hover {
-    background-color: #218838;
-  }
-  
-  .btn-reject {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  .btn-reject:hover {
-    background-color: #c82333;
-  }
-  
-  .btn-secondary {
-    background-color: transparent;
-    color: #007bff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .btn-secondary:hover {
-    text-decoration: underline;
-  }
-  
+
   .btn-toggle {
-    margin-bottom: 1.5rem;
-    background-color: #6610f2;
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
+    margin-bottom: 1rem;
+    width: 100%;
   }
-  
-  .btn-toggle:hover {
-    background-color: #520dc2;
+}
+
+/* ===== Responsive para móviles (hasta 480px) ===== */
+
+@media (max-width: 480px) {
+  .admin-title {
+    font-size: 1.4rem;
   }
-  
+
+  .btn-toggle {
+    font-size: 0.95rem;
+    padding: 0.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .user-avatar,
+  .event-image {
+    max-width: 100%;
+  }
+
+  .btn {
+    font-size: 0.95rem;
+  }
+}
