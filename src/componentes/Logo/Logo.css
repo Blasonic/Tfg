@@ -1,9 +1,19 @@
+.logoStyle {
+  width: 120px;          /* 🔥 fuerza el ancho real */
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+    /* 🔥 evita que el PNG gigante expanda el header */
+}
+
 .logo {
-  width: 120px;
+  width: 100%;           /* 🔥 ocupa solo el espacio permitido */
   height: auto;
   object-fit: contain;
   transition: all 0.3s ease;
 }
+
 
 /* ===== Móviles (≤480px) ===== */
 @media (max-width: 480px) {

@@ -1,252 +1,269 @@
-/* ===== ESTILO BASE (pantallas normales) ===== */
+/* ===================================================
+   HEADER PERFECTAMENTE EQUILIBRADO
+=================================================== */
 
-.headerStyle {
+.header-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 60px;
+  height: 80px;
+  background: #fff;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: white;
-  padding: 0 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  padding-left: 60px;   /* ⭐ margen izquierdo del logo */
+  padding-right: 60px;  /* ⭐ misma distancia para el avatar */
+  border-bottom: 4px solid #FF751F;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   z-index: 1000;
 }
 
-/* ===== MENÚ Y LOGO EN LÍNEA ===== */
+/* ===========================================
+   IZQUIERDA (LOGO)
+=========================================== */
 
-.barraLateral {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  height: 100%;
-}
-
-.menu-btn {
-  font-size: 1.8rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  height: 100%;
-}
-
-.logo-container {
-  transform: scale(1.2); /* Ajustable */
+.header-left {
   display: flex;
   align-items: center;
 }
 
-.logo-container img {
-  height: 40px;
-  object-fit: contain;
-}
+/* ===========================================
+   DERECHA (ENLACES + LUPA + AVATAR)
+=========================================== */
 
-/* ===== CONTENIDO A LA DERECHA ===== */
-
-.headerContent {
+.header-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-grow: 1;
-  justify-content: flex-end;
+  gap: 30px;   /* ⭐ separación entre ENLACES → LUPA → AVATAR */
 }
 
-.search-container {
-  flex-grow: 1;
+/* ===== Enlaces ===== */
+
+.nav-links {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 35px;  /* ⭐ separación estética entre enlaces */
 }
 
-.search-container input {
-  width: 100%;
-  max-width: 500px;
-  padding: 8px 12px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-/* Login / Avatar */
-
-.login-btn {
-  padding: 10px 20px;
-  font-size: 1rem;
-  font-weight: bold;
-  background-color: #A7C4B2;
-  color: white;
-  border: none;
-  border-radius: 6px;
+.nav-link {
   text-decoration: none;
+  color: #333;
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
 }
 
-.user-avatar {
-  display: flex;
-  align-items: center;
+.nav-link:hover {
+  color: #FF751F;
 }
+
+.calendario {
+  color: #333;           /* 🔥 Ahora negro */
+  font-weight: 700;
+  font-size: 1.15rem;    /* 🔥 Un poco más grande */
+}
+
+/* Hover igual al resto */
+.calendario:hover {
+  color: #FF751F;
+}
+
+
+/* ===== LUPA ===== */
+
+.icono-buscar {
+  font-size: 28px;
+  color: #FF751F;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.icono-buscar:hover {
+  transform: scale(1.15);
+}
+
+/* ===== AVATAR ===== */
 
 .avatar-img {
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid white;
-  background-color: #f4f4f4;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  border: 2px solid #FF751F;
+
+  margin-right: 120px;  /* ⭐ MISMO MARGEN que el logo a la izquierda */
 }
 
-/* ===== MÓVILES (≤480px) ===== */
+/* ===== Login ===== */
 
-@media (max-width: 480px) {
-  .headerStyle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    height: 64px;
-    background-color: white;
-    gap: 8px;
-  }
+.login-btn {
+  padding: 8px 16px;
+  background-color: #FF751F;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
 
-  .barraLateral {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 4px; /* ✅ separación debajo del menú y logo */
-  }
+  margin-right: 120px; /* ⭐ para que Login también respete el margen del avatar */
+}
 
-  .menu-btn {
-    font-size: 1.2rem;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
+/* ===================================== */
+/*          POPUP OVERLAY OSCURO         */
+/* ===================================== */
 
-  .logo-container img {
-    height: 28px;
-  }
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease forwards;
+  z-index: 4000;
+}
 
-  .headerContent {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-grow: 1;
-    justify-content: flex-end;
-  }
+/* ===================================== */
+/*          CONTENEDOR DEL POPUP         */
+/* ===================================== */
 
-  .search-container {
-    max-width: 140px;
-    flex-grow: 0;
-    flex-shrink: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.popup-busqueda {
+  background: #fff;
+  width: 90%;
+  max-width: 600px;
 
-  .search-container input {
-    width: 100%;
-    font-size: 0.75rem;
-    padding: 4px 6px;
-    height: 26px;
-  }
+  padding: 40px 50px;   /* 🔥 más margen lateral para centrar el input */
 
-  .login-btn {
-    font-size: 0.75rem;
-    padding: 6px 10px;
-    white-space: nowrap;
-    border-radius: 5px;
-    margin-left: 10px;     /* ✅ espacio entre buscador y login */
-    margin-right: 10px;    /* ✅ separación del borde derecho */
-  }
-
-  .avatar-img {
-    width: 30px;
-    height: 30px;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
+  border-radius: 18px;
+  position: relative;
+  animation: scaleIn 0.25s ease forwards;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.20);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
 
-/* ===== TABLETS (481px – 1024px) ===== */
-
-@media (max-width: 1024px) and (min-width: 481px) {
-  .headerStyle {
-    padding: 10px 20px;
-  }
-
-  .barraLateral {
-    gap: 14px;
-  }
-
-  .menu-btn {
-    font-size: 1.8rem;
-  }
-
-  .logo-container {
-    transform: scale(1.2);
-  }
-
-  .search-container input {
-    max-width: 400px;
-  }
+/* Título */
+.popup-titulo {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
 }
 
-/* ===== PANTALLAS GRANDES (≥1440px) ===== */
-
-@media (min-width: 1440px) {
-  .headerStyle {
-    height: 80px;
-    padding: 0 40px;
-  }
-
-  .barraLateral {
-    gap: 24px;
-  }
-
-  .menu-btn {
-    font-size: 2rem;
-  }
-
-  .logo-container {
-    transform: scale(1.3);
-  }
-
-  .logo-container img {
-    height: 50px;
-  }
-
-  .search-container input {
-    max-width: 650px;
-    font-size: 1.1rem;
-    padding: 10px 16px;
-  }
-
- .login-btn {
-    font-size: 1.1rem;
-    padding: 12px 24px;
-    margin-right: 60px; /* 👈 añadido */
-  }
-
-  .user-avatar {
-    margin-right: 60px; /* 👈 añadido */
-  }
-
-  .avatar-img {
-    width: 50px;
-    height: 50px;
-  }
+/* Input */
+.popup-input {
+  width: 100%;    
+  padding: 15px 20px;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  border: 2px solid #FF751F;
+  outline: none;
+  transition: 0.25s ease;
+  
+  box-sizing: border-box;   /* 🔥 evita que el borde lo haga crecer */
 }
 
 
+.popup-input:focus {
+  border-color: #FF751F;
+}
 
-.barraLateral .logo {
-  margin-left: 35px;
+/* Botón cerrar */
+.popup-cerrar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #444;
+  transition: 0.2s ease;
+}
+
+.popup-cerrar:hover {
+  color: #FF751F;
+}
+
+/* ===================================== */
+/*              ANIMACIONES              */
+/* ===================================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ====================================== */
+/*        MENÚ DESPLEGABLE USUARIO        */
+/* ====================================== */
+
+.avatar-wrapper {
+  position: relative;
+}
+
+/* Caja del menú */
+.menu-usuario {
+  position: absolute;
+  top: 55px;
+  right: 0;
+
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  width: 160px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  box-shadow: 0px 6px 18px rgba(0,0,0,0.15);
+
+  animation: fadeInMenu 0.2s ease forwards;
+  z-index: 3000;
+}
+
+/* Elementos */
+.menu-usuario-item {
+  font-size: 0.95rem;
+  color: #333;
+  padding: 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  text-align: left;
+  transition: 0.25s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* Hover */
+.menu-usuario-item:hover {
+  background: #f4f4f4;
+}
+
+.cerrar-sesion {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+/* Animación */
+@keyframes fadeInMenu {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
