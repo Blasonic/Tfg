@@ -81,7 +81,7 @@
 }
 
 .highlight {
-  color: #d87830;
+  color: #FF751F;
   font-style: italic;
   font-weight: 900;
 }
@@ -89,7 +89,7 @@
 .subtitle {
   margin-top: 1rem;
   font-size: 1.3rem;
-  color: #d87830;
+  color: #FF751F;
   font-weight: bold;
 }
 
@@ -126,7 +126,7 @@
 }
 
 .read-btn {
-  background: #d87830;
+  background: #FF751F;
   color: white;
   padding: 0.8rem 2.5rem;
   border: none;
@@ -137,7 +137,7 @@
 }
 
 .read-btn:hover {
-  background: #b86326;
+  background: #FF751F;
 }
 
 /* IMÁGENES DERECHA */
