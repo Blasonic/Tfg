@@ -1,29 +1,19 @@
+/* Contenedor pequeño y sin margen que rompa el header */
 .contenedor-buscador {
-    display: flex;
-    align-items: center;
-    margin-right: 15px;
-  }
-  
-  .input-con-icono {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: auto;
-  }
-  
-  .input-buscador {
-    padding: 8px 16px; 
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 100px;
-    width: 200px;
-  }
-  
-  .icono-lupa {
-    position: absolute;
-    right: 16px;
-    color: #ccc;
-    font-size: 20px;
-    pointer-events: none;
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;          /* 🔥 evita que se expanda */
+  margin: 0;            /* 🔥 quitamos el margin-right que rompía todo */
+  padding: 0;
+}
+
+/* Input compacto */
+.input-buscador {
+  padding: 8px 14px;
+  font-size: 14px;
+  border: 2px solid #ccc;
+  border-radius: 50px;
+  width: 180px;         /* 🔥 tamaño ideal para caber entre logo y enlaces */
+  max-width: 200px;     /* 🔥 evita que crezca */
+}

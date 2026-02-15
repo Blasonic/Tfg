@@ -126,7 +126,8 @@ const StyledWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 20px;
 
   .form {
     display: flex;
@@ -134,13 +135,15 @@ const StyledWrapper = styled.div`
     gap: 10px;
     background-color: #ffffff;
     padding: 30px;
-    width: 450px;
+    width: 100%;
+    max-width: 450px;
     border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   ::placeholder {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: inherit;
   }
 
   .form button {
@@ -170,23 +173,6 @@ const StyledWrapper = styled.div`
     font-size: 14px;
   }
 
-  .inputForm input::placeholder {
-    color: #888;
-    opacity: 1;
-  }
-
-  .input {
-    margin-left: 10px;
-    border-radius: 10px;
-    border: none;
-    width: 100%;
-    height: 100%;
-  }
-
-  .input:focus {
-    outline: none;
-  }
-
   .inputForm:focus-within {
     border: 1.5px solid #2d79f3;
   }
@@ -197,6 +183,7 @@ const StyledWrapper = styled.div`
     align-items: center;
     gap: 10px;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
 
   .flex-row > div {
@@ -221,7 +208,7 @@ const StyledWrapper = styled.div`
 
   .button-submit {
     margin: 20px 0 10px 0;
-    background-color:#A7C4B2;
+    background-color: #A7C4B2;
     border: none;
     color: white;
     font-size: 15px;
@@ -237,6 +224,10 @@ const StyledWrapper = styled.div`
     color: black;
     font-size: 14px;
     margin: 5px 0;
+  }
+
+  .line {
+    margin-top: 10px;
   }
 
   .btn {
@@ -258,6 +249,104 @@ const StyledWrapper = styled.div`
   .btn:hover {
     border: 1px solid #A7C4B2;
   }
+
+  .error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: -5px;
+    margin-bottom: 10px;
+  }
+
+  /* ===== MÓVILES (≤480px) ===== */
+  @media (max-width: 480px) {
+    .form {
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .btn {
+      font-size: 14px;
+      padding: 0 10px;
+    }
+
+    .span {
+      display: block;
+      margin-top: 5px;
+      margin-left: 0;
+    }
+
+    .flex-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  /* ===== TABLETS (481px – 1024px) ===== */
+  @media (min-width: 481px) and (max-width: 1024px) {
+    .form {
+      padding: 25px;
+      max-width: 600px;
+      border-radius: 18px;
+    }
+
+    .search-container input {
+      font-size: 1rem;
+    }
+
+    .btn {
+      font-size: 15px;
+    }
+
+    .button-submit {
+      font-size: 16px;
+    }
+  }
+
+  /* ===== PANTALLAS GRANDES (≥1440px) ===== */
+@media (min-width: 1440px) {
+  .form {
+    max-width: 900px;         /* Mucho más ancho */
+    min-height: 600px;        /* Más alto */
+    padding: 60px 80px;       /* Más espacio interno */
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .inputForm {
+    height: 60px;
+    font-size: 18px;
+  }
+
+  .inputForm input {
+    font-size: 18px;
+  }
+
+  .button-submit {
+    font-size: 20px;
+    height: 65px;
+  }
+
+  .btn {
+    height: 65px;
+    font-size: 18px;
+  }
+
+  .flex-column > label {
+    font-size: 18px;
+  }
+
+  .p {
+    font-size: 16px;
+  }
+
+  .span {
+    font-size: 16px;
+  }
+}
+
 `;
+
 
 export default Login;

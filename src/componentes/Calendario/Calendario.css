@@ -1,322 +1,344 @@
-body {
-  padding-top: 70px;
+/* ===========================
+   FUENTES
+=========================== */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+/* ===========================
+   THEME
+=========================== */
+:root{
+  --bg: #f6f3ef;
+  --panel: #ffffff;
+  --muted: #6f6f6f;
+  --text: #222;
+
+  --accent: #FF751F;
+  --cream: #F1DFB6;
+
+  --line: rgba(0,0,0,.08);
+
+  --radius-xl: 18px;
+  --radius-lg: 14px;
+
+  --shadow: 0 10px 30px rgba(0,0,0,.10);
+  --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+}
+
+*{ box-sizing: border-box; }
+
+body{
   margin: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f5f7f6;
+  padding-top: 70px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
-/* ===== Layout Principal ===== */
-.calendario-container {
-  display: flex;
-  flex-direction: row;
-  gap: 3rem;
-  max-width: 1200px;
-  margin: 1rem auto 2rem auto;
-  padding: 2rem 3rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  min-height: 70vh;
+/* ===========================
+   LAYOUT PRINCIPAL (NO CRECE)
+=========================== */
+.calendario-container{
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 28px;
+
+  max-width: 1250px;
+  margin: 24px auto 40px auto;
+  padding: 28px;
+
+  background: var(--panel);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+
+  /* CLAVE: evita que el contenedor se alargue */
+  height: 70vh;
+  min-height: 640px;
 }
 
-.calendario-panel {
-  flex: 1;
-  min-width: 700px;
-  max-width: 800px;
+/* ===========================
+   PANEL CALENDARIO
+=========================== */
+.calendario-panel{
+  background: var(--cream);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--line);
+  padding: 18px;
 }
 
-.eventos-panel {
-  flex: 2;
-  overflow-y: auto;
-  max-height: 70vh;
-  padding-bottom: 1rem;
-}
+/* ===========================
+   PANEL EVENTOS (SCROLL AQUÍ)
+=========================== */
+.eventos-panel{
+  height: 100%;
+  overflow-y: auto;   /* ✅ SCROLL aquí */
+  overflow-x: hidden;
+  padding-right: 8px; /* separa scrollbar */
 
-.eventos-panel h3 {
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.eventos-panel h3::after {
-  content: '';
-  display: block;
-  margin: 8px auto 0 auto;
-  width: 60px;
-  height: 3px;
-  background-color: #A7C4B2;
-  border-radius: 2px;
-}
-
-.eventos-panel h4 {
-  margin: 1.5rem 0 0.5rem 0;
-  font-size: 1.1rem;
-  color: #2c3e50;
-  border-bottom: 2px solid #A7C4B2;
-  padding-bottom: 4px;
-  text-transform: capitalize;
-}
-
-.eventos-panel p {
-  font-size: 1rem;
-  color: #666;
-  text-align: center;
-  margin-top: 1rem;
-}
-
-/* ===== Calendario ===== */
-.react-calendar {
-  font-size: 1.2rem;
-}
-
-.react-calendar__tile {
-  padding: 1.2rem 0.5rem;
-}
-
-.dot {
-  height: 8px;
-  width: 8px;
-  background-color: #4CAF50;
-  border-radius: 50%;
-  margin: 0 auto;
-  margin-top: 4px;
-}
-
-/* ===== Evento Card ===== */
-.evento-card {
-  display: flex;
-  flex-direction: row;
-  border-radius: 10px;
-  border: 2px solid transparent;
-  margin-bottom: 1rem;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  transition: transform 0.2s ease, border-color 0.3s ease;
-  background: #fff;
+  /* importante para sticky */
   position: relative;
 }
 
-.evento-card:hover {
-  transform: scale(1.01);
-}
-
-.evento-card.evento {
-  border-color: #A7C4B2;
-}
-
-.evento-card.local {
-  border-color: #FFC107;
-}
-
-.evento-card.patronal {
-  border-color: #FF7043;
-}
-
-.evento-imagen-lateral {
-  width: 200px;
-  height: 100%;
-  object-fit: cover;
-}
-
-.evento-info-lateral {
-  padding: 1rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.evento-info-lateral h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.3rem;
-  color: #333;
-}
-
-.evento-info-lateral p {
-  margin: 0.3rem 0;
-  font-size: 0.95rem;
-  color: #555;
-}
-
-.evento-descripcion {
-  margin-top: 0.8rem;
-  color: #666;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-/* ===== Creador Info Superior ===== */
-.evento-creador-superior {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border: 2px solid black;
-  border-radius: 999px;
-  padding: 4px 8px;
-  z-index: 2;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-}
-
-.creador-avatar-superior {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 6px;
-}
-
-.creador-nombre-superior {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #222;
-}
-
-/* ===== Botón nuevo evento / comentar ===== */
-.btn-nuevo-evento {
-  background-color: #A7C4B2;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn-nuevo-evento:hover {
-  background-color: #8cab99;
-}
-
-/* ===== Toastify Custom ===== */
-.Toastify__toast--success {
-  background-color: #a7c4b2;
-  color: #fff;
-  font-weight: 500;
-}
-
-.Toastify__toast--error {
-  background-color: #ff4d4f;
-  color: #fff;
-  font-weight: 500;
-}
-
-.Toastify__progress-bar {
-  background-color: rgba(255, 255, 255, 0.7);
-}
-
-/* ===== Modal con Desenfoque ===== */
-.modal-comentarios-overlay {
-  position: fixed;
+/* La “barra” del título (tu primer div con position:relative) se queda fija */
+.eventos-panel > div:first-child{
+  position: sticky;
   top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  z-index: 5;
+
+  background: var(--panel);
+  padding: 10px 0 14px 0;
+  margin-bottom: 10px;
+
+  /* un poquito de separación visual */
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+
+/* Título “Planes hoy” */
+.eventos-panel h3{
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+}
+
+.eventos-panel h3::after{
+  content: '';
+  display: block;
+  margin: 10px auto 0 auto;
+  width: 64px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+/* Títulos de tipo */
+.eventos-panel h4{
+  margin: 18px 0 10px 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  color: #333;
+  text-transform: uppercase;
+}
+
+/* Texto vacío */
+.eventos-panel p{
+  font-size: 1rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* ===========================
+   BOTONES (evitar “gigantes”)
+=========================== */
+.btn-nuevo-evento{
+  background: var(--accent);
+  color: #fff;
+  border: none;
+
+  padding: 10px 16px;
+  border-radius: 999px;
+
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+
+  /* ✅ evita que se estire raro */
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+
+  box-shadow: 0 6px 16px rgba(255,117,31,.28);
+}
+
+.btn-nuevo-evento:hover{ filter: brightness(.95); }
+/* ===========================
+   REACT CALENDAR (grande + sin hueco inferior)
+=========================== */
+.react-calendar{
+  width: 100%;
+  border: none;
+  background: transparent;
+  min-height: 520px;
+}
+
+/* mes/año (Febrero 2026) */
+.react-calendar__navigation__label{
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+/* ✅ recorta el hueco inferior del mes */
+.react-calendar__viewContainer{
+  padding-bottom: 4px;
+}
+
+.react-calendar__month-view{
+  padding-bottom: 4px;
+}
+
+/* ✅ ajusta el grid (reduce “aire” sobrante) */
+.react-calendar__month-view__days{
+  grid-auto-rows: 1fr;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+/* días */
+.react-calendar__tile{
+  padding: 18px 6px;
+  min-height: 70px;
+  border-radius: 14px;
+
+  /* ✅ evita que el texto “empuje” hacia abajo */
+  line-height: 1.2;
+}
+
+/* seleccionado */
+.react-calendar__tile--active{
+  background: var(--accent) !important;
+  color: #fff !important;
+}
+
+/* hoy */
+.react-calendar__tile--now{
+  background: rgba(255,117,31,.18);
+  font-weight: 800;
+}
+
+/* punto */
+.dot{
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin: 6px auto 0;
+}
+
+
+/* ===========================
+   EVENT CARD (ARREGLA BOTÓN)
+=========================== */
+.evento-card-expandido{
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  background: var(--cream);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 14px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ✅ fuerza la imagen al lado derecho (tu <img> es el primer hijo) */
+.evento-card-expandido > img{
+  grid-column: 2 / 3;
+  grid-row: 1 / 4;
+
+  width: 100% !important;
+  height: 100% !important;
+  max-height: none !important;
+  object-fit: cover !important;
+
+  border-top-left-radius: 70px !important;
+  border-bottom-left-radius: 22px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+/* info siempre a la izquierda */
+.evento-info-lateral{
+  grid-column: 1 / 2;
+  padding: 16px;
+}
+
+.evento-info-lateral h4{
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  margin: 0 0 6px 0;
+}
+
+/* ✅ botones SIEMPRE a la izquierda (esto arregla tu captura del botón enorme) */
+.comentarios-seccion{
+  grid-column: 1 / 2;
+
+  padding: 12px 16px 16px 16px;
+
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.comentarios-seccion .btn-nuevo-evento{
+  flex: 0 0 auto; /* no crece */
+}
+
+/* ===========================
+   MODALES
+=========================== */
+.modal-comentarios-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(7px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
 }
 
-.modal-comentarios-contenido {
-  background: white;
-  padding: 2rem;
-  width: 90%;
-  max-width: 600px;
+.modal-comentarios-contenido{
+  background: #fff;
+  padding: 22px;
+  width: 92%;
+  max-width: 650px;
   max-height: 80vh;
   overflow-y: auto;
-  border-radius: 12px;
-  position: relative;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease;
+  border-radius: var(--radius-xl);
 }
 
-.cerrar-modal {
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #444;
-  cursor: pointer;
-  z-index: 10;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-  .calendario-container {
-    flex-direction: column;
-    padding: 1rem;
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 980px){
+  .calendario-container{
+    grid-template-columns: 1fr;
+    height: auto;
   }
 
-  .calendario-panel,
-  .eventos-panel {
-    width: 100%;
-    max-width: none;
+  .eventos-panel{
+    height: auto;
+    overflow: visible;
+    padding-right: 0;
   }
 
-  .evento-card {
-    flex-direction: column;
+  .eventos-panel > div:first-child{
+    position: static;
+    border-bottom: none;
   }
 
-  .evento-imagen-wrapper {
-    height: 100%;
-    display: flex;
-    align-items: stretch;
+  .evento-card-expandido{
+    grid-template-columns: 1fr;
   }
 
-  .evento-imagen-lateral {
-    width: 100%;
-    object-fit: cover;
-    height: 100%;
+  .evento-card-expandido > img{
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    height: 220px !important;
+
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 22px !important;
+    border-bottom-left-radius: 22px !important;
   }
 
-  .evento-creador-superior {
-    top: 10px;
-    right: 10px;
-    transform: scale(0.9);
+  .comentarios-seccion{
+    grid-column: 1 / 2;
   }
-
-  .evento-card-expandido {
-    border: 2px solid #ccc;
-    border-radius: 12px;
-    margin-bottom: 2rem;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-    background: #fff;
-    position: relative;
-  }
-
-  .modal-comentarios-contenido {
-    padding: 1.2rem;
-    max-height: 90vh;
-  }
-
-  .cerrar-modal {
-    font-size: 1.3rem;
-  }
-  .estrellas-selector span:hover {
-  transform: scale(1.2);
-}
-
 }

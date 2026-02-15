@@ -86,7 +86,7 @@ const CalendarioGlobal = () => {
         <div className="eventos-panel">
           {/* Título centrado con botón a la derecha */}
           <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
-            <h3 style={{ textAlign: 'center', margin: 0 }}>Planes hoy</h3>
+            <h3 style={{ textAlign: 'center', margin: 0 }}>Planes</h3>
             {usuario && (
               <button
                 onClick={() => setMostrarFormulario(true)}
@@ -110,25 +110,14 @@ const CalendarioGlobal = () => {
               return <p>No hay eventos para este día.</p>;
             }
 
-            const eventosPorTipo = eventosDelDia.reduce((acc, evento) => {
-              const tipo = evento.tipo || 'otros';
-              if (!acc[tipo]) acc[tipo] = [];
-              acc[tipo].push(evento);
-              return acc;
-            }, {});
-
             return (
-              <>
-                {Object.entries(eventosPorTipo).map(([tipo, eventos]) => (
-                  <div key={tipo} style={{ marginBottom: '24px' }}>
-                    <h4>{tipo}</h4>
-                    {eventos.map(ev => (
-                      <EventoCard key={ev.id} evento={ev} />
-                    ))}
-                  </div>
-                ))}
-              </>
-            );
+  <>
+    {eventosDelDia.map((ev) => (
+      <EventoCard key={ev.id} evento={ev} />
+    ))}
+  </>
+);
+
           })() : (
             <p>Selecciona un día para ver los eventos.</p>
           )}

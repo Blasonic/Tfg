@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
-import './BarraLateral.css'; 
+import './BarraLateral.css';
 
 const BarraLateral = () => {
   const [abierto, setAbierto] = useState(false);
@@ -15,18 +15,15 @@ const BarraLateral = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user"); 
-    window.dispatchEvent(new Event("storage")); 
+    localStorage.removeItem("user");
+    window.dispatchEvent(new Event("storage"));
     setUserLoggedIn(false);
-    navigate("/"); 
+    navigate("/");
   };
 
   return (
     <div className="barra-lateral">
-      <button 
-        onClick={() => setAbierto(!abierto)}
-        className="menu-btn"
-      >
+      <button onClick={() => setAbierto(!abierto)} className="menu-btn">
         <FaBars />
       </button>
 
@@ -42,7 +39,6 @@ const BarraLateral = () => {
             <MenuLink to="/comentarios" texto="Comentarios" />
             <MenuLink to="/Soporte" texto="Soporte" />
             <hr className="menu-divider" />
-
             {userLoggedIn && (
               <button onClick={handleLogout} className="menu-button">
                 Cerrar sesión
@@ -55,14 +51,10 @@ const BarraLateral = () => {
   );
 };
 
-const MenuLink = ({ to, texto }) => {
-  return (
-    <li className="menu-item">
-      <Link to={to} className="menu-link">
-        {texto}
-      </Link>
-    </li>
-  );
-};
+const MenuLink = ({ to, texto }) => (
+  <li className="menu-item">
+    <Link to={to} className="menu-link">{texto}</Link>
+  </li>
+);
 
 export default BarraLateral;
