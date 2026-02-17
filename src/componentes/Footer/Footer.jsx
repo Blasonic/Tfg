@@ -1,41 +1,146 @@
 import React from "react";
-import "./Footer.css"; // Asegúrate de importar el CSS
+import { Link } from "react-router-dom";
+import "./Footer.css";
 
 const Footer = () => {
   return (
-    <footer className="footer">
-      <div className="footer-container">
-        {/* Logo y frase */}
-        <div className="footer-section logo-section">
-          <img src="/imagenes/Logo-Planzo.png" alt="Planzo logo" className="footer-logo" />
-          <p className="footer-tagline">"Planifica, localiza, organiza. <br />
-          Todo en un solo lugar."</p>
+    <footer className="footerV2">
+      <div className="footerV2__inner">
+        
+        {/* IZQUIERDA */}
+        <div className="footerV2__left">
+
+          {/* Marca */}
+          <div className="footerV2__brand">
+            <div className="footerV2__logoWrap">
+              <img
+                src="/imagenes/Logo-Planzo.png"
+                alt="Planzo"
+                className="footerV2__logo"
+              />
+            </div>
+            <p className="footerV2__tagline">
+              Eventos culturales y sociales de tu comunidad
+            </p>
+          </div>
+
+          {/* 3 columnas superiores */}
+          <div className="footerV2__colsTop">
+
+            <nav className="footerV2__col">
+              <h3 className="footerV2__title">Eventos</h3>
+              <Link className="footerV2__link" to="/Agenda">
+                • Agenda
+              </Link>
+              <Link className="footerV2__link" to="/Destacados">
+                • Eventos destacados
+              </Link>
+              <Link className="footerV2__link" to="/EnviarEvento">
+                • Enviar tu evento
+              </Link>
+            </nav>
+
+            <nav className="footerV2__col">
+              <h3 className="footerV2__title">Comunidad</h3>
+              <Link className="footerV2__link" to="/QuienesSomos">
+                • Quiénes somos
+              </Link>
+              <Link className="footerV2__link" to="/Colaboradores">
+                • Colaboradores
+              </Link>
+              <Link className="footerV2__link" to="/Ayuntamientos">
+                • Ayuntamientos
+              </Link>
+            </nav>
+
+            <nav className="footerV2__col">
+              <h3 className="footerV2__title">Información</h3>
+              <Link className="footerV2__link" to="/Noticias">
+                • Noticias
+              </Link>
+              <Link className="footerV2__link" to="/FAQ">
+                • Preguntas frecuentes
+              </Link>
+              <Link className="footerV2__link" to="/Contacto">
+                • Contacto
+              </Link>
+            </nav>
+
+          </div>
+
+          {/* 3 columnas inferiores */}
+          <div className="footerV2__colsBottom">
+
+            <div className="footerV2__col">
+              <h3 className="footerV2__title">Contacto</h3>
+              <a className="footerV2__link" href="mailto:info@planzo.es">
+                info@planzo.es
+              </a>
+              <a className="footerV2__link" href="tel:+34910000000">
+                Tel. 91 000 00 00
+              </a>
+              <span className="footerV2__text">
+                Región Metropolitana
+              </span>
+            </div>
+
+            <div className="footerV2__col">
+              <h3 className="footerV2__title">Síguenos</h3>
+              <a
+                className="footerV2__link"
+                href="https://instagram.com"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Instagram
+              </a>
+            </div>
+
+            <div className="footerV2__col footerV2__legal">
+              <h3 className="footerV2__title">Legal</h3>
+              <Link className="footerV2__link" to="/AvisoLegal">
+                • Aviso legal
+              </Link>
+              <Link className="footerV2__link" to="/PoliticaPrivacidad">
+                • Política privacidad
+              </Link>
+              <Link className="footerV2__link" to="/Cookies">
+                • Cookies
+              </Link>
+              <Link className="footerV2__link" to="/Accesibilidad">
+                • Accesibilidad
+              </Link>
+            </div>
+
+          </div>
         </div>
 
-        {/* Contacto */}
-        <div className="footer-section">
-          <h3>Contacto</h3>
-          <a href="mailto:info@planzo.com">info@planzo.com</a>
-          <a href="tel:123456789">123 456 789</a>
-          <a href="#">C/ Imaginaria, 42, 1ºB, <br />
-            28000 Ciudad Virtual</a>
-        </div>
+        {/* CTA DERECHA */}
+        <aside className="footerV2__cta">
+          <p className="footerV2__ctaTitle">¿Tienes un evento?</p>
 
-        {/* Menú */}
-        <div className="footer-section">
-          <h3>Menú</h3>
-          <a href="/CalendarioGlobal">Calendario</a>
-          <a href="/CalendarioLocal">Fiestas Locales</a>
-          <a href="/CalenadarioPatronal">Fiestas Patronales</a>
-          <a href="/Ayuda">Ayuda</a>
-        </div>
+          <Link
+            className="footerV2__btn footerV2__btn--primary"
+            to="/PublicarEvento"
+          >
+            Publícalo aquí
+          </Link>
 
-        {/* Avisos legales */}
-        <div className="footer-section">
-          <h3>Avisos Legales</h3>
-          <a href="/AvisoLegal">Aviso Legal</a>
-          <a href="/PoliticaCookies">Política de Cookies</a>
-        </div>
+          <Link
+            className="footerV2__btn footerV2__btn--secondary"
+            to="/Suscripcion"
+          >
+            Suscríbete a la Agenda Semanal
+          </Link>
+        </aside>
+
+      </div>
+
+      <div className="footerV2__bottom">
+        <div className="footerV2__divider" />
+        <p className="footerV2__copyright">
+          2026 Planzo tu viaje en tu comunidad. Todos los derechos reservados
+        </p>
       </div>
     </footer>
   );
