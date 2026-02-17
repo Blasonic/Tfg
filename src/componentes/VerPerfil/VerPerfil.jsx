@@ -1,70 +1,90 @@
-import React, { useEffect, useState } from 'react';
-import { getUserProfile, updateUserProfile } from '../../ServiciosBack/servicio';
-import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// ✅ NUEVO: servicio Firebase
+import { getUserProfile, updateUserProfile } from "../../ServiciosBack/servicioFirebase";
 
 const avatarList = [
-  'imagenes/avatares/avatar1.png',
-  'imagenes/avatares/avatar2.png',
-  'imagenes/avatares/avatar3.png',
-  'imagenes/avatares/avatar4.png',
-  'imagenes/avatares/avatar5.jpg',
-  'imagenes/avatares/avatar6.jpg',
-  'imagenes/avatares/avatar7.jpg',
-  'imagenes/avatares/avatar8.webp',
-  'imagenes/avatares/avatar9.jpg',
-  'imagenes/avatares/avatar10.png',
+  "imagenes/avatares/avatar1.png",
+  "imagenes/avatares/avatar2.png",
+  "imagenes/avatares/avatar3.png",
+  "imagenes/avatares/avatar4.png",
+  "imagenes/avatares/avatar5.jpg",
+  "imagenes/avatares/avatar6.jpg",
+  "imagenes/avatares/avatar7.jpg",
+  "imagenes/avatares/avatar8.webp",
+  "imagenes/avatares/avatar9.jpg",
+  "imagenes/avatares/avatar10.png",
 ];
 
 const VerPerfil = () => {
-  const [userData, setUserData] = useState({ name: '', user: '', email: '', profilePicture: '' });
+  // en Firestore usamos displayName, pero mantengo tu UI con "name"
+  const [userData, setUserData] = useState({ name: "", user: "", email: "", profilePicture: "" });
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    try {
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      const token = localStorage.getItem("token");
+    (async () => {
+      try {
+        const data = await getUserProfile();
 
-      if (!storedUser || !token) {
-        toast.warning("Es necesario iniciar sesión para acceder al perfil.");
-        setTimeout(() => navigate("/Login"), 2000);
-        return;
-      }
-
-      getUserProfile()
-        .then((data) => {
-          setUserData(data);
-        })
-        .catch((err) => {
-          console.error("Error al obtener el perfil:", err);
+        setUserData({
+          name: data.displayName || data.name || "",
+          user: data.user || "",
+          email: data.email || "",
+          profilePicture: data.profilePicture || "",
         });
-    } catch {
-      toast.error("Error al leer los datos de sesión.");
-    }
+      } catch (err) {
+        console.error("Error perfil:", err);
+        toast.warning("Es necesario iniciar sesión para acceder al perfil.");
+        setTimeout(() => navigate("/Login"), 1500);
+      }
+    })();
   }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
+    setUserData((p) => ({ ...p, [name]: value }));
+  };
+
+  const persistUser = (updated) => {
+    // guardamos con las claves que usa el Header
+    const normalized = {
+      ...updated,
+      // normaliza por si backend devuelve displayName
+      displayName: updated.displayName ?? userData.name,
+      profilePicture: updated.profilePicture ?? userData.profilePicture,
+    };
+
+    localStorage.setItem("user", JSON.stringify(normalized));
+    window.dispatchEvent(new Event("storage"));
   };
 
   const handleAvatarSelect = async (avatarPath) => {
     try {
-      const updatedData = {
-        name: userData.name,
+      const updatedUser = await updateUserProfile({
+        // backend espera displayName (según controller)
+        displayName: userData.name,
         user: userData.user,
         profilePicture: `/${avatarPath}`,
-      };
+      });
 
-      const updatedUser = await updateUserProfile(updatedData);
-      setUserData(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      setUserData({
+        name: updatedUser.displayName || "",
+        user: updatedUser.user || "",
+        email: updatedUser.email || "",
+        profilePicture: updatedUser.profilePicture || "",
+      });
+
+      persistUser(updatedUser);
       setShowAvatarOptions(false);
+      toast.success("Avatar actualizado");
     } catch (error) {
-      console.error('❌ Error al actualizar el perfil con el avatar:', error);
+      console.error("❌ Error avatar:", error);
+      toast.error(error.message || "Error al actualizar avatar");
     }
   };
 
@@ -72,14 +92,24 @@ const VerPerfil = () => {
     e.preventDefault();
     try {
       const updatedUser = await updateUserProfile({
-        name: userData.name,
-        user: userData.user,
+        displayName: userData.name,
+        user: userData.user, // aquí aplica unicidad y puede devolver 400
         profilePicture: userData.profilePicture,
       });
-      setUserData(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-    } catch {
-      console.error('Error al actualizar el perfil');
+
+      setUserData({
+        name: updatedUser.displayName || "",
+        user: updatedUser.user || "",
+        email: updatedUser.email || "",
+        profilePicture: updatedUser.profilePicture || "",
+      });
+
+      persistUser(updatedUser);
+      toast.success("Perfil actualizado");
+    } catch (error) {
+      console.error("❌ Error update perfil:", error);
+      // si username ocupado, backend devuelve message "El nombre de usuario ya está en uso"
+      toast.error(error.message || "Error al actualizar el perfil");
     }
   };
 
@@ -90,7 +120,7 @@ const VerPerfil = () => {
 
         <div className="profile-picture-container">
           <img
-            src={userData.profilePicture || '/imagenes/avatares/avatar1.jpg'}
+            src={userData.profilePicture || "/imagenes/avatares/avatar-en-blanco.webp"}
             alt="Avatar"
             className="profile-picture"
           />
@@ -202,7 +232,7 @@ const StyledWrapper = styled.div`
   }
 
   .button-submit {
-    background-color: #A7C4B2;
+    background-color: #a7c4b2;
     border: none;
     color: white;
     font-size: 15px;
@@ -212,7 +242,7 @@ const StyledWrapper = styled.div`
   }
 
   .button-secondary {
-    background-color: #A7C4B2;
+    background-color: #a7c4b2;
     border: none;
     color: white;
     font-size: 13px;
@@ -227,7 +257,7 @@ const StyledWrapper = styled.div`
     text-align: center;
     text-decoration: none;
     margin-top: 10px;
-    background-color: #A7C4B2;
+    background-color: #a7c4b2;
     color: white;
     border-radius: 10px;
     padding: 8px 12px;

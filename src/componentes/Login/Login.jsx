@@ -1,63 +1,89 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FaGoogle, FaApple } from 'react-icons/fa';
-import styled from 'styled-components';
-import './Login.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaGoogle, FaApple } from "react-icons/fa";
+import styled from "styled-components";
+import "./Login.css";
+
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+
+import { auth } from "../../firebase";
+import { bootstrapUser, getUserProfile } from "../../ServiciosBack/servicioFirebase";
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
-  const [adminRedirecting, setAdminRedirecting] = useState(false); // NUEVO
+  const [adminRedirecting, setAdminRedirecting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  // ✅ flujo común post-login
+  const postLoginFlow = async () => {
+    await bootstrapUser();
+    const profile = await getUserProfile();
+
+    localStorage.setItem("user", JSON.stringify(profile));
+    window.dispatchEvent(new Event("storage"));
+
+    if (profile.role === "admin") {
+      setAdminRedirecting(true);
+      setTimeout(() => navigate("/admin"), 1500);
+    } else {
+      navigate("/");
+    }
+
+    setFormData({ email: "", password: "" });
+  };
+
+  // ✅ Login email/password
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/Login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Guardar token y usuario
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        // 🔥 Redirigir según el role
-        if (data.user.role === 'admin') {
-          setAdminRedirecting(true); // mostramos mensaje de carga
-          setTimeout(() => {
-            navigate("/admin");
-          }, 3000); // 3 segundos
-        } else {
-          navigate("/");
-        }
-
-        setFormData({ email: "", password: "" });
-        window.dispatchEvent(new Event("storage"));
-      } else {
-        setErrorMessage(data.message || "Correo o contraseña incorrectos");
-      }
+      await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      await postLoginFlow();
     } catch (error) {
-      console.error("❌ Error en login:", error);
-      setErrorMessage("Error al intentar iniciar sesión");
+      const code = error?.code || "";
+
+      if (
+        code === "auth/invalid-credential" ||
+        code === "auth/wrong-password" ||
+        code === "auth/user-not-found"
+      ) {
+        setErrorMessage("Correo o contraseña incorrectos");
+      } else if (code === "auth/too-many-requests") {
+        setErrorMessage("Demasiados intentos. Espera un momento y prueba otra vez.");
+      } else {
+        console.error("❌ Error en login:", error);
+        setErrorMessage(error?.message || "Error al intentar iniciar sesión");
+      }
     }
   };
 
-  // 💬 Mostrar carga si es admin
+  // ✅ Login Google
+  const handleGoogleLogin = async () => {
+    setErrorMessage("");
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      await postLoginFlow();
+    } catch (error) {
+      console.error("❌ Error Google login:", error);
+      setErrorMessage("Error al iniciar sesión con Google");
+    }
+  };
+
   if (adminRedirecting) {
     return (
       <StyledWrapper>
-        <h2 style={{ textAlign: 'center' }}>Cargando panel de administración...</h2>
+        <h2 style={{ textAlign: "center" }}>Cargando panel de administración...</h2>
       </StyledWrapper>
     );
   }
@@ -94,6 +120,7 @@ const Login = () => {
             required
           />
         </div>
+
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <div className="flex-row">
@@ -101,19 +128,32 @@ const Login = () => {
             <input type="checkbox" />
             <label>Recordarme</label>
           </div>
-          <Link to="/PerdidaContraseña" className="span">¿Olvidaste tu contraseña?</Link>
+          <Link to="/PerdidaContraseña" className="span">
+            ¿Olvidaste tu contraseña?
+          </Link>
         </div>
 
-        <button type="submit" className="button-submit">Ingresar</button>
+        <button type="submit" className="button-submit">
+          Ingresar
+        </button>
 
-        <p className="p">¿No tienes cuenta? <Link to="/Registro" className="span">Regístrate</Link></p>
+        <p className="p">
+          ¿No tienes cuenta?{" "}
+          <Link to="/Registro" className="span">
+            Regístrate
+          </Link>
+        </p>
+
         <p className="p line">O ingresa con</p>
 
         <div className="flex-row">
-          <button type="button" className="btn google">
+          {/* ✅ Google (activo) */}
+          <button type="button" className="btn google" onClick={handleGoogleLogin}>
             <FaGoogle /> Google
           </button>
-          <button type="button" className="btn apple">
+
+          {/* Apple lo dejamos para luego */}
+          <button type="button" className="btn apple" disabled>
             <FaApple /> Apple
           </button>
         </div>
@@ -139,7 +179,8 @@ const StyledWrapper = styled.div`
     max-width: 450px;
     border-radius: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+      Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   }
 
   ::placeholder {
@@ -208,7 +249,7 @@ const StyledWrapper = styled.div`
 
   .button-submit {
     margin: 20px 0 10px 0;
-    background-color: #A7C4B2;
+    background-color: #a7c4b2;
     border: none;
     color: white;
     font-size: 15px;
@@ -247,7 +288,7 @@ const StyledWrapper = styled.div`
   }
 
   .btn:hover {
-    border: 1px solid #A7C4B2;
+    border: 1px solid #a7c4b2;
   }
 
   .error-message {
@@ -257,7 +298,6 @@ const StyledWrapper = styled.div`
     margin-bottom: 10px;
   }
 
-  /* ===== MÓVILES (≤480px) ===== */
   @media (max-width: 480px) {
     .form {
       padding: 20px;
@@ -281,16 +321,11 @@ const StyledWrapper = styled.div`
     }
   }
 
-  /* ===== TABLETS (481px – 1024px) ===== */
   @media (min-width: 481px) and (max-width: 1024px) {
     .form {
       padding: 25px;
       max-width: 600px;
       border-radius: 18px;
-    }
-
-    .search-container input {
-      font-size: 1rem;
     }
 
     .btn {
@@ -302,51 +337,48 @@ const StyledWrapper = styled.div`
     }
   }
 
-  /* ===== PANTALLAS GRANDES (≥1440px) ===== */
-@media (min-width: 1440px) {
-  .form {
-    max-width: 900px;         /* Mucho más ancho */
-    min-height: 600px;        /* Más alto */
-    padding: 60px 80px;       /* Más espacio interno */
-    border-radius: 30px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-  }
+  @media (min-width: 1440px) {
+    .form {
+      max-width: 900px;
+      min-height: 600px;
+      padding: 60px 80px;
+      border-radius: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
 
-  .inputForm {
-    height: 60px;
-    font-size: 18px;
-  }
+    .inputForm {
+      height: 60px;
+      font-size: 18px;
+    }
 
-  .inputForm input {
-    font-size: 18px;
-  }
+    .inputForm input {
+      font-size: 18px;
+    }
 
-  .button-submit {
-    font-size: 20px;
-    height: 65px;
-  }
+    .button-submit {
+      font-size: 20px;
+      height: 65px;
+    }
 
-  .btn {
-    height: 65px;
-    font-size: 18px;
-  }
+    .btn {
+      height: 65px;
+      font-size: 18px;
+    }
 
-  .flex-column > label {
-    font-size: 18px;
-  }
+    .flex-column > label {
+      font-size: 18px;
+    }
 
-  .p {
-    font-size: 16px;
-  }
+    .p {
+      font-size: 16px;
+    }
 
-  .span {
-    font-size: 16px;
+    .span {
+      font-size: 16px;
+    }
   }
-}
-
 `;
-
 
 export default Login;

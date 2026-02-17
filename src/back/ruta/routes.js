@@ -1,27 +1,28 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
+const requireAuth = require("../middelware/requireAuth");
+const requireAdmin = require("../middelware/requireAdmin");
+
 const {
-  registerUser,
-  loginUser,
+  bootstrapUser,
   getUserProfile,
   updateUserProfile,
   getAllUsers,
-  getUserResumen
-} = require('../controlador/controller');
+  getUserResumen,
+} = require("../controlador/controller");
 
-// Rutas públicas
-router.post('/Registro', registerUser);
-router.post('/Login', loginUser);
+// ✅ Se llama después de register/login en React (con Bearer token)
+router.post("/bootstrap", requireAuth, bootstrapUser);
 
-// Rutas protegidas para perfil (opcional)
-router.get('/perfil', getUserProfile);
-router.put('/perfil', updateUserProfile);
+// ✅ Perfil
+router.get("/perfil", requireAuth, getUserProfile);
+router.put("/perfil", requireAuth, updateUserProfile);
 
-// Rutas de usuarios
-router.get('/usuarios', getAllUsers);
+// ✅ Admin
+router.get("/usuarios", requireAdmin, getAllUsers);
 
-// 🟢 Ruta que necesita el backend de fiestas (MySQL)
-router.get('/usuarios/:id/resumen', getUserResumen);
+// ✅ Para tu backend MySQL (usa uid)
+router.get("/usuarios/:id/resumen", requireAdmin, getUserResumen);
 
 module.exports = router;

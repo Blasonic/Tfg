@@ -1,147 +1,247 @@
-const Usuario = require('../modelo/Usuario');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const { db } = require("../configuracion/firebaseAdmin");
 
-const JWT_SECRET = process.env.JWT_SECRET || 'Qca200@';
+// =======================
+// Helpers
+// =======================
+const userDocRef = (uid) => db.collection("users").doc(uid);
+const usernameDocRef = (uname) => db.collection("usernames").doc(uname);
 
+function normalizeUsername(u) {
+  return (u || "").trim().toLowerCase();
+}
 
-// ✅ Registro
-const registerUser = async (req, res) => {
-  try {
-    const { name, user, email, password } = req.body;
+// Regla de username: 3-20, a-z 0-9 _
+function validateUsername(u) {
+  return /^[a-z0-9_]{3,20}$/.test(u);
+}
 
-    const emailExiste = await Usuario.findOne({ email });
-    if (emailExiste) {
-      return res.status(400).json({ message: 'El correo ya está registrado' });
-    }
+// =======================
+// Scaffold inicial de usuario
+// =======================
+async function ensureUserScaffold(uid, email) {
+  const ref = userDocRef(uid);
+  const snap = await ref.get();
+  const now = new Date();
 
-    const userExiste = await Usuario.findOne({ user });
-    if (userExiste) {
-      return res.status(400).json({ message: 'El nombre de usuario ya está en uso' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const nuevoUsuario = new Usuario({
-      name,
-      user,
-      email,
-      password: hashedPassword,
-      profilePicture: '/imagenes/avatares/avatar-en-blanco.webp',
-      role: 'user'
+  if (!snap.exists) {
+    // users/{uid}
+    await ref.set({
+      uid,
+      email: email || null,
+      displayName: null,
+      user: null, // username
+      profilePicture: "/imagenes/avatares/avatar-en-blanco.webp",
+      role: "user",
+      language: "es",
+      createdAt: now,
+      lastActiveAt: now,
+      onboardingCompleted: false,
     });
 
-    await nuevoUsuario.save();
-    res.status(201).json({ message: 'Usuario registrado correctamente' });
+    // users/{uid}/preferences/main
+    await ref.collection("preferences").doc("main").set({
+      categories: [],
+      tags: [],
+      budget: { currency: "EUR", min: 0, max: 0 },
+      distanceKm: 10,
+      availability: {
+        weekdays: true,
+        weekends: true,
+        morning: true,
+        afternoon: true,
+        evening: true,
+      },
+      constraints: { avoidTags: [], accessibilityNeeds: [] },
+      updatedAt: now,
+    });
+
+    // users/{uid}/privacy/main
+    await ref.collection("privacy").doc("main").set({
+      consent: { analytics: true, personalization: true },
+      dataRetentionDays: 180,
+      updatedAt: now,
+    });
+
+    // users/{uid}/recommendation_state/main
+    await ref.collection("recommendation_state").doc("main").set({
+      topCategories: {},
+      topTags: {},
+      recentItemRefs: [],
+      negativeSignals: { dismissedTags: {} },
+      coldStart: true,
+      lastRecommendation: null,
+      updatedAt: now,
+    });
+  } else {
+    await ref.update({ lastActiveAt: now });
+  }
+}
+
+// =======================
+// Controllers
+// =======================
+
+// ✅ POST /api/bootstrap (requireAuth)
+const bootstrapUser = async (req, res) => {
+  try {
+    const { uid, email } = req.auth;
+    await ensureUserScaffold(uid, email);
+
+    const snap = await userDocRef(uid).get();
+    return res.json({ ok: true, user: snap.data() });
   } catch (error) {
-    console.error("❌ Error en registerUser:", error);
-    res.status(500).json({ message: 'Error en el servidor' });
+    console.error("❌ Error en bootstrapUser:", error);
+    return res.status(500).json({ message: "Error en el servidor" });
   }
 };
 
-// ✅ Login
-const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const usuario = await Usuario.findOne({ email });
-
-    if (!usuario) return res.status(400).json({ message: 'Correo o contraseña incorrectos' });
-
-    const match = await bcrypt.compare(password, usuario.password);
-    if (!match) return res.status(400).json({ message: 'Correo o contraseña incorrectos' });
-
-    const token = jwt.sign(
-      { id: usuario._id, email: usuario.email, role: usuario.role },
-      JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    res.json({
-      token,
-      user: {
-        id: usuario._id,
-        name: usuario.name,
-        email: usuario.email,
-        user: usuario.user,
-        profilePicture: usuario.profilePicture || '',
-        role: usuario.role
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Error en el servidor' });
-  }
-};
-
-// ✅ Perfil
+// ✅ GET /api/perfil (requireAuth)
 const getUserProfile = async (req, res) => {
   try {
-    const token = req.header('Authorization').replace('Bearer ', '');
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const { uid } = req.auth;
 
-    const usuario = await Usuario.findById(decoded.id).select('-password');
-    if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
+    const snap = await userDocRef(uid).get();
+    if (!snap.exists) return res.status(404).json({ message: "Usuario no encontrado" });
 
-    res.json(usuario);
+    return res.json(snap.data());
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener el perfil' });
+    console.error("❌ Error en getUserProfile:", error);
+    return res.status(500).json({ message: "Error al obtener el perfil" });
   }
 };
 
-// ✅ Actualizar perfil
+// ✅ PUT /api/perfil (requireAuth)
+// Incluye username único con colección usernames/{username}
+// Opción B: si cambias username, libera el anterior
 const updateUserProfile = async (req, res) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) return res.status(401).json({ message: 'Token no proporcionado' });
+    const { uid } = req.auth;
+    const { user, profilePicture, displayName, language } = req.body;
 
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const { user, profilePicture } = req.body;
+    const now = new Date();
+    const ref = userDocRef(uid);
 
-    const updatedUser = await Usuario.findByIdAndUpdate(
-      decoded.id,
-      { user, profilePicture },
-      { new: true }
-    ).select('-password');
+    // 1) Username único (si viene en el body)
+    if (user !== undefined) {
+      const newUname = normalizeUsername(user);
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      if (!newUname) {
+        return res.status(400).json({ message: "El nombre de usuario es obligatorio" });
+      }
+      if (!validateUsername(newUname)) {
+        return res.status(400).json({
+          message: "El nombre de usuario debe tener 3-20 caracteres y solo a-z, 0-9, _",
+        });
+      }
+
+      await db.runTransaction(async (tx) => {
+        const userSnap = await tx.get(ref);
+        if (!userSnap.exists) throw new Error("Usuario no encontrado");
+
+        const currentUname = userSnap.data().user ? normalizeUsername(userSnap.data().user) : null;
+
+        // si es el mismo, no tocar índice
+        if (currentUname !== newUname) {
+          const newRef = usernameDocRef(newUname);
+          const newSnap = await tx.get(newRef);
+
+          // Ocupado por otro uid
+          if (newSnap.exists && newSnap.data().uid !== uid) {
+            throw new Error("El nombre de usuario ya está en uso");
+          }
+
+          // Reservar nuevo
+          tx.set(newRef, { uid, createdAt: now }, { merge: true });
+
+          // Liberar anterior (Opción B)
+          if (currentUname) {
+            const oldRef = usernameDocRef(currentUname);
+            const oldSnap = await tx.get(oldRef);
+            if (oldSnap.exists && oldSnap.data().uid === uid) {
+              tx.delete(oldRef);
+            }
+          }
+
+          // Guardar username en perfil
+          tx.set(ref, { user: newUname }, { merge: true });
+        }
+
+        // lastActiveAt dentro de la transacción
+        tx.set(ref, { lastActiveAt: now }, { merge: true });
+      });
     }
 
-    res.json(updatedUser);
+    // 2) Actualizaciones normales del perfil
+    const patch = {};
+    if (profilePicture !== undefined) patch.profilePicture = profilePicture;
+    if (displayName !== undefined) patch.displayName = displayName;
+    if (language !== undefined) patch.language = language;
+
+    patch.lastActiveAt = now;
+
+    await ref.set(patch, { merge: true });
+
+    const snap = await ref.get();
+    return res.json(snap.data());
   } catch (error) {
-    console.error('❌ Error en updateUserProfile:', error);
-    res.status(500).json({ message: 'Error al actualizar el perfil' });
+    console.error("❌ Error en updateUserProfile:", error);
+    const msg = error?.message || "Error al actualizar el perfil";
+
+    // username ocupado o inválido -> 400 (para UI)
+    if (
+      msg.toLowerCase().includes("usuario") ||
+      msg.toLowerCase().includes("uso") ||
+      msg.toLowerCase().includes("caracter")
+    ) {
+      return res.status(400).json({ message: msg });
+    }
+
+    return res.status(500).json({ message: "Error al actualizar el perfil" });
   }
 };
 
-// ✅ Obtener todos los usuarios
+// ✅ GET /api/usuarios (admin)
+// Nota: tu ruta debe tener requireAdmin
 const getAllUsers = async (req, res) => {
   try {
-    const usuarios = await Usuario.find({}, 'name user profilePicture');
-    res.json(usuarios);
+    const q = await db
+      .collection("users")
+      .select("uid", "user", "displayName", "profilePicture", "role", "email")
+      .get();
+
+    const usuarios = q.docs.map((d) => d.data());
+    return res.json(usuarios);
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los usuarios' });
+    console.error("❌ Error en getAllUsers:", error);
+    return res.status(500).json({ message: "Error al obtener los usuarios" });
   }
 };
 
-// ✅ NUEVO: Obtener resumen del usuario (para el backend de fiestas)
+// ✅ GET /api/usuarios/:id/resumen (admin o servicio interno)
 const getUserResumen = async (req, res) => {
   try {
-   const usuario = await Usuario.findById(req.params.id).select('user profilePicture role email');
-    if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
+    const { id } = req.params; // uid
+    const snap = await userDocRef(id).get();
+    if (!snap.exists) return res.status(404).json({ message: "Usuario no encontrado" });
 
-    res.json(usuario);
+    const data = snap.data();
+    return res.json({
+      uid: data.uid,
+      user: data.user,
+      profilePicture: data.profilePicture,
+      role: data.role,
+      email: data.email,
+    });
   } catch (error) {
-    console.error('❌ Error en getUserResumen:', error);
-    res.status(500).json({ message: 'Error al obtener datos del usuario' });
+    console.error("❌ Error en getUserResumen:", error);
+    return res.status(500).json({ message: "Error al obtener datos del usuario" });
   }
 };
 
-
 module.exports = {
-  registerUser,
-  loginUser,
+  bootstrapUser,
   getUserProfile,
   updateUserProfile,
   getAllUsers,
-  getUserResumen // 👈 Exportado aquí
+  getUserResumen,
 };

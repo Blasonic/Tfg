@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { registerUser } from '../../ServiciosBack/servicio';
+
+// ✅ Firebase Auth
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../../firebase";
+
+// ✅ llamadas al backend con token Firebase
+import { bootstrapUser, updateUserProfile, getUserProfile } from "../../ServiciosBack/servicioFirebase";
+
+
 
 const Registro = () => {
   const navigate = useNavigate();
@@ -42,9 +50,7 @@ const Registro = () => {
       [id]: value
     }));
 
-    if (id === "password") {
-      setPasswordStatus(getPasswordStatus(value));
-    }
+    if (id === "password") setPasswordStatus(getPasswordStatus(value));
 
     if (id === "email") {
       const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -52,10 +58,7 @@ const Registro = () => {
     }
 
     if (id === "email" || id === "user") {
-      setFieldErrors((prevErrors) => ({
-        ...prevErrors,
-        [id]: ""
-      }));
+      setFieldErrors((prevErrors) => ({ ...prevErrors, [id]: "" }));
     }
 
     setErrorMessage("");
@@ -65,58 +68,79 @@ const Registro = () => {
     e.preventDefault();
     setErrorMessage("");
     setFieldErrors({ email: "", user: "" });
-  
+
     if (!emailValid) {
       setErrorMessage("El formato del correo es inválido");
       return;
     }
-  
+
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Las contraseñas no coinciden");
       return;
     }
-  
+
     const status = getPasswordStatus(formData.password);
     const allValid = Object.values(status).every(Boolean);
-  
     if (!allValid) {
       setErrorMessage("La contraseña no cumple con todos los requisitos");
       return;
     }
-  
-    const userData = {
-      name: formData.name,
-      user: formData.user,
-      email: formData.email,
-      password: formData.password,
-    };
-  
+
     try {
-      await registerUser(userData);
-      // 🔥 SIN alert: simplemente redirigimos
+      // ✅ 1) Crear usuario en Firebase Auth
+      const cred = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+
+      // ✅ 2) (Opcional) Guardar displayName en Auth
+      // Nota: tu "name" lo usamos como displayName
+      await updateProfile(cred.user, { displayName: formData.name });
+
+      // ✅ 3) Backend: crear estructura users/{uid} + subdocs
+      await bootstrapUser();
+
+      // ✅ 4) Backend: guardar username + foto default + displayName
+    await updateUserProfile({
+  user: formData.user,
+  displayName: formData.name,
+  profilePicture: "/imagenes/avatares/avatar-en-blanco.webp",
+});
+const profile = await getUserProfile();
+
+// ✅ 6) Guardarlo en localStorage para que el header ya tenga avatar
+localStorage.setItem("user", JSON.stringify(profile));
+window.dispatchEvent(new Event("storage"));
+
+// ✅ 7) Redirigir directamente al home (mejor UX)
+navigate('/');
+
+      // ✅ 5) Redirigir
       navigate('/Login');
     } catch (error) {
-      const message = error.message || "Error al registrar la cuenta";
-  
-      const newFieldErrors = { email: "", user: "" };
-  
-      if (message.toLowerCase().includes("correo")) {
-        newFieldErrors.email = message;
+      const code = error?.code || "";
+      const message = error?.message || "Error al registrar la cuenta";
+
+      // Errores típicos Firebase
+      if (code === "auth/email-already-in-use") {
+        setFieldErrors({ email: "El correo ya está registrado", user: "" });
+        return;
       }
-  
+      if (code === "auth/invalid-email") {
+        setFieldErrors({ email: "Correo inválido", user: "" });
+        return;
+      }
+      if (code === "auth/weak-password") {
+        setErrorMessage("Contraseña débil (mínimo 6). Mantén tus requisitos de 8+.");
+        return;
+      }
+
+      // Si tu backend devuelve error por username repetido (cuando lo implementemos)
       if (message.toLowerCase().includes("usuario")) {
-        newFieldErrors.user = message;
+        setFieldErrors({ email: "", user: message });
+        return;
       }
-  
-      if (!newFieldErrors.email && !newFieldErrors.user) {
-        setErrorMessage(message);
-      }
-  
-      setFieldErrors(newFieldErrors);
+
+      setErrorMessage(message);
     }
   };
-  
-  
 
   return (
     <StyledWrapper>
