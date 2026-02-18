@@ -16,8 +16,6 @@ import Admin from './componentes/Admin/Admin';
 import CalendarioGlobal from './componentes/Calendario/CalendarioGlobal';
 import FormularioAnadir from './componentes/Calendario/FormularioAnadir';
 import ProtegerAdmin from './componentes/Admin/ProtegerAdmin';
-import CalendarioPatronal from './componentes/Calendario/CalendarioPatronal';
-import CalendarioLocal from './componentes/Calendario/CalendarioLocal';
 import ComentariosPanel from './componentes/Comentarios/Comentarios';
 import Soporte from './componentes/Soporte/Soporte';
 import Ayuda from './componentes/Ayuda/Ayuda';
@@ -49,8 +47,7 @@ function App() {
           <Route path="/Soporte" element={<Soporte />} />
           <Route path="/Ayuda" element={<Ayuda />} />
           <Route path="/CalendarioGlobal" element={<CalendarioGlobal />} />
-          <Route path="/CalendarioLocal" element={<CalendarioLocal />} />
-          <Route path="/CalendarioPatronal" element={<CalendarioPatronal />} />
+
           <Route path="/FormularioAnadir" element={<FormularioAnadir />} />
           <Route
   path="/admin"
