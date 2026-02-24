@@ -12,14 +12,13 @@ import {
 
 import { auth } from "../../firebase";
 
-// ------------------ helpers ------------------
+// helpers
 function formatDateRange(start, end) {
   if (!start) return "";
   const s = start.toLocaleDateString();
   const e = end ? end.toLocaleDateString() : null;
   return e && e !== s ? `${s} - ${e}` : s;
 }
-
 function formatTimeRange(start, end) {
   if (!start) return null;
   const hhmm = (d) => d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -27,7 +26,6 @@ function formatTimeRange(start, end) {
   const e = end ? hhmm(end) : null;
   return e && e !== s ? `${s} - ${e}` : s;
 }
-
 function buildMapsUrl(evento) {
   const parts = [];
   if (evento.direccion) parts.push(evento.direccion);
@@ -37,16 +35,15 @@ function buildMapsUrl(evento) {
   const q = encodeURIComponent(parts.join(", "));
   return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
-
 function safeArray(x) {
   return Array.isArray(x) ? x : [];
 }
 
-// ------------------ component ------------------
-const EventoCard = ({ evento }) => {
+// ✅ onFavoriteChange(opcional): (isFavorite:boolean) => void
+const EventoCard = ({ evento, onFavoriteChange }) => {
   const [comentarios, setComentarios] = useState([]);
-  const [mostrarComentarios, setMostrarComentarios] = useState(false); // dentro del modal
-  const [mostrarFormulario, setMostrarFormulario] = useState(false); // comentar dentro modal
+  const [mostrarComentarios, setMostrarComentarios] = useState(false);
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [texto, setTexto] = useState("");
   const [estrellas, setEstrellas] = useState(0);
 
@@ -54,7 +51,7 @@ const EventoCard = ({ evento }) => {
   const [loadingFav, setLoadingFav] = useState(false);
 
   const [expandedDesc, setExpandedDesc] = useState(false);
-  const [open, setOpen] = useState(false); // modal detalles
+  const [open, setOpen] = useState(false);
 
   const usuario = useMemo(() => {
     try {
@@ -74,7 +71,7 @@ const EventoCard = ({ evento }) => {
   const tags = safeArray(evento.tags);
   const mapsUrl = buildMapsUrl(evento);
 
-  // ----- data loading -----
+  // comentarios
   useEffect(() => {
     const run = async () => {
       try {
@@ -87,14 +84,15 @@ const EventoCard = ({ evento }) => {
     run();
   }, [evento.id]);
 
+  // favorito inicial
   useEffect(() => {
     const run = async () => {
       try {
         if (!auth.currentUser) return;
-        const data = await getFavorito(evento.id); // { saved }
-        setFav(Boolean(data?.saved));
+        const data = await getFavorito(evento.id); // { isFavorite }
+        setFav(Boolean(data?.isFavorite));
       } catch {
-        // no rompas UI si no existe aún el endpoint
+        // no rompas UI
       }
     };
     run();
@@ -105,11 +103,20 @@ const EventoCard = ({ evento }) => {
       toast.error("Inicia sesión para guardar favoritos");
       return;
     }
+
     setLoadingFav(true);
     try {
-      if (fav) await removeFavorito(evento.id);
-      else await addFavorito(evento.id);
-      setFav(!fav);
+      if (fav) {
+        const r = await removeFavorito(evento.id); // { isFavorite:false }
+        const next = Boolean(r?.isFavorite);
+        setFav(next);
+        onFavoriteChange?.(next); // ✅ avisa al padre
+      } else {
+        const r = await addFavorito(evento.id); // { isFavorite:true }
+        const next = Boolean(r?.isFavorite);
+        setFav(next);
+        onFavoriteChange?.(next); // ✅ avisa al padre
+      }
     } catch (e) {
       toast.error(e.message || "No se pudo actualizar favorito");
     } finally {
@@ -144,7 +151,6 @@ const EventoCard = ({ evento }) => {
     }
   };
 
-  // ------------------ UI pieces ------------------
   const Desc = () => (
     <div>
       <p
@@ -181,10 +187,9 @@ const EventoCard = ({ evento }) => {
       </p>
     ) : null;
 
-  // ------------------ render ------------------
   return (
     <>
-      {/* ===== CARD COMPACTA ===== */}
+      {/* CARD */}
       <div className="evento-card-mini" style={styles.card}>
         <div style={styles.imgWrap}>
           <img
@@ -212,8 +217,6 @@ const EventoCard = ({ evento }) => {
 
           <MetaLine label="Fecha" value={fechaTxt} />
           <MetaLine label="Hora" value={horaTxt} />
-
-          {/* categoría nueva (si ya la tienes en DB) */}
           <MetaLine
             label="Categoría"
             value={
@@ -238,7 +241,7 @@ const EventoCard = ({ evento }) => {
         </div>
       </div>
 
-      {/* ===== MODAL DETALLES ===== */}
+      {/* MODAL */}
       {open && (
         <div style={styles.overlay} onClick={() => setOpen(false)}>
           <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
@@ -247,7 +250,6 @@ const EventoCard = ({ evento }) => {
             </button>
 
             <div style={styles.modalGrid}>
-              {/* Left: imagen */}
               <div style={styles.modalLeft}>
                 <img
                   src={evento.imagen || "/imagenes/default-evento.jpg"}
@@ -256,7 +258,6 @@ const EventoCard = ({ evento }) => {
                 />
               </div>
 
-              {/* Right: info */}
               <div style={styles.modalRight}>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start" }}>
                   <div>
@@ -326,7 +327,6 @@ const EventoCard = ({ evento }) => {
                           type="button"
                           className="btn-nuevo-evento"
                           onClick={() => {
-                            // mini toggle de mapa: usando estado local simple
                             const el = document.getElementById(`map-${evento.id}`);
                             if (el) el.style.display = el.style.display === "none" ? "block" : "none";
                           }}
@@ -335,7 +335,6 @@ const EventoCard = ({ evento }) => {
                         </button>
                       </div>
 
-                      {/* Preview mapa (sin API key, embed simple) */}
                       <div
                         id={`map-${evento.id}`}
                         style={{ marginTop: 12, borderRadius: 12, overflow: "hidden", display: "none" }}
@@ -366,10 +365,7 @@ const EventoCard = ({ evento }) => {
                     <h3 style={{ margin: 0 }}>Comentarios ({comentarios.length})</h3>
 
                     <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                      <button
-                        className="btn-nuevo-evento"
-                        onClick={() => setMostrarComentarios((v) => !v)}
-                      >
+                      <button className="btn-nuevo-evento" onClick={() => setMostrarComentarios((v) => !v)}>
                         {mostrarComentarios ? "Ocultar" : "Ver"}
                       </button>
 
@@ -422,11 +418,7 @@ const EventoCard = ({ evento }) => {
                           <button type="submit" className="btn-nuevo-evento">
                             Enviar
                           </button>
-                          <button
-                            type="button"
-                            className="btn-nuevo-evento"
-                            onClick={() => setMostrarFormulario(false)}
-                          >
+                          <button type="button" className="btn-nuevo-evento" onClick={() => setMostrarFormulario(false)}>
                             Cancelar
                           </button>
                         </div>
@@ -449,9 +441,7 @@ const EventoCard = ({ evento }) => {
                               />
                               <div>
                                 <strong>{c.autor_nombre || "Usuario"}</strong>
-                                <div style={{ color: "#f4c542" }}>
-                                  {"⭐".repeat(Number(c.estrellas || 0))}
-                                </div>
+                                <div style={{ color: "#f4c542" }}>{"⭐".repeat(Number(c.estrellas || 0))}</div>
                               </div>
                             </div>
 
@@ -516,7 +506,6 @@ const styles = {
     padding: "6px 10px",
     fontSize: 12,
   },
-
   overlay: {
     position: "fixed",
     inset: 0,

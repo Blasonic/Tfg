@@ -19,7 +19,8 @@ import ProtegerAdmin from './componentes/Admin/ProtegerAdmin';
 import ComentariosPanel from './componentes/Comentarios/Comentarios';
 import Soporte from './componentes/Soporte/Soporte';
 import Ayuda from './componentes/Ayuda/Ayuda';
-
+import FavoritoButton from './componentes/Favoritos/FavoritosButton'; 
+import FavoritosPage from './componentes/Favoritos/FavoritosPage';
 
 
 
@@ -47,8 +48,9 @@ function App() {
           <Route path="/Soporte" element={<Soporte />} />
           <Route path="/Ayuda" element={<Ayuda />} />
           <Route path="/CalendarioGlobal" element={<CalendarioGlobal />} />
-
           <Route path="/FormularioAnadir" element={<FormularioAnadir />} />
+          <Route path="/FavoritoButton" element={<FavoritoButton />} />
+          <Route path="/favoritos" element={<FavoritosPage />} />
           <Route
   path="/admin"
   element={

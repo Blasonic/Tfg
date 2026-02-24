@@ -1,15 +1,13 @@
 import { apiFetch } from "./apiFetch";
+import { apiFetchUsers } from "./apiFetchUsers";
 
 /* =========================
-   FIESTAS
+   FIESTAS (EVENTOS - 3000)
 ========================= */
-
-// Público (ruta real en tu backend)
 export function listarFiestasPublicadas() {
   return apiFetch("/fiestas/aceptadas");
 }
 
-// Crear evento (ruta real en tu backend)
 export function crearFiesta(payload) {
   return apiFetch("/fiestas/solicitar", {
     method: "POST",
@@ -19,41 +17,34 @@ export function crearFiesta(payload) {
 }
 
 /* =========================
-   COMENTARIOS
+   COMENTARIOS (EVENTOS - 3000)
 ========================= */
-
-// Público (en tu backend actual estaba como pública en rutasComentarios)
 export function listarComentariosPorFiesta(fiestaId) {
   return apiFetch(`/comentarios/por-evento/${fiestaId}`);
 }
 
-// Requiere login
 export function upsertComentario({ fiestaId, estrellas, texto }) {
   return apiFetch("/comentarios", {
     method: "POST",
-    body: {
-      fiesta_id: fiestaId,
-      estrellas,
-      texto,
-    },
+    body: { fiesta_id: fiestaId, estrellas, texto },
     authRequired: true,
   });
 }
 
 /* =========================
-   FAVORITOS (Firestore via backend)
-   - Si aún no lo tienes en backend, no romperá:
-     EventoCard atrapa errores en try/catch.
+   FAVORITOS (USERS - 3001)
 ========================= */
-
 export function getFavorito(fiestaId) {
-  return apiFetch(`/favoritos/${fiestaId}`, { authRequired: true });
+  return apiFetchUsers(`/favoritos/${fiestaId}`, { authRequired: true });
 }
 
 export function addFavorito(fiestaId) {
-  return apiFetch(`/favoritos/${fiestaId}`, { method: "POST", authRequired: true });
+  return apiFetchUsers(`/favoritos/${fiestaId}`, { method: "POST", authRequired: true });
 }
 
 export function removeFavorito(fiestaId) {
-  return apiFetch(`/favoritos/${fiestaId}`, { method: "DELETE", authRequired: true });
+  return apiFetchUsers(`/favoritos/${fiestaId}`, { method: "DELETE", authRequired: true });
+}
+export function listFavoritos() {
+  return apiFetchUsers("/favoritos", { authRequired: true });
 }

@@ -22,18 +22,14 @@ function Header() {
     };
 
     load();
-
-    // cuando haces localStorage.setItem('user') disparas storage en tu código
     window.addEventListener("storage", load);
-
     return () => window.removeEventListener("storage", load);
   }, []);
 
   const handleLogout = async () => {
     try {
-      await signOut(auth); // 🔥 cierra sesión Firebase
+      await signOut(auth);
     } catch (e) {
-      // aunque falle, limpiamos local igualmente
       console.error("Logout Firebase:", e);
     }
 
@@ -42,6 +38,11 @@ function Header() {
     setMenuUsuario(false);
     window.dispatchEvent(new Event("storage"));
     navigate("/");
+  };
+
+  const goFavoritos = () => {
+    setMenuUsuario(false);
+    navigate("/favoritos");
   };
 
   return (
@@ -82,6 +83,15 @@ function Header() {
                   >
                     Ver Perfil
                   </Link>
+
+                  <button
+                    type="button"
+                    className="menu-usuario-item"
+                    onClick={goFavoritos}
+                    style={{ background: "transparent", border: "none", textAlign: "left", cursor: "pointer" }}
+                  >
+                    Favoritos
+                  </button>
 
                   <button
                     className="menu-usuario-item cerrar-sesion"
