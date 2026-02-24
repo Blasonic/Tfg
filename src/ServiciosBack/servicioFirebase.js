@@ -34,11 +34,7 @@ export async function getUserProfile() {
   };
 }
 
-/**
- * updateUserProfile:
- * Sin backend /perfil no podemos persistir cambios.
- * De momento devolvemos el payload para no romper pantallas.
- */
+
 export async function updateUserProfile(payload) {
   return { ok: true, payload };
 }  
