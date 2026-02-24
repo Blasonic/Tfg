@@ -1,6 +1,5 @@
 const admin = require("firebase-admin");
 
-// Middleware para verificar token Firebase
 async function requireAuth(req, res, next) {
   try {
     const header = req.headers.authorization;
@@ -13,8 +12,11 @@ async function requireAuth(req, res, next) {
 
     const decodedToken = await admin.auth().verifyIdToken(token);
 
-    // guardamos datos del usuario para usar en controllers
+    // claims completas
     req.auth = decodedToken;
+
+    // acceso rápido al uid (estándar backend)
+    req.user = { id: decodedToken.uid };
 
     next();
   } catch (error) {

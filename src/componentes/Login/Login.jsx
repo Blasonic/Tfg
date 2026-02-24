@@ -1,3 +1,4 @@
+// src/componentes/Login/Login.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle, FaApple } from "react-icons/fa";
@@ -23,17 +24,19 @@ const Login = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // ✅ flujo común post-login
+  // ✅ flujo común post-login (sin 404)
   const postLoginFlow = async () => {
+    // compat: no rompe aunque no haya backend
     await bootstrapUser();
-    const profile = await getUserProfile();
+
+    const profile = await getUserProfile(); // incluye isAdmin desde claims
 
     localStorage.setItem("user", JSON.stringify(profile));
     window.dispatchEvent(new Event("storage"));
 
-    if (profile.role === "admin") {
+    if (profile.isAdmin) {
       setAdminRedirecting(true);
-      setTimeout(() => navigate("/admin"), 1500);
+      setTimeout(() => navigate("/admin"), 500);
     } else {
       navigate("/");
     }
@@ -147,12 +150,10 @@ const Login = () => {
         <p className="p line">O ingresa con</p>
 
         <div className="flex-row">
-          {/* ✅ Google (activo) */}
           <button type="button" className="btn google" onClick={handleGoogleLogin}>
             <FaGoogle /> Google
           </button>
 
-          {/* Apple lo dejamos para luego */}
           <button type="button" className="btn apple" disabled>
             <FaApple /> Apple
           </button>
