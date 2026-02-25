@@ -24,17 +24,40 @@ const Login = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // ✅ flujo común post-login (sin 404)
+  // ✅ flujo común post-login (robusto con avatar + refresco header)
   const postLoginFlow = async () => {
-    // compat: no rompe aunque no haya backend
+    // No rompe aunque el backend esté caído (si bootstrapUser ya lo maneja así)
     await bootstrapUser();
 
-    const profile = await getUserProfile(); // incluye isAdmin desde claims
+    const profile = await getUserProfile(); // ideal: { uid, email, displayName, avatarUrl?, isAdmin? }
 
-    localStorage.setItem("user", JSON.stringify(profile));
-    window.dispatchEvent(new Event("storage"));
+    // 🔒 Merge para NO pisar avatar existente
+    const prev = JSON.parse(localStorage.getItem("user") || "{}");
 
-    if (profile.isAdmin) {
+    const merged = {
+      ...prev,
+      ...profile,
+      // Fallbacks de avatar (elige una convención: avatarUrl recomendado)
+      avatarUrl:
+        profile?.avatarUrl ??
+        prev?.avatarUrl ??
+        profile?.photoURL ??
+        prev?.photoURL ??
+        auth.currentUser?.photoURL ??
+        null,
+      photoURL:
+        profile?.photoURL ??
+        prev?.photoURL ??
+        auth.currentUser?.photoURL ??
+        null,
+    };
+
+    localStorage.setItem("user", JSON.stringify(merged));
+
+    // ✅ Evento propio (storage no refresca en la misma pestaña)
+    window.dispatchEvent(new Event("user-updated"));
+
+    if (merged?.isAdmin) {
       setAdminRedirecting(true);
       setTimeout(() => navigate("/admin"), 500);
     } else {

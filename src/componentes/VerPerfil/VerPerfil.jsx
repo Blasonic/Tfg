@@ -1,11 +1,15 @@
+// src/componentes/VerPerfil/VerPerfil.jsx  (ajusta la ruta si tu archivo está en otra carpeta)
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// ✅ NUEVO: servicio Firebase
+// ✅ Servicios backend users (Firestore via 3001)
 import { getUserProfile, updateUserProfile } from "../../ServiciosBack/servicioFirebase";
+
+// ✅ Opcional pero recomendado: fallback con photoURL de Firebase Auth
+import { auth } from "../../firebase";
 
 const avatarList = [
   "imagenes/avatares/avatar1.png",
@@ -21,21 +25,73 @@ const avatarList = [
 ];
 
 const VerPerfil = () => {
-  // en Firestore usamos displayName, pero mantengo tu UI con "name"
-  const [userData, setUserData] = useState({ name: "", user: "", email: "", profilePicture: "" });
+  // UI keys: name/user/email/profilePicture
+  const [userData, setUserData] = useState({
+    name: "",
+    user: "",
+    email: "",
+    profilePicture: "",
+  });
+
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
   const navigate = useNavigate();
 
+  // ✅ Guarda perfil en localStorage SIN pisar campos + notifica al header
+  const persistUser = (updated) => {
+    const prev = JSON.parse(localStorage.getItem("user") || "{}");
+
+    // unifica avatar con fallbacks (mantén una convención: avatarUrl recomendado)
+    const avatar =
+      updated?.profilePicture ??
+      updated?.avatarUrl ??
+      updated?.photoURL ??
+      prev?.profilePicture ??
+      prev?.avatarUrl ??
+      prev?.photoURL ??
+      auth?.currentUser?.photoURL ??
+      null;
+
+    const merged = {
+      ...prev,
+      ...updated,
+      // normalizamos nombre
+      displayName: updated?.displayName ?? prev?.displayName ?? userData.name ?? "",
+      // guardamos avatar en ambas claves por compat con tu app
+      avatarUrl: avatar,
+      profilePicture: avatar,
+    };
+
+    localStorage.setItem("user", JSON.stringify(merged));
+
+    // ✅ evento propio (storage no refresca en la misma pestaña)
+    window.dispatchEvent(new Event("user-updated"));
+  };
+
+  // ✅ Cargar perfil al entrar
   useEffect(() => {
     (async () => {
       try {
         const data = await getUserProfile();
 
+        const avatar =
+          data?.profilePicture ??
+          data?.avatarUrl ??
+          data?.photoURL ??
+          auth?.currentUser?.photoURL ??
+          "";
+
         setUserData({
-          name: data.displayName || data.name || "",
-          user: data.user || "",
-          email: data.email || "",
-          profilePicture: data.profilePicture || "",
+          name: data?.displayName || data?.name || "",
+          user: data?.user || "",
+          email: data?.email || "",
+          profilePicture: avatar || "",
+        });
+
+        // (Opcional) mantener localStorage sincronizado al entrar al perfil
+        persistUser({
+          ...data,
+          profilePicture: avatar || data?.profilePicture || "",
+          avatarUrl: avatar || data?.avatarUrl || "",
         });
       } catch (err) {
         console.error("Error perfil:", err);
@@ -43,6 +99,7 @@ const VerPerfil = () => {
         setTimeout(() => navigate("/Login"), 1500);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   const handleChange = (e) => {
@@ -50,68 +107,63 @@ const VerPerfil = () => {
     setUserData((p) => ({ ...p, [name]: value }));
   };
 
-  const persistUser = (updated) => {
-    // guardamos con las claves que usa el Header
-    const normalized = {
-      ...updated,
-      // normaliza por si backend devuelve displayName
-      displayName: updated.displayName ?? userData.name,
-      profilePicture: updated.profilePicture ?? userData.profilePicture,
-    };
-
-    localStorage.setItem("user", JSON.stringify(normalized));
-    window.dispatchEvent(new Event("storage"));
-  };
-
+  // ✅ Selección de avatar
   const handleAvatarSelect = async (avatarPath) => {
     try {
+      const avatar = `/${avatarPath}`;
+
       const updatedUser = await updateUserProfile({
-        // backend espera displayName (según controller)
         displayName: userData.name,
         user: userData.user,
-        profilePicture: `/${avatarPath}`,
+        profilePicture: avatar,
       });
 
-      setUserData({
-        name: updatedUser.displayName || "",
-        user: updatedUser.user || "",
-        email: updatedUser.email || "",
-        profilePicture: updatedUser.profilePicture || "",
-      });
+      const next = {
+        name: updatedUser?.displayName || userData.name || "",
+        user: updatedUser?.user || userData.user || "",
+        email: updatedUser?.email || userData.email || "",
+        profilePicture: updatedUser?.profilePicture || avatar,
+      };
 
-      persistUser(updatedUser);
+      setUserData(next);
+      persistUser({ ...updatedUser, profilePicture: next.profilePicture, avatarUrl: next.profilePicture });
+
       setShowAvatarOptions(false);
       toast.success("Avatar actualizado");
     } catch (error) {
       console.error("❌ Error avatar:", error);
-      toast.error(error.message || "Error al actualizar avatar");
+      toast.error(error?.message || "Error al actualizar avatar");
     }
   };
 
+  // ✅ Guardar cambios de texto (nombre / username)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const updatedUser = await updateUserProfile({
         displayName: userData.name,
-        user: userData.user, // aquí aplica unicidad y puede devolver 400
+        user: userData.user, // el backend puede devolver 400 si está ocupado
         profilePicture: userData.profilePicture,
       });
 
-      setUserData({
-        name: updatedUser.displayName || "",
-        user: updatedUser.user || "",
-        email: updatedUser.email || "",
-        profilePicture: updatedUser.profilePicture || "",
-      });
+      const next = {
+        name: updatedUser?.displayName || userData.name || "",
+        user: updatedUser?.user || userData.user || "",
+        email: updatedUser?.email || userData.email || "",
+        profilePicture: updatedUser?.profilePicture || userData.profilePicture || "",
+      };
 
-      persistUser(updatedUser);
+      setUserData(next);
+      persistUser({ ...updatedUser, profilePicture: next.profilePicture, avatarUrl: next.profilePicture });
+
       toast.success("Perfil actualizado");
     } catch (error) {
       console.error("❌ Error update perfil:", error);
-      // si username ocupado, backend devuelve message "El nombre de usuario ya está en uso"
-      toast.error(error.message || "Error al actualizar el perfil");
+      toast.error(error?.message || "Error al actualizar el perfil");
     }
   };
+
+  const avatarSrc = userData.profilePicture || "/imagenes/avatares/avatar-en-blanco.webp";
 
   return (
     <StyledWrapper>
@@ -119,15 +171,11 @@ const VerPerfil = () => {
         <h2>Perfil de Usuario</h2>
 
         <div className="profile-picture-container">
-          <img
-            src={userData.profilePicture || "/imagenes/avatares/avatar-en-blanco.webp"}
-            alt="Avatar"
-            className="profile-picture"
-          />
+          <img src={avatarSrc} alt="Avatar" className="profile-picture" />
           <button
             type="button"
             className="button-secondary"
-            onClick={() => setShowAvatarOptions(!showAvatarOptions)}
+            onClick={() => setShowAvatarOptions((v) => !v)}
           >
             Elegir Avatar
           </button>
@@ -162,8 +210,13 @@ const VerPerfil = () => {
           <input type="email" value={userData.email} disabled />
         </div>
 
-        <button type="submit" className="button-submit">Guardar Cambios</button>
-        <Link to="/" className="button-link">← Volver al Home</Link>
+        <button type="submit" className="button-submit">
+          Guardar Cambios
+        </button>
+
+        <Link to="/" className="button-link">
+          ← Volver al Home
+        </Link>
       </form>
 
       <ToastContainer />

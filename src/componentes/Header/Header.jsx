@@ -6,7 +6,7 @@ import "./Header.css";
 
 // ✅ Firebase logout
 import { signOut } from "firebase/auth";
-import { auth } from "../../firebase"; // ajusta ruta si tu firebase.js está en otro sitio
+import { auth } from "../../firebase";
 
 function Header() {
   const [user, setUser] = useState(null);
@@ -14,16 +14,31 @@ function Header() {
   const [menuUsuario, setMenuUsuario] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ cargar user de localStorage + escuchar cambios
+  // ✅ cargar user de localStorage + escuchar cambios (MISMA pestaña)
   useEffect(() => {
     const load = () => {
-      const storedUser = localStorage.getItem("user");
-      setUser(storedUser ? JSON.parse(storedUser) : null);
+      try {
+        const storedUser = localStorage.getItem("user");
+        setUser(storedUser ? JSON.parse(storedUser) : null);
+      } catch (e) {
+        console.warn("Header: user corrupto en localStorage, limpiando…", e);
+        localStorage.removeItem("user");
+        setUser(null);
+      }
     };
 
     load();
+
+    // ✅ Evento propio: lo disparan Login / VerPerfil / Logout
+    window.addEventListener("user-updated", load);
+
+    // (Opcional) Mantener también storage para cambios entre pestañas
     window.addEventListener("storage", load);
-    return () => window.removeEventListener("storage", load);
+
+    return () => {
+      window.removeEventListener("user-updated", load);
+      window.removeEventListener("storage", load);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -36,7 +51,10 @@ function Header() {
     localStorage.removeItem("user");
     setUser(null);
     setMenuUsuario(false);
-    window.dispatchEvent(new Event("storage"));
+
+    // ✅ notifica en la misma pestaña
+    window.dispatchEvent(new Event("user-updated"));
+
     navigate("/");
   };
 
@@ -44,6 +62,12 @@ function Header() {
     setMenuUsuario(false);
     navigate("/favoritos");
   };
+
+  const avatarSrc =
+    user?.avatarUrl ||
+    user?.profilePicture ||
+    user?.photoURL ||
+    "/imagenes/avatares/avatar-en-blanco.webp";
 
   return (
     <>
@@ -68,10 +92,10 @@ function Header() {
           {user ? (
             <div className="avatar-wrapper">
               <img
-                src={user.profilePicture || "/imagenes/avatares/avatar-en-blanco.webp"}
+                src={avatarSrc}
                 alt="Avatar"
                 className="avatar-img"
-                onClick={() => setMenuUsuario(!menuUsuario)}
+                onClick={() => setMenuUsuario((v) => !v)}
               />
 
               {menuUsuario && (
@@ -88,7 +112,13 @@ function Header() {
                     type="button"
                     className="menu-usuario-item"
                     onClick={goFavoritos}
-                    style={{ background: "transparent", border: "none", textAlign: "left", cursor: "pointer" }}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
                   >
                     Favoritos
                   </button>

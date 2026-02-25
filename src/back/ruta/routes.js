@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-console.log("✅ routes.js (users) cargado"); // <-- DEBUG
+
 
 const requireAuth = require("../middelware/requireAuth");
 const requireAdmin = require("../middelware/requireAdmin");
