@@ -80,7 +80,7 @@ function Header() {
           <nav className="nav-links">
             <Link to="/" className="nav-link">Home</Link>
             <Link to="/SobreNosotros" className="nav-link">About</Link>
-            <Link to="/Soporte" className="nav-link">Contacto</Link>
+            <Link to="/Contacto" className="nav-link">Contacto</Link>
             <Link to="/CalendarioGlobal" className="nav-link calendario">Calendario</Link>
           </nav>
 

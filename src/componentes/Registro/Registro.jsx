@@ -1,30 +1,38 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 // ✅ Firebase Auth
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendEmailVerification,
+} from "firebase/auth";
 import { auth } from "../../firebase";
 
 // ✅ llamadas al backend con token Firebase
-import { bootstrapUser, updateUserProfile, getUserProfile } from "../../ServiciosBack/servicioFirebase";
+import {
+  bootstrapUser,
+  updateUserProfile,
+  getUserProfile,
+} from "../../ServiciosBack/servicioFirebase";
 
-
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
 
 const Registro = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
-    user: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
+    name: "",
+    user: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState({ email: "", user: "" });
-  const [passwordStatus, setPasswordStatus] = useState({});
   const [emailValid, setEmailValid] = useState(null);
+  const [infoMessage, setInfoMessage] = useState(""); // ✅ para mensajes tipo "revisa tu email"
 
   const passwordRules = {
     length: "Al menos 8 caracteres",
@@ -42,15 +50,24 @@ const Registro = () => {
     };
   };
 
+  // ✅ derivado (siempre consistente aunque borres)
+  const passwordStatus = useMemo(
+    () => getPasswordStatus(formData.password),
+    [formData.password]
+  );
+
+  const allPasswordValid = useMemo(() => {
+    if (!formData.password) return false;
+    return Object.values(getPasswordStatus(formData.password)).every(Boolean);
+  }, [formData.password]);
+
   const handleChange = (e) => {
     const { id, value } = e.target;
 
     setFormData((prevData) => ({
       ...prevData,
-      [id]: value
+      [id]: value,
     }));
-
-    if (id === "password") setPasswordStatus(getPasswordStatus(value));
 
     if (id === "email") {
       const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -62,11 +79,33 @@ const Registro = () => {
     }
 
     setErrorMessage("");
+    setInfoMessage("");
+  };
+
+  const sendWelcomeEmail = async (firebaseUser, name) => {
+    // ✅ Bienvenida por tu backend (protegido con requireAuth)
+    const token = await firebaseUser.getIdToken();
+
+    const res = await fetch(`${API_URL}/api/email/bienvenida`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ name }),
+    });
+
+    // Si falla, NO rompemos el registro (solo log)
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      console.warn("⚠️ Welcome email no enviado:", data?.message || res.status);
+    }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setErrorMessage("");
+    setInfoMessage("");
     setFieldErrors({ email: "", user: "" });
 
     if (!emailValid) {
@@ -79,46 +118,56 @@ const Registro = () => {
       return;
     }
 
-    const status = getPasswordStatus(formData.password);
-    const allValid = Object.values(status).every(Boolean);
-    if (!allValid) {
+    if (!allPasswordValid) {
       setErrorMessage("La contraseña no cumple con todos los requisitos");
       return;
     }
 
     try {
       // ✅ 1) Crear usuario en Firebase Auth
-      const cred = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const cred = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
 
-      // ✅ 2) (Opcional) Guardar displayName en Auth
-      // Nota: tu "name" lo usamos como displayName
+      // ✅ 2) Guardar displayName en Auth
       await updateProfile(cred.user, { displayName: formData.name });
 
-      // ✅ 3) Backend: crear estructura users/{uid} + subdocs
+      // ✅ 3) Enviar email de verificación (Firebase)
+      // (Esto manda el correo "Verify your email")
+      await sendEmailVerification(cred.user);
+
+      // ✅ 4) Backend: crear estructura users/{uid}
       await bootstrapUser();
 
-      // ✅ 4) Backend: guardar username + foto default + displayName
-    await updateUserProfile({
-  user: formData.user,
-  displayName: formData.name,
-  profilePicture: "/imagenes/avatares/avatar-en-blanco.webp",
-});
-const profile = await getUserProfile();
+      // ✅ 5) Backend: guardar username + avatar + displayName
+      await updateUserProfile({
+        user: formData.user,
+        displayName: formData.name,
+        profilePicture: "/imagenes/avatares/avatar-en-blanco.webp",
+      });
 
-// ✅ 6) Guardarlo en localStorage para que el header ya tenga avatar
-localStorage.setItem("user", JSON.stringify(profile));
-window.dispatchEvent(new Event("storage"));
+      // ✅ 6) Leer perfil y guardarlo para header
+      const profile = await getUserProfile();
+      localStorage.setItem("user", JSON.stringify(profile));
+      window.dispatchEvent(new Event("storage"));
 
-// ✅ 7) Redirigir directamente al home (mejor UX)
-navigate('/');
+      // ✅ 7) Email de bienvenida (personalizado) por Nodemailer
+      // (si falla, no rompemos nada)
+      await sendWelcomeEmail(cred.user, formData.name);
 
-      // ✅ 5) Redirigir
-      navigate('/Login');
+      // ✅ Mensaje UX
+      setInfoMessage(
+        "Registro completado ✅. Te hemos enviado un correo de verificación. Revisa tu email (y spam)."
+      );
+
+      // ✅ Decide a dónde ir (recomendación: home)
+      navigate("/");
     } catch (error) {
       const code = error?.code || "";
       const message = error?.message || "Error al registrar la cuenta";
 
-      // Errores típicos Firebase
       if (code === "auth/email-already-in-use") {
         setFieldErrors({ email: "El correo ya está registrado", user: "" });
         return;
@@ -132,7 +181,6 @@ navigate('/');
         return;
       }
 
-      // Si tu backend devuelve error por username repetido (cuando lo implementemos)
       if (message.toLowerCase().includes("usuario")) {
         setFieldErrors({ email: "", user: message });
         return;
@@ -147,20 +195,47 @@ navigate('/');
       <form className="form" onSubmit={handleRegister}>
         <h2>Crear Cuenta</h2>
 
-        <div className="flex-column"><label>Nombre</label></div>
+        <div className="flex-column">
+          <label>Nombre</label>
+        </div>
         <div className="inputForm">
-          <input type="text" id="name" placeholder="Ingresa tu nombre" value={formData.name} onChange={handleChange} required />
+          <input
+            type="text"
+            id="name"
+            placeholder="Ingresa tu nombre"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
         </div>
 
-        <div className="flex-column"><label>Nombre de Usuario</label></div>
+        <div className="flex-column">
+          <label>Nombre de Usuario</label>
+        </div>
         <div className="inputForm">
-          <input type="text" id="user" placeholder="Ingresa un nombre de usuario" value={formData.user} onChange={handleChange} required />
+          <input
+            type="text"
+            id="user"
+            placeholder="Ingresa un nombre de usuario"
+            value={formData.user}
+            onChange={handleChange}
+            required
+          />
         </div>
         {fieldErrors.user && <p className="error-message">{fieldErrors.user}</p>}
 
-        <div className="flex-column"><label>Correo Electrónico</label></div>
+        <div className="flex-column">
+          <label>Correo Electrónico</label>
+        </div>
         <div className="inputForm">
-          <input type="email" id="email" placeholder="Ingresa tu correo" value={formData.email} onChange={handleChange} required />
+          <input
+            type="email"
+            id="email"
+            placeholder="Ingresa tu correo"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
         </div>
         {emailValid !== null && (
           <p className={emailValid ? "valid-message" : "invalid-message"}>
@@ -169,12 +244,23 @@ navigate('/');
         )}
         {fieldErrors.email && <p className="error-message">{fieldErrors.email}</p>}
 
-        <div className="flex-column"><label>Contraseña</label></div>
+        <div className="flex-column">
+          <label>Contraseña</label>
+        </div>
         <div className="inputForm">
-          <input type="password" id="password" placeholder="Ingresa tu contraseña" value={formData.password} onChange={handleChange} required />
+          <input
+            type="password"
+            id="password"
+            placeholder="Ingresa tu contraseña"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
         </div>
 
-        {formData.password && (
+        {/* ✅ Tics: se ven solo si hay password y NO cumple todo.
+            Si cumple todo, desaparece. Si borras y deja de cumplir, vuelve. */}
+        {formData.password && !allPasswordValid && (
           <div className="password-status-box">
             <p>La contraseña debe cumplir con:</p>
             <ul className="password-status-list">
@@ -187,15 +273,33 @@ navigate('/');
           </div>
         )}
 
-        <div className="flex-column"><label>Confirmar Contraseña</label></div>
+        <div className="flex-column">
+          <label>Confirmar Contraseña</label>
+        </div>
         <div className="inputForm">
-          <input type="password" id="confirmPassword" placeholder="Repita tu contraseña" value={formData.confirmPassword} onChange={handleChange} required />
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Repita tu contraseña"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {infoMessage && <p className="info-message">{infoMessage}</p>}
 
-        <button type="submit" className="button-submit">Registrarse</button>
-        <p className="p">¿Ya tienes cuenta? <Link to="/Login" className="span">Inicia sesión</Link></p>
+        <button type="submit" className="button-submit">
+          Registrarse
+        </button>
+
+        <p className="p">
+          ¿Ya tienes cuenta?{" "}
+          <Link to="/Login" className="span">
+            Inicia sesión
+          </Link>
+        </p>
       </form>
     </StyledWrapper>
   );
@@ -254,7 +358,7 @@ const StyledWrapper = styled.div`
 
   .button-submit {
     margin: 20px 0 10px 0;
-    background-color: #A7C4B2;
+    background-color: #a7c4b2;
     border: none;
     color: white;
     font-size: 15px;
@@ -283,6 +387,12 @@ const StyledWrapper = styled.div`
     color: red;
     font-size: 13px;
     margin: 4px 0 0 5px;
+  }
+
+  .info-message {
+    color: #226b22;
+    font-size: 13px;
+    margin: 6px 0 0 5px;
   }
 
   .valid-message {

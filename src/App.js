@@ -21,6 +21,7 @@ import Soporte from './componentes/Soporte/Soporte';
 import Ayuda from './componentes/Ayuda/Ayuda';
 import FavoritoButton from './componentes/Favoritos/FavoritosButton'; 
 import FavoritosPage from './componentes/Favoritos/FavoritosPage';
+import Contacto from './componentes/Contacto/Contacto';
 
 
 
@@ -39,7 +40,7 @@ function App() {
           <Route path="/Logo" element={<Logo />} />
           <Route path="/Section" element={<Section />} />
           <Route path="/Footer" element={<Footer />} />
-
+          <Route path="/Contacto" element={<Contacto />} />
           <Route path="/SobreNosotros" element={<SobreNosotros />} />
           <Route path="/AvisoLegal" element={<AvisoLegal />} />
           <Route path="/PoliticaCookies" element={<PoliticaCookies />} />

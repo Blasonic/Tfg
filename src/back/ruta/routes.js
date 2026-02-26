@@ -1,12 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-
-
 const requireAuth = require("../middelware/requireAuth");
 const requireAdmin = require("../middelware/requireAdmin");
 
 const { admin } = require("../configuracion/firebaseAdmin");
+
+// ✅ Contacto
+const { enviarContacto } = require("../controlador/contactoController");
+
+// ✅ Nodemailer transporter
+const transporter = require("../configuracion/email");
 
 const {
   bootstrapUser,
@@ -17,10 +21,52 @@ const {
 } = require("../controlador/controller");
 
 // DEBUG ping para confirmar que este router está montado
-router.get("/__ping", (_req, res) => res.json({ ok: true, router: "users-routes" }));
+router.get("/__ping", (_req, res) =>
+  res.json({ ok: true, router: "users-routes" })
+);
 
 // Health
 router.get("/health", (_req, res) => res.json({ ok: true, service: "users" }));
+
+
+router.post("/contacto", enviarContacto);
+
+
+router.post("/email/bienvenida", requireAuth, async (req, res) => {
+  try {
+    const uid = req.auth?.uid;
+    if (!uid) return res.status(401).json({ message: "No autorizado" });
+
+    const { name } = req.body;
+
+    // Sacamos el email real desde Firebase Admin (seguro)
+    const userRecord = await admin.auth().getUser(uid);
+    const toEmail = userRecord.email;
+
+    if (!toEmail) {
+      return res.status(400).json({ message: "Email no disponible" });
+    }
+
+    await transporter.sendMail({
+      from: `"Planzo" <${process.env.EMAIL_USER}>`,
+      to: toEmail,
+      subject: "¡Registro completado!",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px;">
+          <h2 style="margin: 0 0 12px;">¡Bienvenido${name ? `, ${name}` : ""}! 🎉</h2>
+          <p>Tu registro se ha completado con éxito.</p>
+          <p>Te hemos enviado un correo para verificar tu cuenta (revisa también spam).</p>
+          <p style="margin-top: 18px; color: #666;">— Equipo Planzo</p>
+        </div>
+      `,
+    });
+
+    return res.json({ ok: true });
+  } catch (e) {
+    console.error("❌ Error email bienvenida:", e);
+    return res.status(500).json({ message: "Error enviando email de bienvenida" });
+  }
+});
 
 // =====================
 // USERS
@@ -82,7 +128,8 @@ router.get("/favoritos/:fiestaId", requireAuth, async (req, res) => {
     const fiestaId = parseFiestaId(req.params.fiestaId);
 
     if (!uid) return res.status(401).json({ message: "No autorizado" });
-    if (!fiestaId) return res.status(400).json({ message: "fiestaId inválido" });
+    if (!fiestaId)
+      return res.status(400).json({ message: "fiestaId inválido" });
 
     const snap = await favDocRef(uid, fiestaId).get();
     return res.json({ fiestaId, isFavorite: snap.exists });
@@ -99,7 +146,8 @@ router.post("/favoritos/:fiestaId", requireAuth, async (req, res) => {
     const fiestaId = parseFiestaId(req.params.fiestaId);
 
     if (!uid) return res.status(401).json({ message: "No autorizado" });
-    if (!fiestaId) return res.status(400).json({ message: "fiestaId inválido" });
+    if (!fiestaId)
+      return res.status(400).json({ message: "fiestaId inválido" });
 
     await favDocRef(uid, fiestaId).set(
       {
@@ -124,7 +172,8 @@ router.delete("/favoritos/:fiestaId", requireAuth, async (req, res) => {
     const fiestaId = parseFiestaId(req.params.fiestaId);
 
     if (!uid) return res.status(401).json({ message: "No autorizado" });
-    if (!fiestaId) return res.status(400).json({ message: "fiestaId inválido" });
+    if (!fiestaId)
+      return res.status(400).json({ message: "fiestaId inválido" });
 
     await favDocRef(uid, fiestaId).delete();
     return res.json({ fiestaId, isFavorite: false });
