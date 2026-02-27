@@ -6,7 +6,7 @@ function Logo() {
   return (
     <div className="logoStyle">
       <Link to="/" className="linkStyle-logo">
-        <img className="logo" src="/imagenes/Logo-Planzo.png" alt="Logo" />
+        <img className="logo" src="/imagenes/Positivo.png" alt="Logo" />
       </Link>
     </div>
   );

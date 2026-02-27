@@ -14,7 +14,7 @@ const Footer = () => {
           <div className="footerV2__brand">
             <div className="footerV2__logoWrap">
               <img
-                src="/imagenes/Logo-Planzo.png"
+                src="/imagenes/Negativo.png"
                 alt="Planzo"
                 className="footerV2__logo"
               />
