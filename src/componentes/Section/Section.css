@@ -8,6 +8,11 @@
   overflow: hidden;
 }
 
+.bottom-title{
+  margin: 0 0 12px 0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
 /* ----------- FONDO ----------- */
 .bg {
   width: 100%;
