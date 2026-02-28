@@ -22,6 +22,7 @@ import Ayuda from './componentes/Ayuda/Ayuda';
 import FavoritoButton from './componentes/Favoritos/FavoritosButton'; 
 import FavoritosPage from './componentes/Favoritos/FavoritosPage';
 import Contacto from './componentes/Contacto/Contacto';
+import OlvidarPassword from "./componentes/OlvidarPassword/OlvidarPassword";
 
 
 
@@ -52,6 +53,8 @@ function App() {
           <Route path="/FormularioAnadir" element={<FormularioAnadir />} />
           <Route path="/FavoritoButton" element={<FavoritoButton />} />
           <Route path="/favoritos" element={<FavoritosPage />} />
+          <Route path="/OlvidarPassword" element={<OlvidarPassword />} />
+
           <Route
   path="/admin"
   element={

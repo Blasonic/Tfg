@@ -1,6 +1,6 @@
 // src/componentes/Login/Login.jsx
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaGoogle, FaApple } from "react-icons/fa";
 import styled from "styled-components";
 import "./Login.css";
@@ -12,32 +12,45 @@ import {
 } from "firebase/auth";
 
 import { auth } from "../../firebase";
-import { bootstrapUser, getUserProfile } from "../../ServiciosBack/servicioFirebase";
+import {
+  bootstrapUser,
+  getUserProfile,
+} from "../../ServiciosBack/servicioFirebase";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
+  const [infoMessage, setInfoMessage] = useState("");
   const [adminRedirecting, setAdminRedirecting] = useState(false);
+
+  // ✅ Mostrar mensaje si vienes desde OlvidarPassword
+  useEffect(() => {
+    const msg = location.state?.resetInfo;
+    if (msg) {
+      setInfoMessage(msg);
+
+      // limpiar state para que no reaparezca al recargar
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // ✅ flujo común post-login (robusto con avatar + refresco header)
+  // ✅ flujo común post-login
   const postLoginFlow = async () => {
-    // No rompe aunque el backend esté caído (si bootstrapUser ya lo maneja así)
     await bootstrapUser();
+    const profile = await getUserProfile();
 
-    const profile = await getUserProfile(); // ideal: { uid, email, displayName, avatarUrl?, isAdmin? }
-
-    // 🔒 Merge para NO pisar avatar existente
     const prev = JSON.parse(localStorage.getItem("user") || "{}");
 
     const merged = {
       ...prev,
       ...profile,
-      // Fallbacks de avatar (elige una convención: avatarUrl recomendado)
       avatarUrl:
         profile?.avatarUrl ??
         prev?.avatarUrl ??
@@ -53,8 +66,6 @@ const Login = () => {
     };
 
     localStorage.setItem("user", JSON.stringify(merged));
-
-    // ✅ Evento propio (storage no refresca en la misma pestaña)
     window.dispatchEvent(new Event("user-updated"));
 
     if (merged?.isAdmin) {
@@ -71,9 +82,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
+    setInfoMessage("");
 
     try {
-      await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
       await postLoginFlow();
     } catch (error) {
       const code = error?.code || "";
@@ -85,10 +101,14 @@ const Login = () => {
       ) {
         setErrorMessage("Correo o contraseña incorrectos");
       } else if (code === "auth/too-many-requests") {
-        setErrorMessage("Demasiados intentos. Espera un momento y prueba otra vez.");
+        setErrorMessage(
+          "Demasiados intentos. Espera un momento y prueba otra vez."
+        );
       } else {
         console.error("❌ Error en login:", error);
-        setErrorMessage(error?.message || "Error al intentar iniciar sesión");
+        setErrorMessage(
+          error?.message || "Error al intentar iniciar sesión"
+        );
       }
     }
   };
@@ -96,6 +116,8 @@ const Login = () => {
   // ✅ Login Google
   const handleGoogleLogin = async () => {
     setErrorMessage("");
+    setInfoMessage("");
+
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
@@ -109,7 +131,9 @@ const Login = () => {
   if (adminRedirecting) {
     return (
       <StyledWrapper>
-        <h2 style={{ textAlign: "center" }}>Cargando panel de administración...</h2>
+        <h2 style={{ textAlign: "center" }}>
+          Cargando panel de administración...
+        </h2>
       </StyledWrapper>
     );
   }
@@ -118,6 +142,11 @@ const Login = () => {
     <StyledWrapper>
       <form className="form" onSubmit={handleSubmit}>
         <h2>Iniciar Sesión</h2>
+
+        {/* ✅ Aviso de recuperación */}
+        {infoMessage && (
+          <div className="info-message">{infoMessage}</div>
+        )}
 
         <div className="flex-column">
           <label>Email</label>
@@ -147,14 +176,18 @@ const Login = () => {
           />
         </div>
 
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {errorMessage && (
+          <p className="error-message">{errorMessage}</p>
+        )}
 
         <div className="flex-row">
           <div>
             <input type="checkbox" />
             <label>Recordarme</label>
           </div>
-          <Link to="/PerdidaContraseña" className="span">
+
+          {/* ✅ Ruta correcta */}
+          <Link to="/OlvidarPassword" className="span">
             ¿Olvidaste tu contraseña?
           </Link>
         </div>
@@ -173,7 +206,11 @@ const Login = () => {
         <p className="p line">O ingresa con</p>
 
         <div className="flex-row">
-          <button type="button" className="btn google" onClick={handleGoogleLogin}>
+          <button
+            type="button"
+            className="btn google"
+            onClick={handleGoogleLogin}
+          >
             <FaGoogle /> Google
           </button>
 
@@ -203,16 +240,15 @@ const StyledWrapper = styled.div`
     max-width: 450px;
     border-radius: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
-      Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   }
 
-  ::placeholder {
-    font-family: inherit;
-  }
-
-  .form button {
-    align-self: flex-end;
+  .info-message {
+    background: #eef8ee;
+    border: 1px solid #cbe8cb;
+    color: #226b22;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 13px;
   }
 
   .flex-column > label {
@@ -244,28 +280,14 @@ const StyledWrapper = styled.div`
 
   .flex-row {
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     gap: 10px;
-    justify-content: space-between;
     flex-wrap: wrap;
-  }
-
-  .flex-row > div {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .flex-row > div > label {
-    font-size: 14px;
-    color: black;
-    font-weight: 400;
   }
 
   .span {
     font-size: 14px;
-    margin-left: 5px;
     color: #2d79f3;
     font-weight: 500;
     cursor: pointer;
@@ -284,17 +306,6 @@ const StyledWrapper = styled.div`
     cursor: pointer;
   }
 
-  .p {
-    text-align: center;
-    color: black;
-    font-size: 14px;
-    margin: 5px 0;
-  }
-
-  .line {
-    margin-top: 10px;
-  }
-
   .btn {
     margin-top: 10px;
     width: 100%;
@@ -308,7 +319,6 @@ const StyledWrapper = styled.div`
     border: 1px solid #ededef;
     background-color: white;
     cursor: pointer;
-    transition: 0.2s ease-in-out;
   }
 
   .btn:hover {
@@ -318,90 +328,6 @@ const StyledWrapper = styled.div`
   .error-message {
     color: red;
     font-size: 0.9rem;
-    margin-top: -5px;
-    margin-bottom: 10px;
-  }
-
-  @media (max-width: 480px) {
-    .form {
-      padding: 20px;
-      border-radius: 12px;
-    }
-
-    .btn {
-      font-size: 14px;
-      padding: 0 10px;
-    }
-
-    .span {
-      display: block;
-      margin-top: 5px;
-      margin-left: 0;
-    }
-
-    .flex-row {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
-
-  @media (min-width: 481px) and (max-width: 1024px) {
-    .form {
-      padding: 25px;
-      max-width: 600px;
-      border-radius: 18px;
-    }
-
-    .btn {
-      font-size: 15px;
-    }
-
-    .button-submit {
-      font-size: 16px;
-    }
-  }
-
-  @media (min-width: 1440px) {
-    .form {
-      max-width: 900px;
-      min-height: 600px;
-      padding: 60px 80px;
-      border-radius: 30px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-
-    .inputForm {
-      height: 60px;
-      font-size: 18px;
-    }
-
-    .inputForm input {
-      font-size: 18px;
-    }
-
-    .button-submit {
-      font-size: 20px;
-      height: 65px;
-    }
-
-    .btn {
-      height: 65px;
-      font-size: 18px;
-    }
-
-    .flex-column > label {
-      font-size: 18px;
-    }
-
-    .p {
-      font-size: 16px;
-    }
-
-    .span {
-      font-size: 16px;
-    }
   }
 `;
 
