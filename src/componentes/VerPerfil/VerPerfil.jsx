@@ -285,7 +285,7 @@ const StyledWrapper = styled.div`
   }
 
   .button-submit {
-    background-color: #a7c4b2;
+    background-color: #FF751F;
     border: none;
     color: white;
     font-size: 15px;
@@ -295,7 +295,7 @@ const StyledWrapper = styled.div`
   }
 
   .button-secondary {
-    background-color: #a7c4b2;
+    background-color: #FF751F
     border: none;
     color: white;
     font-size: 13px;
@@ -310,7 +310,7 @@ const StyledWrapper = styled.div`
     text-align: center;
     text-decoration: none;
     margin-top: 10px;
-    background-color: #a7c4b2;
+    background-color: #FF751F;
     color: white;
     border-radius: 10px;
     padding: 8px 12px;
@@ -320,7 +320,7 @@ const StyledWrapper = styled.div`
   .button-link:hover,
   .button-submit:hover,
   .button-secondary:hover {
-    background-color: #8fae99;
+    background-color: #c54f06;
   }
 `;
 

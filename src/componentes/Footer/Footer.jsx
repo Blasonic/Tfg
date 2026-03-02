@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { AiFillInstagram } from "react-icons/ai";
 import "./Footer.css";
 
 const Footer = () => {
@@ -13,11 +14,13 @@ const Footer = () => {
           {/* Marca */}
           <div className="footerV2__brand">
             <div className="footerV2__logoWrap">
-              <img
-                src="/imagenes/Negativo.png"
-                alt="Planzo"
-                className="footerV2__logo"
-              />
+              <Link to="/">
+                <img
+                  src="/imagenes/Negativo.png"
+                  alt="Planzo"
+                  className="footerV2__logo"
+                />
+              </Link>
             </div>
             <p className="footerV2__tagline">
               Eventos culturales y sociales de tu comunidad
@@ -29,41 +32,23 @@ const Footer = () => {
 
             <nav className="footerV2__col">
               <h3 className="footerV2__title">Eventos</h3>
-              <Link className="footerV2__link" to="/Agenda">
-                • Agenda
-              </Link>
-              <Link className="footerV2__link" to="/Destacados">
-                • Eventos destacados
-              </Link>
-              <Link className="footerV2__link" to="/EnviarEvento">
-                • Enviar tu evento
-              </Link>
+              <Link className="footerV2__link" to="/CalendarioGlobal">• Agenda</Link>
+              <Link className="footerV2__link" to="/Destacados">• Eventos destacados</Link>
+              <Link className="footerV2__link" to="/FormularioAnadir">• Enviar tu evento</Link>
             </nav>
 
             <nav className="footerV2__col">
               <h3 className="footerV2__title">Comunidad</h3>
-              <Link className="footerV2__link" to="/QuienesSomos">
-                • Quiénes somos
-              </Link>
-              <Link className="footerV2__link" to="/Colaboradores">
-                • Colaboradores
-              </Link>
-              <Link className="footerV2__link" to="/Ayuntamientos">
-                • Ayuntamientos
-              </Link>
+              <Link className="footerV2__link" to="/SobreNosotros">• Quiénes somos</Link>
+              <Link className="footerV2__link" to="/Colaboradores">• Colaboradores</Link>
+              <Link className="footerV2__link" to="/Ayuntamientos">• Ayuntamientos</Link>
             </nav>
 
             <nav className="footerV2__col">
               <h3 className="footerV2__title">Información</h3>
-              <Link className="footerV2__link" to="/Noticias">
-                • Noticias
-              </Link>
-              <Link className="footerV2__link" to="/FAQ">
-                • Preguntas frecuentes
-              </Link>
-              <Link className="footerV2__link" to="/Contacto">
-                • Contacto
-              </Link>
+              <Link className="footerV2__link" to="/Noticias">• Noticias</Link>
+              <Link className="footerV2__link" to="/Ayuda">• Preguntas frecuentes</Link>
+              <Link className="footerV2__link" to="/Contacto">• Contacto</Link>
             </nav>
 
           </div>
@@ -73,12 +58,21 @@ const Footer = () => {
 
             <div className="footerV2__col">
               <h3 className="footerV2__title">Contacto</h3>
-              <a className="footerV2__link" href="mailto:info@planzo.es">
-                info@planzo.es
+
+              <a
+                className="footerV2__link"
+                href="mailto:planzo.eventos@gmail.com"
+              >
+                planzo.eventos@gmail.com"
               </a>
-              <a className="footerV2__link" href="tel:+34910000000">
+
+              <a
+                className="footerV2__link"
+                href="tel:+34910000000"
+              >
                 Tel. 91 000 00 00
               </a>
+
               <span className="footerV2__text">
                 Región Metropolitana
               </span>
@@ -86,30 +80,24 @@ const Footer = () => {
 
             <div className="footerV2__col">
               <h3 className="footerV2__title">Síguenos</h3>
+
               <a
-                className="footerV2__link"
+                className="footerV2__link footerV2__social"
                 href="https://instagram.com"
                 target="_blank"
                 rel="noreferrer"
               >
+                <AiFillInstagram className="footerV2__icon" />
                 Instagram
               </a>
             </div>
 
             <div className="footerV2__col footerV2__legal">
               <h3 className="footerV2__title">Legal</h3>
-              <Link className="footerV2__link" to="/AvisoLegal">
-                • Aviso legal
-              </Link>
-              <Link className="footerV2__link" to="/PoliticaPrivacidad">
-                • Política privacidad
-              </Link>
-              <Link className="footerV2__link" to="/Cookies">
-                • Cookies
-              </Link>
-              <Link className="footerV2__link" to="/Accesibilidad">
-                • Accesibilidad
-              </Link>
+              <Link className="footerV2__link" to="/AvisoLegal">• Aviso legal</Link>
+              <Link className="footerV2__link" to="/PoliticaPrivacidad">• Política privacidad</Link>
+              <Link className="footerV2__link" to="/PoliticaCookies">• Cookies</Link>
+              <Link className="footerV2__link" to="/Accesibilidad">• Accesibilidad</Link>
             </div>
 
           </div>
@@ -121,7 +109,7 @@ const Footer = () => {
 
           <Link
             className="footerV2__btn footerV2__btn--primary"
-            to="/PublicarEvento"
+            to="/FormularioAnadir"
           >
             Publícalo aquí
           </Link>
