@@ -46,7 +46,7 @@ const Footer = () => {
 
             <nav className="footerV2__col">
               <h3 className="footerV2__title">Información</h3>
-              <Link className="footerV2__link" to="/Noticias">• Noticias</Link>
+              <Link className="footerV2__link" to="/Soporte">• Soporte</Link>
               <Link className="footerV2__link" to="/Ayuda">• Preguntas frecuentes</Link>
               <Link className="footerV2__link" to="/Contacto">• Contacto</Link>
             </nav>
