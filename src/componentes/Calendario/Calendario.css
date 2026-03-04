@@ -303,6 +303,174 @@ body{
   border-radius: var(--radius-xl);
 }
 
+/* CONTENEDOR PRINCIPAL */
+
+.solicitar-plan-container {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+
+/* CAJA DEL FORMULARIO */
+
+.solicitar-plan-form {
+  width: 100%;
+  max-width: 550px;
+  background: white;
+  padding: 28px;
+  border-radius: 16px;
+  border: 1px solid #e9e9e9;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+}
+
+
+/* TITULO */
+
+.solicitar-plan-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.solicitar-plan-subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+
+/* INPUTS */
+
+.solicitar-plan-form input,
+.solicitar-plan-form textarea,
+.solicitar-plan-form select {
+
+  width: 100%;
+  padding: 10px 12px;
+
+  border-radius: 10px;
+  border: 1px solid #e5e5e5;
+
+  font-size: 14px;
+
+  outline: none;
+  box-sizing: border-box;
+}
+
+
+.solicitar-plan-form textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+
+/* GRID FECHAS */
+
+.solicitar-plan-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+
+/* IMAGEN */
+
+.solicitar-plan-img-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.solicitar-plan-img-row input {
+  flex: 1;
+}
+
+
+/* BOTON SUBIR */
+
+.solicitar-plan-file-btn {
+  position: relative;
+  padding: 10px 14px;
+
+  background: #FF751F;
+  color: white;
+
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.solicitar-plan-file-btn:hover {
+  background: #8cab99;
+}
+
+.solicitar-plan-file-btn input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+
+/* BOTON ENVIAR */
+
+.solicitar-plan-submit {
+  margin-top: 6px;
+  padding: 12px;
+
+  background: #FF751F;
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.solicitar-plan-submit:hover {
+  background: #8cab99;
+}
+
+.solicitar-plan-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+
+/* TEXTO AYUDA */
+
+.solicitar-plan-hint {
+  font-size: 12px;
+  color: #777;
+  text-align: center;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 520px) {
+
+  .solicitar-plan-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .solicitar-plan-container {
+    padding: 25px 14px;
+  }
+
+}
+
 /* ===========================
    RESPONSIVE
 =========================== */
