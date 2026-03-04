@@ -13,9 +13,6 @@ const { enviarContacto } = require("../controlador/contactoController");
 const transporter = require("../configuracion/email");
 
 const {
-  bootstrapUser,
-  getUserProfile,
-  updateUserProfile,
   getAllUsers,
   getUserResumen,
 } = require("../controlador/controller");
@@ -28,10 +25,10 @@ router.get("/__ping", (_req, res) =>
 // Health
 router.get("/health", (_req, res) => res.json({ ok: true, service: "users" }));
 
-
+// ✅ Contacto
 router.post("/contacto", enviarContacto);
 
-
+// ✅ Email bienvenida
 router.post("/email/bienvenida", requireAuth, async (req, res) => {
   try {
     const uid = req.auth?.uid;
@@ -39,7 +36,7 @@ router.post("/email/bienvenida", requireAuth, async (req, res) => {
 
     const { name } = req.body;
 
-    // Sacamos el email real desde Firebase Admin (seguro)
+    // Email real desde Firebase Admin
     const userRecord = await admin.auth().getUser(uid);
     const toEmail = userRecord.email;
 
@@ -69,13 +66,131 @@ router.post("/email/bienvenida", requireAuth, async (req, res) => {
 });
 
 // =====================
-// USERS
+// PERFIL (Firestore) — TODO EN ESTE ROUTER
 // =====================
-router.post("/bootstrap", requireAuth, bootstrapUser);
 
-router.get("/perfil", requireAuth, getUserProfile);
-router.put("/perfil", requireAuth, updateUserProfile);
+// POST /api/bootstrap (auth)
+// Crea users/{uid} si no existe
+router.post("/bootstrap", requireAuth, async (req, res) => {
+  try {
+    const uid = req.auth?.uid;
+    if (!uid) return res.status(401).json({ message: "No autorizado" });
 
+    const userRecord = await admin.auth().getUser(uid);
+    const email = userRecord.email || null;
+
+    const ref = admin.firestore().collection("users").doc(uid);
+    const snap = await ref.get();
+
+    if (!snap.exists) {
+      await ref.set({
+        uid,
+        email,
+        displayName: userRecord.displayName || "",
+        user: "",
+        avatarUrl: userRecord.photoURL || "",
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    } else {
+      await ref.set(
+        { updatedAt: admin.firestore.FieldValue.serverTimestamp() },
+        { merge: true }
+      );
+    }
+
+    return res.json({ ok: true });
+  } catch (e) {
+    console.error("❌ bootstrap error:", e);
+    return res.status(500).json({ message: "Error en bootstrap" });
+  }
+});
+
+// GET /api/perfil (auth)
+// Devuelve perfil desde Firestore + fallback Auth
+router.get("/perfil", requireAuth, async (req, res) => {
+  try {
+    const uid = req.auth?.uid;
+    if (!uid) return res.status(401).json({ message: "No autorizado" });
+
+    const userRecord = await admin.auth().getUser(uid);
+
+    const ref = admin.firestore().collection("users").doc(uid);
+    const snap = await ref.get();
+    const data = snap.exists ? snap.data() : {};
+
+    const isAdmin = req.auth?.admin === true;
+
+    const avatarUrl =
+      data?.avatarUrl ||
+      data?.profilePicture || // compat si guardaste antes con otro nombre
+      userRecord.photoURL ||
+      "";
+
+    return res.json({
+      uid,
+      email: userRecord.email || data?.email || "",
+      displayName: data?.displayName || userRecord.displayName || "",
+      user: data?.user || "",
+      avatarUrl,
+      isAdmin,
+    });
+  } catch (e) {
+    console.error("❌ get perfil error:", e);
+    return res.status(500).json({ message: "Error al obtener perfil" });
+  }
+});
+
+// PUT /api/perfil (auth)
+// Actualiza perfil en Firestore (displayName/user/avatarUrl)
+router.put("/perfil", requireAuth, async (req, res) => {
+  try {
+    const uid = req.auth?.uid;
+    if (!uid) return res.status(401).json({ message: "No autorizado" });
+
+    const { displayName, user, avatarUrl } = req.body;
+
+    if (displayName !== undefined && typeof displayName !== "string") {
+      return res.status(400).json({ message: "displayName inválido" });
+    }
+    if (user !== undefined && typeof user !== "string") {
+      return res.status(400).json({ message: "user inválido" });
+    }
+    if (avatarUrl !== undefined && typeof avatarUrl !== "string") {
+      return res.status(400).json({ message: "avatarUrl inválido" });
+    }
+
+    const patch = {
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+    if (displayName !== undefined) patch.displayName = displayName;
+    if (user !== undefined) patch.user = user;
+    if (avatarUrl !== undefined) patch.avatarUrl = avatarUrl;
+
+    const ref = admin.firestore().collection("users").doc(uid);
+    await ref.set(patch, { merge: true });
+
+    // (Opcional recomendado) sincroniza displayName en Auth
+    if (typeof displayName === "string") {
+      await admin.auth().updateUser(uid, { displayName });
+    }
+
+    return res.json({
+      ok: true,
+      uid,
+      displayName: displayName ?? undefined,
+      user: user ?? undefined,
+      avatarUrl: avatarUrl ?? undefined,
+    });
+  } catch (e) {
+    console.error("❌ put perfil error:", e);
+    return res.status(500).json({ message: "Error al actualizar perfil" });
+  }
+});
+
+// =====================
+// ADMIN
+// =====================
 router.get("/usuarios", requireAdmin, getAllUsers);
 router.get("/usuarios/:id/resumen", requireAdmin, getUserResumen);
 
@@ -128,8 +243,7 @@ router.get("/favoritos/:fiestaId", requireAuth, async (req, res) => {
     const fiestaId = parseFiestaId(req.params.fiestaId);
 
     if (!uid) return res.status(401).json({ message: "No autorizado" });
-    if (!fiestaId)
-      return res.status(400).json({ message: "fiestaId inválido" });
+    if (!fiestaId) return res.status(400).json({ message: "fiestaId inválido" });
 
     const snap = await favDocRef(uid, fiestaId).get();
     return res.json({ fiestaId, isFavorite: snap.exists });
@@ -146,8 +260,7 @@ router.post("/favoritos/:fiestaId", requireAuth, async (req, res) => {
     const fiestaId = parseFiestaId(req.params.fiestaId);
 
     if (!uid) return res.status(401).json({ message: "No autorizado" });
-    if (!fiestaId)
-      return res.status(400).json({ message: "fiestaId inválido" });
+    if (!fiestaId) return res.status(400).json({ message: "fiestaId inválido" });
 
     await favDocRef(uid, fiestaId).set(
       {
@@ -172,8 +285,7 @@ router.delete("/favoritos/:fiestaId", requireAuth, async (req, res) => {
     const fiestaId = parseFiestaId(req.params.fiestaId);
 
     if (!uid) return res.status(401).json({ message: "No autorizado" });
-    if (!fiestaId)
-      return res.status(400).json({ message: "fiestaId inválido" });
+    if (!fiestaId) return res.status(400).json({ message: "fiestaId inválido" });
 
     await favDocRef(uid, fiestaId).delete();
     return res.json({ fiestaId, isFavorite: false });

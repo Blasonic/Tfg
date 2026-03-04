@@ -9,8 +9,8 @@ import EventoCard from "./EventoCard";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { listarFiestasPublicadas, crearFiesta } from "../../ServiciosBack/eventsService"; 
-import { auth } from "../../firebase"; // ajusta ruta
+import { listarFiestasPublicadas, crearFiesta } from "../../ServiciosBack/eventsService";
+import { auth } from "../../firebase";
 
 function mysqlToDate(dt) {
   if (!dt) return null;
@@ -33,12 +33,27 @@ const CalendarioGlobal = () => {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const usuario = useMemo(() => {
-    try {
-      return JSON.parse(localStorage.getItem("user"));
-    } catch {
-      return null;
-    }
+  // ✅ NO useMemo([]): así se actualiza tras login/perfil
+  const [usuario, setUsuario] = useState(null);
+
+  useEffect(() => {
+    const load = () => {
+      try {
+        const raw = localStorage.getItem("user");
+        setUsuario(raw ? JSON.parse(raw) : null);
+      } catch {
+        setUsuario(null);
+      }
+    };
+
+    load();
+    window.addEventListener("user-updated", load);
+    window.addEventListener("storage", load);
+
+    return () => {
+      window.removeEventListener("user-updated", load);
+      window.removeEventListener("storage", load);
+    };
   }, []);
 
   const cargarEventos = async () => {
@@ -96,7 +111,11 @@ const CalendarioGlobal = () => {
 
       <div className="calendario-container">
         <div className="calendario-panel">
-          <Calendar onClickDay={setFechaSeleccionada} tileContent={tileContent} value={fechaSeleccionada} />
+          <Calendar
+            onClickDay={setFechaSeleccionada}
+            tileContent={tileContent}
+            value={fechaSeleccionada}
+          />
         </div>
 
         <div className="eventos-panel">
@@ -107,7 +126,12 @@ const CalendarioGlobal = () => {
               <button
                 onClick={() => setMostrarFormulario(true)}
                 className="btn-nuevo-evento"
-                style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                }}
               >
                 Añadir evento
               </button>

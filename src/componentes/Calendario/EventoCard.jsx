@@ -53,12 +53,27 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
   const [expandedDesc, setExpandedDesc] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const usuario = useMemo(() => {
-    try {
-      return JSON.parse(localStorage.getItem("user"));
-    } catch {
-      return null;
-    }
+  // ✅ NO useMemo([]): si no, se queda congelado tras login
+  const [usuario, setUsuario] = useState(null);
+
+  useEffect(() => {
+    const load = () => {
+      try {
+        const raw = localStorage.getItem("user");
+        setUsuario(raw ? JSON.parse(raw) : null);
+      } catch {
+        setUsuario(null);
+      }
+    };
+
+    load();
+    window.addEventListener("user-updated", load);
+    window.addEventListener("storage", load);
+
+    return () => {
+      window.removeEventListener("user-updated", load);
+      window.removeEventListener("storage", load);
+    };
   }, []);
 
   const esCreador =
@@ -110,12 +125,12 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
         const r = await removeFavorito(evento.id); // { isFavorite:false }
         const next = Boolean(r?.isFavorite);
         setFav(next);
-        onFavoriteChange?.(next); // ✅ avisa al padre
+        onFavoriteChange?.(next);
       } else {
         const r = await addFavorito(evento.id); // { isFavorite:true }
         const next = Boolean(r?.isFavorite);
         setFav(next);
-        onFavoriteChange?.(next); // ✅ avisa al padre
+        onFavoriteChange?.(next);
       }
     } catch (e) {
       toast.error(e.message || "No se pudo actualizar favorito");

@@ -131,7 +131,7 @@ const Wrap = styled.div`
     height: 46px;
     border: 0;
     border-radius: 10px;
-    background: #a7c4b2;
+    background: #FF751F;
     color: #fff;
     font-weight: 600;
     cursor: pointer;

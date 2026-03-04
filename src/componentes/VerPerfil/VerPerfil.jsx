@@ -1,14 +1,11 @@
-// src/componentes/VerPerfil/VerPerfil.jsx  (ajusta la ruta si tu archivo está en otra carpeta)
-import React, { useEffect, useState } from "react";
+// src/componentes/VerPerfil/VerPerfil.jsx
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// ✅ Servicios backend users (Firestore via 3001)
 import { getUserProfile, updateUserProfile } from "../../ServiciosBack/servicioFirebase";
-
-// ✅ Opcional pero recomendado: fallback con photoURL de Firebase Auth
 import { auth } from "../../firebase";
 
 const avatarList = [
@@ -25,145 +22,148 @@ const avatarList = [
 ];
 
 const VerPerfil = () => {
-  // UI keys: name/user/email/profilePicture
-  const [userData, setUserData] = useState({
-    name: "",
+  const navigate = useNavigate();
+
+  // ✅ lo que el usuario ve/edita (BORRADOR)
+  const [draft, setDraft] = useState({
+    displayName: "",
     user: "",
     email: "",
-    profilePicture: "",
+    avatarUrl: "",
+  });
+
+  // ✅ lo último guardado (SOURCE OF TRUTH local)
+  const savedRef = useRef({
+    displayName: "",
+    user: "",
+    email: "",
+    avatarUrl: "",
   });
 
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
-  const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
+  const [dirty, setDirty] = useState(false);
 
-  // ✅ Guarda perfil en localStorage SIN pisar campos + notifica al header
   const persistUser = (updated) => {
     const prev = JSON.parse(localStorage.getItem("user") || "{}");
-
-    // unifica avatar con fallbacks (mantén una convención: avatarUrl recomendado)
-    const avatar =
-      updated?.profilePicture ??
-      updated?.avatarUrl ??
-      updated?.photoURL ??
-      prev?.profilePicture ??
-      prev?.avatarUrl ??
-      prev?.photoURL ??
-      auth?.currentUser?.photoURL ??
-      null;
 
     const merged = {
       ...prev,
       ...updated,
-      // normalizamos nombre
-      displayName: updated?.displayName ?? prev?.displayName ?? userData.name ?? "",
-      // guardamos avatar en ambas claves por compat con tu app
-      avatarUrl: avatar,
-      profilePicture: avatar,
+      displayName: updated?.displayName ?? prev?.displayName ?? "",
+      user: updated?.user ?? prev?.user ?? "",
+      email: updated?.email ?? prev?.email ?? "",
+      avatarUrl: updated?.avatarUrl ?? prev?.avatarUrl ?? auth?.currentUser?.photoURL ?? "",
     };
 
     localStorage.setItem("user", JSON.stringify(merged));
-
-    // ✅ evento propio (storage no refresca en la misma pestaña)
     window.dispatchEvent(new Event("user-updated"));
   };
 
-  // ✅ Cargar perfil al entrar
+  // ✅ Cargar perfil (Firestore via backend) -> rellena draft y savedRef
   useEffect(() => {
     (async () => {
       try {
         const data = await getUserProfile();
 
-        const avatar =
-          data?.profilePicture ??
-          data?.avatarUrl ??
-          data?.photoURL ??
-          auth?.currentUser?.photoURL ??
-          "";
-
-        setUserData({
-          name: data?.displayName || data?.name || "",
+        const initial = {
+          displayName: data?.displayName || "",
           user: data?.user || "",
           email: data?.email || "",
-          profilePicture: avatar || "",
-        });
+          avatarUrl: data?.avatarUrl || auth?.currentUser?.photoURL || "",
+        };
 
-        // (Opcional) mantener localStorage sincronizado al entrar al perfil
-        persistUser({
-          ...data,
-          profilePicture: avatar || data?.profilePicture || "",
-          avatarUrl: avatar || data?.avatarUrl || "",
-        });
+        savedRef.current = initial;
+        setDraft(initial);
+        setDirty(false);
       } catch (err) {
         console.error("Error perfil:", err);
         toast.warning("Es necesario iniciar sesión para acceder al perfil.");
-        setTimeout(() => navigate("/Login"), 1500);
+        setTimeout(() => navigate("/Login"), 1200);
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
+  const markDirtyIfChanged = (nextDraft) => {
+    const s = savedRef.current;
+    const changed =
+      nextDraft.displayName !== s.displayName ||
+      nextDraft.user !== s.user ||
+      nextDraft.avatarUrl !== s.avatarUrl;
+    setDirty(changed);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserData((p) => ({ ...p, [name]: value }));
+    setDraft((prev) => {
+      const next = { ...prev, [name]: value };
+      markDirtyIfChanged(next);
+      return next;
+    });
   };
 
-  // ✅ Selección de avatar
-  const handleAvatarSelect = async (avatarPath) => {
-    try {
-      const avatar = `/${avatarPath}`;
-
-      const updatedUser = await updateUserProfile({
-        displayName: userData.name,
-        user: userData.user,
-        profilePicture: avatar,
-      });
-
-      const next = {
-        name: updatedUser?.displayName || userData.name || "",
-        user: updatedUser?.user || userData.user || "",
-        email: updatedUser?.email || userData.email || "",
-        profilePicture: updatedUser?.profilePicture || avatar,
-      };
-
-      setUserData(next);
-      persistUser({ ...updatedUser, profilePicture: next.profilePicture, avatarUrl: next.profilePicture });
-
-      setShowAvatarOptions(false);
-      toast.success("Avatar actualizado");
-    } catch (error) {
-      console.error("❌ Error avatar:", error);
-      toast.error(error?.message || "Error al actualizar avatar");
-    }
+  // ✅ Avatar: SOLO cambia el borrador (NO guarda)
+  const handleAvatarSelect = (avatarPath) => {
+    const avatarUrl = `/${avatarPath}`;
+    setDraft((prev) => {
+      const next = { ...prev, avatarUrl };
+      markDirtyIfChanged(next);
+      return next;
+    });
+    setShowAvatarOptions(false);
   };
 
-  // ✅ Guardar cambios de texto (nombre / username)
+  // ✅ Guardar cambios (aquí sí se persiste a Firestore + localStorage)
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!dirty) {
+      toast.info("No hay cambios para guardar");
+      return;
+    }
+
+    setSaving(true);
     try {
-      const updatedUser = await updateUserProfile({
-        displayName: userData.name,
-        user: userData.user, // el backend puede devolver 400 si está ocupado
-        profilePicture: userData.profilePicture,
+      const updated = await updateUserProfile({
+        displayName: draft.displayName,
+        user: draft.user,
+        avatarUrl: draft.avatarUrl,
       });
 
-      const next = {
-        name: updatedUser?.displayName || userData.name || "",
-        user: updatedUser?.user || userData.user || "",
-        email: updatedUser?.email || userData.email || "",
-        profilePicture: updatedUser?.profilePicture || userData.profilePicture || "",
+      // backend puede devolver parcial -> consolidamos con draft
+      const committed = {
+        ...draft,
+        displayName: updated?.displayName ?? draft.displayName,
+        user: updated?.user ?? draft.user,
+        avatarUrl: updated?.avatarUrl ?? draft.avatarUrl,
       };
 
-      setUserData(next);
-      persistUser({ ...updatedUser, profilePicture: next.profilePicture, avatarUrl: next.profilePicture });
+      // ✅ actualiza savedRef y el UI
+      savedRef.current = committed;
+      setDraft(committed);
+      setDirty(false);
+
+      // ✅ AHORA sí: localStorage para Header + resto app
+      persistUser(committed);
 
       toast.success("Perfil actualizado");
     } catch (error) {
       console.error("❌ Error update perfil:", error);
       toast.error(error?.message || "Error al actualizar el perfil");
+    } finally {
+      setSaving(false);
     }
   };
 
-  const avatarSrc = userData.profilePicture || "/imagenes/avatares/avatar-en-blanco.webp";
+  // ✅ Cancelar: vuelve a lo guardado (sin tocar Firestore)
+  const handleCancel = () => {
+    setDraft(savedRef.current);
+    setDirty(false);
+    setShowAvatarOptions(false);
+    toast.info("Cambios descartados");
+  };
+
+  const avatarSrc = draft.avatarUrl || "/imagenes/avatares/avatar-en-blanco.webp";
 
   return (
     <StyledWrapper>
@@ -171,14 +171,25 @@ const VerPerfil = () => {
         <h2>Perfil de Usuario</h2>
 
         <div className="profile-picture-container">
-          <img src={avatarSrc} alt="Avatar" className="profile-picture" />
+          <img
+            src={avatarSrc}
+            alt="Avatar"
+            className="profile-picture"
+            onError={(e) => {
+              e.currentTarget.src = "/imagenes/avatares/avatar-en-blanco.webp";
+            }}
+          />
+
           <button
             type="button"
             className="button-secondary"
             onClick={() => setShowAvatarOptions((v) => !v)}
+            disabled={saving}
           >
             Elegir Avatar
           </button>
+
+          {dirty && <div className="dirty-badge">Tienes cambios sin guardar</div>}
         </div>
 
         {showAvatarOptions && (
@@ -190,6 +201,9 @@ const VerPerfil = () => {
                 alt="Avatar"
                 className="avatar-option"
                 onClick={() => handleAvatarSelect(avatar)}
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
               />
             ))}
           </div>
@@ -197,22 +211,45 @@ const VerPerfil = () => {
 
         <div className="inputForm">
           <label>Nombre</label>
-          <input type="text" name="name" value={userData.name} onChange={handleChange} />
+          <input
+            type="text"
+            name="displayName"
+            value={draft.displayName}
+            onChange={handleChange}
+            disabled={saving}
+          />
         </div>
 
         <div className="inputForm">
           <label>Nombre de Usuario</label>
-          <input type="text" name="user" value={userData.user} onChange={handleChange} />
+          <input
+            type="text"
+            name="user"
+            value={draft.user}
+            onChange={handleChange}
+            disabled={saving}
+          />
         </div>
 
         <div className="inputForm">
           <label>Correo Electrónico</label>
-          <input type="email" value={userData.email} disabled />
+          <input type="email" value={draft.email} disabled />
         </div>
 
-        <button type="submit" className="button-submit">
-          Guardar Cambios
-        </button>
+        <div className="buttons-row">
+          <button type="submit" className="button-submit" disabled={saving || !dirty}>
+            {saving ? "Guardando..." : "Guardar Cambios"}
+          </button>
+
+          <button
+            type="button"
+            className="button-cancel"
+            onClick={handleCancel}
+            disabled={saving || !dirty}
+          >
+            Cancelar
+          </button>
+        </div>
 
         <Link to="/" className="button-link">
           ← Volver al Home
@@ -255,6 +292,15 @@ const StyledWrapper = styled.div`
     gap: 10px;
   }
 
+  .dirty-badge {
+    font-size: 12px;
+    color: #7a4b00;
+    background: #fff3d6;
+    border: 1px solid #ffd48a;
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+
   .profile-picture {
     width: 100px;
     height: 100px;
@@ -280,12 +326,18 @@ const StyledWrapper = styled.div`
   }
 
   .avatar-option:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    transform: scale(1.08);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  }
+
+  .buttons-row {
+    display: flex;
+    gap: 10px;
   }
 
   .button-submit {
-    background-color: #a7c4b2;
+    flex: 1;
+    background-color: #ff751f;
     border: none;
     color: white;
     font-size: 15px;
@@ -294,8 +346,13 @@ const StyledWrapper = styled.div`
     cursor: pointer;
   }
 
+  .button-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
   .button-secondary {
-    background-color: #a7c4b2;
+    background-color: #ff751f;
     border: none;
     color: white;
     font-size: 13px;
@@ -305,12 +362,28 @@ const StyledWrapper = styled.div`
     padding: 0 10px;
   }
 
+  .button-cancel {
+    flex: 1;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    color: #333;
+    font-size: 15px;
+    border-radius: 10px;
+    height: 40px;
+    cursor: pointer;
+  }
+
+  .button-cancel:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
   .button-link {
     display: inline-block;
     text-align: center;
     text-decoration: none;
     margin-top: 10px;
-    background-color: #a7c4b2;
+    background-color: #ff751f;
     color: white;
     border-radius: 10px;
     padding: 8px 12px;
@@ -320,7 +393,11 @@ const StyledWrapper = styled.div`
   .button-link:hover,
   .button-submit:hover,
   .button-secondary:hover {
-    background-color: #8fae99;
+    background-color: #c54f06;
+  }
+
+  .button-cancel:hover {
+    background-color: #e0e0e0;
   }
 `;
 

@@ -358,7 +358,7 @@ const StyledWrapper = styled.div`
 
   .button-submit {
     margin: 20px 0 10px 0;
-    background-color: #a7c4b2;
+    background-color: #FF751F;
     border: none;
     color: white;
     font-size: 15px;
