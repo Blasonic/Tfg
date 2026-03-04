@@ -12,10 +12,7 @@ import {
 } from "firebase/auth";
 
 import { auth } from "../../firebase";
-import {
-  bootstrapUser,
-  getUserProfile,
-} from "../../ServiciosBack/servicioFirebase";
+import { bootstrapUser, getUserProfile } from "../../ServiciosBack/servicioFirebase";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,13 +23,10 @@ const Login = () => {
   const [infoMessage, setInfoMessage] = useState("");
   const [adminRedirecting, setAdminRedirecting] = useState(false);
 
-  // ✅ Mostrar mensaje si vienes desde OlvidarPassword
   useEffect(() => {
     const msg = location.state?.resetInfo;
     if (msg) {
       setInfoMessage(msg);
-
-      // limpiar state para que no reaparezca al recargar
       window.history.replaceState({}, document.title);
     }
   }, [location.state]);
@@ -41,36 +35,33 @@ const Login = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // ✅ flujo común post-login
+  // ✅ flujo común post-login (robusto)
   const postLoginFlow = async () => {
+    // 1) guarda token para pantallas que lo lean de localStorage
+    const token = await auth.currentUser.getIdToken();
+    localStorage.setItem("token", token);
+
+    // 2) bootstrap + perfil desde backend
     await bootstrapUser();
     const profile = await getUserProfile();
 
-    const prev = JSON.parse(localStorage.getItem("user") || "{}");
-
+    // 3) normaliza lo que guardas (una convención)
     const merged = {
-      ...prev,
-      ...profile,
-      avatarUrl:
-        profile?.avatarUrl ??
-        prev?.avatarUrl ??
-        profile?.photoURL ??
-        prev?.photoURL ??
-        auth.currentUser?.photoURL ??
-        null,
-      photoURL:
-        profile?.photoURL ??
-        prev?.photoURL ??
-        auth.currentUser?.photoURL ??
-        null,
+      uid: profile?.uid,
+      email: profile?.email,
+      displayName: profile?.displayName || "",
+      user: profile?.user || "",
+      avatarUrl: profile?.avatarUrl || auth.currentUser?.photoURL || "",
+      isAdmin: profile?.isAdmin === true,
     };
 
     localStorage.setItem("user", JSON.stringify(merged));
     window.dispatchEvent(new Event("user-updated"));
 
-    if (merged?.isAdmin) {
+    // 4) redirect
+    if (merged.isAdmin) {
       setAdminRedirecting(true);
-      setTimeout(() => navigate("/admin"), 500);
+      setTimeout(() => navigate("/admin"), 300);
     } else {
       navigate("/");
     }
@@ -78,18 +69,13 @@ const Login = () => {
     setFormData({ email: "", password: "" });
   };
 
-  // ✅ Login email/password
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setInfoMessage("");
 
     try {
-      await signInWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
+      await signInWithEmailAndPassword(auth, formData.email, formData.password);
       await postLoginFlow();
     } catch (error) {
       const code = error?.code || "";
@@ -101,19 +87,14 @@ const Login = () => {
       ) {
         setErrorMessage("Correo o contraseña incorrectos");
       } else if (code === "auth/too-many-requests") {
-        setErrorMessage(
-          "Demasiados intentos. Espera un momento y prueba otra vez."
-        );
+        setErrorMessage("Demasiados intentos. Espera un momento y prueba otra vez.");
       } else {
         console.error("❌ Error en login:", error);
-        setErrorMessage(
-          error?.message || "Error al intentar iniciar sesión"
-        );
+        setErrorMessage(error?.message || "Error al intentar iniciar sesión");
       }
     }
   };
 
-  // ✅ Login Google
   const handleGoogleLogin = async () => {
     setErrorMessage("");
     setInfoMessage("");
@@ -131,9 +112,7 @@ const Login = () => {
   if (adminRedirecting) {
     return (
       <StyledWrapper>
-        <h2 style={{ textAlign: "center" }}>
-          Cargando panel de administración...
-        </h2>
+        <h2 style={{ textAlign: "center" }}>Cargando panel de administración...</h2>
       </StyledWrapper>
     );
   }
@@ -143,10 +122,7 @@ const Login = () => {
       <form className="form" onSubmit={handleSubmit}>
         <h2>Iniciar Sesión</h2>
 
-        {/* ✅ Aviso de recuperación */}
-        {infoMessage && (
-          <div className="info-message">{infoMessage}</div>
-        )}
+        {infoMessage && <div className="info-message">{infoMessage}</div>}
 
         <div className="flex-column">
           <label>Email</label>
@@ -176,9 +152,7 @@ const Login = () => {
           />
         </div>
 
-        {errorMessage && (
-          <p className="error-message">{errorMessage}</p>
-        )}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <div className="flex-row">
           <div>
@@ -186,7 +160,6 @@ const Login = () => {
             <label>Recordarme</label>
           </div>
 
-          {/* ✅ Ruta correcta */}
           <Link to="/OlvidarPassword" className="span">
             ¿Olvidaste tu contraseña?
           </Link>
@@ -206,11 +179,7 @@ const Login = () => {
         <p className="p line">O ingresa con</p>
 
         <div className="flex-row">
-          <button
-            type="button"
-            className="btn google"
-            onClick={handleGoogleLogin}
-          >
+          <button type="button" className="btn google" onClick={handleGoogleLogin}>
             <FaGoogle /> Google
           </button>
 
@@ -295,7 +264,7 @@ const StyledWrapper = styled.div`
 
   .button-submit {
     margin: 20px 0 10px 0;
-    background-color: #FF751F;
+    background-color: #ff751f;
     border: none;
     color: white;
     font-size: 15px;
@@ -322,7 +291,7 @@ const StyledWrapper = styled.div`
   }
 
   .btn:hover {
-    border: 1px solid #FF751F;
+    border: 1px solid #ff751f;
   }
 
   .error-message {

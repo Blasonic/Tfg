@@ -1,40 +1,36 @@
-// src/ServiciosBack/servicioFirebase.js
 import { auth } from "../firebase";
 
-/**
- * bootstrapUser:
- * Antes llamaba a POST /api/bootstrap (no existe en tu backend -> 404)
- * Ahora: NO hace nada (placeholder). Lo dejamos por compat.
- */
-export async function bootstrapUser() {
-  // Si en el futuro creas /api/bootstrap en el backend,
-  // aquí vuelves a usar apiFetch("/bootstrap", { method:"POST", authRequired:true })
-  return { ok: true };
+const API_BASE = "http://localhost:3001/api";
+
+async function apiFetch(path, options = {}) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("No hay usuario autenticado");
+
+  const token = await user.getIdToken();
+
+  const res = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data?.message || `HTTP ${res.status}`);
+  return data;
 }
 
-/**
- * getUserProfile:
- * Antes llamaba a GET /api/perfil (no existe -> 404)
- * Ahora: construye un perfil mínimo a partir de Firebase Auth
- * y añade isAdmin leyendo custom claims.
- */
-export async function getUserProfile() {
-  const u = auth.currentUser;
-  if (!u) throw new Error("No hay usuario autenticado");
-
-  const tokenResult = await u.getIdTokenResult(true);
-  const isAdmin = tokenResult?.claims?.admin === true;
-
-  return {
-    uid: u.uid,
-    email: u.email,
-    name: u.displayName || "",
-    profilePicture: u.photoURL || "",
-    isAdmin,
-  };
+export function bootstrapUser() {
+  return apiFetch("/bootstrap", { method: "POST" });
 }
-
-
-export async function updateUserProfile(payload) {
-  return { ok: true, payload };
-}  
+export function getUserProfile() {
+  return apiFetch("/perfil");
+}
+export function updateUserProfile(payload) {
+  return apiFetch("/perfil", {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}

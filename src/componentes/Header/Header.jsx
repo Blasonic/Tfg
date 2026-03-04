@@ -4,7 +4,6 @@ import Logo from "../Logo/Logo";
 import { AiOutlineSearch } from "react-icons/ai";
 import "./Header.css";
 
-// ✅ Firebase logout
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 
@@ -14,7 +13,6 @@ function Header() {
   const [menuUsuario, setMenuUsuario] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ cargar user de localStorage + escuchar cambios (MISMA pestaña)
   useEffect(() => {
     const load = () => {
       try {
@@ -28,11 +26,7 @@ function Header() {
     };
 
     load();
-
-    // ✅ Evento propio: lo disparan Login / VerPerfil / Logout
     window.addEventListener("user-updated", load);
-
-    // (Opcional) Mantener también storage para cambios entre pestañas
     window.addEventListener("storage", load);
 
     return () => {
@@ -49,12 +43,11 @@ function Header() {
     }
 
     localStorage.removeItem("user");
+    localStorage.removeItem("token"); // ✅ IMPORTANTE
     setUser(null);
     setMenuUsuario(false);
 
-    // ✅ notifica en la misma pestaña
     window.dispatchEvent(new Event("user-updated"));
-
     navigate("/");
   };
 
