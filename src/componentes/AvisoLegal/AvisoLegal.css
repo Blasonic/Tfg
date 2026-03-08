@@ -1,52 +1,69 @@
-/* ===== Estilo base (pantallas grandes por defecto) ===== */
-
 .aviso-legal {
-  background-color: #f9f9f9;
-  color: black;
-  padding: 40px 30px;
-  max-width: 1000px;
-  margin: 40px auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 40px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   line-height: 1.7;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .titulo-aviso-legal {
-  font-size: 2.8rem;
-  font-weight: bold;
-  margin-bottom: 30px;
   text-align: center;
-  color: rgb(24, 64, 61);
+  font-size: 2.6rem;
+  color: #FF751F;
+  margin-bottom: 35px;
+  font-weight: 700;
+}
+
+.titulo-aviso-legal::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 4px;
+  background: #FF751F;
+  margin: 15px auto;
+  border-radius: 5px;
 }
 
 .subtitulo-aviso-legal {
-  font-size: 1.6rem;
-  font-weight: bold;
-  margin-top: 30px;
+  font-size: 1.8rem;
+  color: #FF751F;
+  margin-top: 40px;
   margin-bottom: 15px;
-  color: #333;
+  padding-left: 15px;
+  position: relative;
+}
+
+.subtitulo-aviso-legal::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  height: 22px;
+  width: 4px;
+  background: #FF751F;
 }
 
 .parrafo-aviso-legal {
-  margin-bottom: 15px;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+  color: #333;
+  margin-bottom: 16px;
   text-align: justify;
 }
 
-.parrafo-aviso-legal:last-child {
-  margin-bottom: 0;
+.parrafo-aviso-legal strong {
+  color: #FF751F;
 }
 
-/* ===== Responsive: Tablets (481px - 1024px) ===== */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .aviso-legal {
-    padding: 30px 20px;
-    margin: 30px auto;
+    padding: 25px;
+    margin: 30px 15px;
   }
 
   .titulo-aviso-legal {
-    font-size: 2.3rem;
+    font-size: 2rem;
   }
 
   .subtitulo-aviso-legal {
@@ -55,28 +72,5 @@
 
   .parrafo-aviso-legal {
     font-size: 1rem;
-  }
-}
-
-/* ===== Responsive: Móviles (hasta 480px) ===== */
-@media (max-width: 480px) {
-  .aviso-legal {
-    padding: 25px 15px;
-    margin: 20px 10px;
-    border-radius: 8px;
-  }
-
-  .titulo-aviso-legal {
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-
-  .subtitulo-aviso-legal {
-    font-size: 1.2rem;
-    margin-top: 20px;
-  }
-
-  .parrafo-aviso-legal {
-    font-size: 0.95rem;
   }
 }

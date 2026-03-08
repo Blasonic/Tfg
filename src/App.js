@@ -24,6 +24,8 @@ import FavoritosPage from './componentes/Favoritos/FavoritosPage';
 import Contacto from './componentes/Contacto/Contacto';
 import OlvidarPassword from "./componentes/OlvidarPassword/OlvidarPassword";
 import FormularioAnadirFooter from './componentes/Calendario/FormularioAnadirFooter';
+import Accesibilidad from './componentes/Accesibilidad/Accesibilidad';
+import PoliticaPrivacidad from './componentes/PoliticaPrivacidad/PoliticaPrivacidad';
 
 
 
@@ -56,6 +58,8 @@ function App() {
           <Route path="/favoritos" element={<FavoritosPage />} />
           <Route path="/OlvidarPassword" element={<OlvidarPassword />} />
           <Route path="/FormularioAnadirFooter" element={<FormularioAnadirFooter />} />
+          <Route path="/Accesibilidad" element={<Accesibilidad />} />
+          <Route path="/PoliticaPrivacidad" element={<PoliticaPrivacidad />} />
 
           <Route
   path="/admin"
