@@ -1,49 +1,76 @@
 .politica-cookies {
   max-width: 900px;
-  margin: 50px auto;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 60px auto;
+  padding: 40px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  line-height: 1.7;
 }
 
-.titulo-politica-cookies {
+.titulo-cookies {
   text-align: center;
-  font-size: 2.5rem;
-  color: rgb(24, 64, 61);
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-size: 2.6rem;
+  color: #FF751F;
+  margin-bottom: 35px;
+  font-weight: 700;
 }
 
-.parrafo-politica-cookies {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  color: #333;
-  text-align: justify;
+.titulo-cookies::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 4px;
+  background: #FF751F;
+  margin: 15px auto;
+  border-radius: 5px;
+}
+
+.subtitulo-cookies {
+  font-size: 1.8rem;
+  color: #FF751F;
+  margin-top: 40px;
   margin-bottom: 15px;
+  padding-left: 15px;
+  position: relative;
 }
 
-.subtitulo-politica-cookies {
-  font-size: 2rem;
-  font-weight: bold;
-  color: rgb(24, 64, 61);
-  margin-top: 30px;
+.subtitulo-cookies::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  height: 22px;
+  width: 4px;
+  background: #FF751F;
+}
+
+.parrafo-cookies {
+  font-size: 1.15rem;
+  color: #333;
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+.parrafo-cookies strong {
+  color: #FF751F;
 }
 
 @media (max-width: 768px) {
   .politica-cookies {
-    padding: 15px;
+    padding: 25px;
+    margin: 30px 15px;
   }
 
-  .titulo-politica-cookies {
+  .titulo-cookies {
     font-size: 2rem;
   }
 
-  .parrafo-politica-cookies {
-    font-size: 1rem;
+  .subtitulo-cookies {
+    font-size: 1.4rem;
   }
 
-  .subtitulo-politica-cookies {
-    font-size: 1.5rem;
+  .parrafo-cookies {
+    font-size: 1rem;
   }
 }
