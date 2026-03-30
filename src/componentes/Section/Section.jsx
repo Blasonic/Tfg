@@ -59,7 +59,7 @@ export default function Section() {
             - Consulta el calendario y reserva tu próxima experiencia
           </p>
 
-          <button className="read-btn" onClick={() => navigate("/calendario")}>
+          <button className="read-btn" onClick={() => navigate("/EventosDestacados")}>
             VER DESTACADOS DEL MES
           </button>
         </div>
