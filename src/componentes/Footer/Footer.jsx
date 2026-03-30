@@ -33,14 +33,13 @@ const Footer = () => {
             <nav className="footerV2__col">
               <h3 className="footerV2__title">Eventos</h3>
               <Link className="footerV2__link" to="/CalendarioGlobal">• Agenda</Link>
-              <Link className="footerV2__link" to="/Destacados">• Eventos destacados</Link>
-              <Link className="footerV2__link" to="/FormularioAnadir">• Enviar tu evento</Link>
+              <Link className="footerV2__link" to="/EventosDestacados">• Eventos destacados</Link>
+              <Link className="footerV2__link" to="/FormularioAnadirFooter">• Enviar tu evento</Link>
             </nav>
 
             <nav className="footerV2__col">
               <h3 className="footerV2__title">Comunidad</h3>
               <Link className="footerV2__link" to="/SobreNosotros">• Quiénes somos</Link>
-              <Link className="footerV2__link" to="/Colaboradores">• Colaboradores</Link>
               <Link className="footerV2__link" to="/Ayuntamientos">• Ayuntamientos</Link>
             </nav>
 
@@ -109,7 +108,7 @@ const Footer = () => {
 
           <Link
             className="footerV2__btn footerV2__btn--primary"
-            to="/FormularioAnadir"
+            to="/FormularioAnadirFooter"
           >
             Publícalo aquí
           </Link>
