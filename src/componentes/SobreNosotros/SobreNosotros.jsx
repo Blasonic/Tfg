@@ -1,49 +1,57 @@
-import React from 'react';
-import './SobreNosotros.css';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer.jsx';
+import React from "react";
 
-function SobreNosotros() {
+const SobreNosotros = () => {
   return (
-    <div>
-      <Header />
-      <section className="sobre-nosotros">
-        <h1 className="titulo-sobre-nosotros">Sobre Nosotros</h1>
-        <p className="parrafo-sobre-nosotros">
-          Soy un Estudiante apasianado por el Desarrollo de Aplicaciones Web
-          con una misión clara: dar a conocer las fiestas y tradiciones de España de forma global.
-          Creemos que cada pueblo y cada ciudad tienen historias, celebraciones y costumbres únicas
-          que merecen ser compartidas con el mundo.
+    <section className="sobre-nosotros">
+      <div className="container">
+        <h1>Quienes Somos</h1>
+
+        <p>
+          En PLANZO creemos que los mejores planes no siempre están en las guías,
+          ni en las grandes ciudades, ni en los algoritmos que deciden por nosotros.
         </p>
-        <p className="parrafo-sobre-nosotros">
-          Nuestra plataforma surge de la necesidad de dar visibilidad a esas festividades que,
-          aunque ricas en cultura y significado, a menudo pasan desapercibidas fuera de sus comunidades.
-          Queremos ser el puente que conecte a las personas con las tradiciones más auténticas,
-          permitiendo que cualquier usuario descubra eventos únicos y se sumerja en la esencia de cada región.
+
+        <p>
+          A menudo, están más cerca: en un pueblo, en un barrio, en una plaza donde
+          alguien ha decidido mantener viva una tradición.
         </p>
-        <p className="parrafo-sobre-nosotros">
-          Nos esforzamos en crear un espacio accesible, dinámico e interactivo, donde los habitantes
-          de los pueblos puedan compartir sus festividades y mantener viva su historia.
-          Desde carnavales ancestrales hasta festivales modernos, cada celebración cuenta con un lugar
-          especial en nuestra web.
+
+        <p>
+          PLANZO nace con una idea clara: dar visibilidad a esos eventos locales que
+          forman parte de nuestra cultura, pero que muchas veces pasan desapercibidos.
+          Fiestas populares, verbenas, ferias, romerías o celebraciones que, sin
+          difusión, corren el riesgo de perderse con el tiempo.
         </p>
-        <p className="parrafo-sobre-nosotros">
-          Más allá de ser un simple catálogo de eventos, nuestra visión es construir una comunidad vibrante
-          de viajeros, curiosos y apasionados por la cultura. Queremos que cada visitante de nuestra página
-          encuentre inspiración para descubrir rincones especiales, vivir nuevas experiencias y conectar con
-          la esencia de cada tradición.
+
+        <p>
+          Somos una plataforma colaborativa que conecta personas, lugares y
+          tradiciones. Un espacio donde cualquier usuario puede descubrir planes
+          auténticos o compartir aquellos que merece la pena vivir. Cada evento
+          publicado pasa por un proceso de revisión, porque creemos que la calidad y
+          el respeto por la cultura local son fundamentales.
         </p>
-        <p className="parrafo-sobre-nosotros">
-          Este proyecto no solo representa un desafío académico, sino una oportunidad para demostrar
-          las habilidades adquiridas en el grado y contribuir a la preservación y difusión de las
-          tradiciones que nos hacen únicos. Estoy emocionado por compartir este camino con ustedes
-          y por seguir creciendo junto a esta increíble comunidad.
+
+        <p>
+          Nuestro objetivo va más allá de informar: buscamos impulsar un turismo más
+          consciente, descentralizado y humano, que apoye a pequeños municipios y
+          ayude a mantener vivas sus costumbres.
         </p>
-        <p className="parrafo-sobre-nosotros">¡Gracias por formar parte de esta aventura!</p>
-      </section>
-      <Footer />
-    </div>
+
+        <p className="highlight">
+          PLANZO no es solo una agenda de planes.
+        </p>
+
+        <p>
+          Es una comunidad que cree en lo auténtico, en lo cercano y en el valor de
+          lo que no siempre se ve.
+        </p>
+
+        <p className="cta">
+          Porque a veces, el mejor plan… todavía no lo conoces.
+        </p>
+      </div>
+    </section>
   );
-}
+};
 
 export default SobreNosotros;
