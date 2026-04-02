@@ -42,17 +42,18 @@ body{
   grid-template-columns: 460px 1fr;
   gap: 28px;
 
+  width: 100%;
   max-width: 1250px;
-  margin: 24px auto 40px auto;
-  padding: 28px;
+
+  margin: 0 auto;              /* ❌ quita espacio arriba/abajo */
+  padding: 10px 20px;          /* menos aire */
 
   background: var(--panel);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow);
 
-  /* CLAVE: evita que el contenedor se alargue */
-  height: 70vh;
-  min-height: 640px;
+  height: calc(123vh - 80px);  /* 🔥 ocupa toda la pantalla */
+  min-height: unset;           /* ❌ elimina límite */
 }
 
 /* ===========================

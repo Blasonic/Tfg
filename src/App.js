@@ -26,6 +26,8 @@ import OlvidarPassword from "./componentes/OlvidarPassword/OlvidarPassword";
 import FormularioAnadirFooter from './componentes/Calendario/FormularioAnadirFooter';
 import Accesibilidad from './componentes/Accesibilidad/Accesibilidad';
 import PoliticaPrivacidad from './componentes/PoliticaPrivacidad/PoliticaPrivacidad';
+import ChatBot from './componentes/Chatbot/Chatbot';
+import ChatBotWidget from './componentes/Chatbot/ChatBotWidget';
 
 
 
@@ -60,6 +62,8 @@ function App() {
           <Route path="/FormularioAnadirFooter" element={<FormularioAnadirFooter />} />
           <Route path="/Accesibilidad" element={<Accesibilidad />} />
           <Route path="/PoliticaPrivacidad" element={<PoliticaPrivacidad />} />
+          <Route path="/ChatBot" element={<ChatBot />} />
+          <Route path="/ChatBotWidget" element={<ChatBotWidget />} />
 
           <Route
   path="/admin"
@@ -68,9 +72,11 @@ function App() {
       <Admin />
     </ProtegerAdmin>
   }
+  
 />
 
         </Routes>
+        <ChatBotWidget />
       </div>
     </Router>
   );

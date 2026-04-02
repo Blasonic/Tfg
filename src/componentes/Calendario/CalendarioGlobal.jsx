@@ -12,6 +12,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { listarFiestasPublicadas, crearFiesta } from "../../ServiciosBack/eventsService";
 import { auth } from "../../firebase";
 
+// 🆕 IMPORTANTE
+import { useLocation, useNavigate } from "react-router-dom";
+
 function mysqlToDate(dt) {
   if (!dt) return null;
   const iso = dt.includes("T") ? dt : dt.replace(" ", "T");
@@ -33,7 +36,14 @@ const CalendarioGlobal = () => {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // ✅ NO useMemo([]): así se actualiza tras login/perfil
+  // 🆕 PARA ABRIR EVENTO DESDE CHAT
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // 👇 leer query param
+  const queryParams = new URLSearchParams(location.search);
+  const eventoId = queryParams.get("eventoId");
+
   const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
@@ -82,6 +92,27 @@ const CalendarioGlobal = () => {
   useEffect(() => {
     cargarEventos();
   }, []);
+
+  // 🆕 AUTO ABRIR EVENTO
+  useEffect(() => {
+    if (!eventoId || eventos.length === 0) return;
+
+    const evento = eventos.find((e) => String(e.id) === String(eventoId));
+
+    if (evento) {
+      // 👉 CAMBIAMOS EL DÍA PARA QUE SE VEA
+      setFechaSeleccionada(new Date(evento.start));
+
+      // 👉 ESPERAMOS A QUE RENDERICE Y ABRIMOS
+      setTimeout(() => {
+        const btn = document.querySelector(`[data-evento-id="${evento.id}"]`);
+        if (btn) btn.click();
+      }, 300);
+
+      // 👉 LIMPIAR URL
+      navigate("/CalendarioGlobal", { replace: true });
+    }
+  }, [eventoId, eventos]);
 
   const eventosDelDia = useMemo(() => {
     const dia = ymd(fechaSeleccionada);
@@ -143,7 +174,9 @@ const CalendarioGlobal = () => {
           ) : eventosDelDia.length === 0 ? (
             <p>No hay eventos para este día.</p>
           ) : (
-            eventosDelDia.map((ev) => <EventoCard key={ev.id} evento={ev} />)
+            eventosDelDia.map((ev) => (
+              <EventoCard key={ev.id} evento={ev} />
+            ))
           )}
         </div>
       </div>

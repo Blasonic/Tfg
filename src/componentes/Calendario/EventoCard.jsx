@@ -225,9 +225,14 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
         <div style={styles.body}>
           <div style={styles.headRow}>
             <h4 style={{ margin: 0, fontSize: 18 }}>{evento.titulo}</h4>
-            <button className="btn-nuevo-evento" onClick={() => setOpen(true)} style={styles.detailsBtn}>
-              Ver detalles
-            </button>
+           <button
+  data-evento-id={evento.id}
+  className="btn-nuevo-evento"
+  onClick={() => setOpen(true)}
+  style={styles.detailsBtn}
+>
+  Ver detalles
+</button>
           </div>
 
           <MetaLine label="Fecha" value={fechaTxt} />
