@@ -375,7 +375,7 @@ const StyledWrapper = styled.div`
 
   .btn-enviar,
   .file-btn {
-    background-color: #a7c4b2;
+    background-color: #FF751F;
     color: white;
     padding: 10px;
     border-radius: 10px;
@@ -388,7 +388,7 @@ const StyledWrapper = styled.div`
 
   .btn-enviar:hover,
   .file-btn:hover {
-    background-color: #8cab99;
+    background-color: #ba4a04;
   }
 
   .file-btn {

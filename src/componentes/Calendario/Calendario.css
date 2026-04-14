@@ -99,7 +99,6 @@ body{
   font-size: 24px;
   font-weight: 800;
   margin: 0;
-  font-family: 'Playfair Display', serif;
 }
 
 .eventos-panel h3::after{
@@ -412,7 +411,7 @@ body{
 }
 
 .solicitar-plan-file-btn:hover {
-  background: #8cab99;
+  background: #ba4a04;
 }
 
 .solicitar-plan-file-btn input {
@@ -440,7 +439,7 @@ body{
 }
 
 .solicitar-plan-submit:hover {
-  background: #8cab99;
+  background: #ba4a04;
 }
 
 .solicitar-plan-submit:disabled {

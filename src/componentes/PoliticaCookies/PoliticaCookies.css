@@ -10,7 +10,7 @@
 
 .titulo-cookies {
   text-align: center;
-  font-size: 2.6rem;
+  font-size: 2.2rem;
   color: #FF751F;
   margin-bottom: 35px;
   font-weight: 700;
@@ -27,7 +27,7 @@
 }
 
 .subtitulo-cookies {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: #FF751F;
   margin-top: 40px;
   margin-bottom: 15px;
@@ -46,7 +46,7 @@
 }
 
 .parrafo-cookies {
-  font-size: 1.15rem;
+  font-size: 1rem;
   color: #333;
   margin-bottom: 16px;
   text-align: justify;
