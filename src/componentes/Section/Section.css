@@ -13,6 +13,7 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
+
 /* ----------- FONDO ----------- */
 .bg {
   width: 100%;
@@ -34,48 +35,75 @@
 
 .top-row {
   position: absolute;
-  top: 40px;   /* 🔥 AJUSTA ESTE VALOR PARA SUBIRLO AÚN MÁS 🔥 */
+  top: 40px;
   left: 50%;
   transform: translateX(-50%);
-
   width: 85%;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* también sube el contenido interno */
+  align-items: flex-start;
   z-index: 3;
 }
 
+/* ========================= */
+/*      POLAROIDES FIX      */
+/* ========================= */
 
-
-
-/* IZQUIERDA: POLAROIDES */
 .top-left {
   position: relative;
-  width: 600px;
+  width: 600px;   /* 👈 tamaño original */
   height: 330px;
 }
 
+/* estilo polaroid */
 .polaroid {
   position: absolute;
-  width: 200px;
-  padding: 10px;
+  width: 180px;
+  padding: 10px 10px 26px 10px;
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 12px 20px rgba(0,0,0,0.25);
+  border-radius: 2px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
 }
 
 .polaroid img {
   width: 100%;
-  border-radius: 6px;
+  height: 180px;
+  object-fit: cover;
 }
 
-/* POSICIONES EXACTAS */
-.p1 { top: 0; left: 0; transform: rotate(-10deg); }
-.p2 { top: 40px; left: 140px; transform: rotate(4deg); }
-.p3 { top: 110px; left: 260px; transform: rotate(-4deg); }
-.p4 { top: 160px; left: 380px; transform: rotate(8deg); }
+/* DIAGONAL AJUSTADA SIN INVADIR TEXTO */
+.p1 {
+  top: 30px;
+  left: 0;
+  transform: rotate(-10deg);
+  z-index: 1;
+}
 
+.p2 {
+  top: 0px;
+  left: 110px;
+  transform: rotate(6deg);
+  z-index: 2;
+}
+
+.p3 {
+  top: 40px;
+  left: 220px;
+  transform: rotate(-6deg);
+  z-index: 3;
+}
+
+.p4 {
+  top: 80px;
+  left: 330px;
+  transform: rotate(10deg);
+  z-index: 4;
+}
+
+/* ========================= */
 /* DERECHA: TEXTO */
+/* ========================= */
+
 .top-right {
   width: 40%;
 }

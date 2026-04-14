@@ -1,13 +1,29 @@
+/* ===========================
+   CONTENEDOR PRINCIPAL (SECCIÓN)
+=========================== */
 .politica-cookies {
-  max-width: 900px;
-  margin: 60px auto;
-  padding: 40px;
-  background: white;
-  border-radius: 14px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  margin: 0;
+  padding: 40px 24px 50px;
+
+  background: #ffffff;
+
+  border-radius: 0;
+  box-shadow: none;
   line-height: 1.7;
 }
 
+/* ===========================
+   BLOQUE INTERIOR (contenido centrado)
+=========================== */
+.politica-cookies > .container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ===========================
+   TÍTULO
+=========================== */
 .titulo-cookies {
   text-align: center;
   font-size: 2.2rem;
@@ -26,6 +42,9 @@
   border-radius: 5px;
 }
 
+/* ===========================
+   SUBTÍTULOS
+=========================== */
 .subtitulo-cookies {
   font-size: 1.5rem;
   color: #FF751F;
@@ -45,6 +64,9 @@
   background: #FF751F;
 }
 
+/* ===========================
+   PÁRRAFOS
+=========================== */
 .parrafo-cookies {
   font-size: 1rem;
   color: #333;
@@ -56,10 +78,12 @@
   color: #FF751F;
 }
 
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 768px) {
   .politica-cookies {
-    padding: 25px;
-    margin: 30px 15px;
+    padding: 28px 16px 40px;
   }
 
   .titulo-cookies {
