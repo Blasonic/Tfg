@@ -1,16 +1,32 @@
+/* ===========================
+   CONTENEDOR PRINCIPAL (SECCIÓN)
+=========================== */
 .accesibilidad {
-  max-width: 900px;
-  margin: 60px auto;
-  padding: 40px;
-  background: white;
-  border-radius: 14px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  margin: 0;
+  padding: 40px 24px 50px;
+
+  background: #ffffff;
+
+  border-radius: 0;
+  box-shadow: none;
   line-height: 1.7;
 }
 
+/* ===========================
+   BLOQUE INTERIOR (contenido centrado)
+=========================== */
+.accesibilidad > .container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ===========================
+   TÍTULO
+=========================== */
 .titulo-accesibilidad {
   text-align: center;
-  font-size: 2.6rem;
+  font-size: 2.2rem;
   color: #FF751F;
   margin-bottom: 35px;
   font-weight: 700;
@@ -26,8 +42,11 @@
   border-radius: 5px;
 }
 
+/* ===========================
+   SUBTÍTULOS
+=========================== */
 .subtitulo-accesibilidad {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: #FF751F;
   margin-top: 40px;
   margin-bottom: 15px;
@@ -45,8 +64,11 @@
   background: #FF751F;
 }
 
+/* ===========================
+   PÁRRAFOS
+=========================== */
 .parrafo-accesibilidad {
-  font-size: 1.15rem;
+  font-size: 1rem;
   color: #333;
   margin-bottom: 16px;
   text-align: justify;
@@ -56,10 +78,12 @@
   color: #FF751F;
 }
 
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 768px) {
   .accesibilidad {
-    padding: 25px;
-    margin: 30px 15px;
+    padding: 28px 16px 40px;
   }
 
   .titulo-accesibilidad {
