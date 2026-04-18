@@ -3,7 +3,7 @@ import { MessageCircle, X } from "lucide-react";
 import ChatBot from "./Chatbot";
 import "./Chatbot.css";
 
-const ChatBotWidget = () => {
+export default function ChatBotWidget() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleChat = () => {
@@ -14,6 +14,22 @@ const ChatBotWidget = () => {
     <div className="chatbot-widget">
       {isOpen && (
         <div className="chatbot-panel">
+          <div className="chatbot-header">
+            <div className="chatbot-header-text">
+              <h4>Asistente de planes</h4>
+              <p>Encuentra eventos, rutas y cómo llegar</p>
+            </div>
+
+            <button
+              className="chatbot-header-close"
+              onClick={toggleChat}
+              aria-label="Cerrar chat"
+              type="button"
+            >
+              <X size={18} />
+            </button>
+          </div>
+
           <div className="chatbot-panel-body">
             <ChatBot />
           </div>
@@ -29,11 +45,9 @@ const ChatBotWidget = () => {
           aria-label={isOpen ? "Cerrar chat" : "Abrir chat"}
           type="button"
         >
-          {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
+          <MessageCircle size={24} />
         </button>
       </div>
     </div>
   );
-};
-
-export default ChatBotWidget;
+}
