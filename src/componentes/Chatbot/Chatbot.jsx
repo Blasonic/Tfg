@@ -4,7 +4,7 @@ import {
   sendChatMessage,
   updateBaseLocation,
   updateTemporaryLocation,
-} from "../../ServiciosBack/chatbotService";
+} from "../../ServiciosBack/chatBotService";
 import ChatMessage from "./ChatMessage";
 
 function createMessage({ role, text, data = null, action = null, type = "text" }) {
