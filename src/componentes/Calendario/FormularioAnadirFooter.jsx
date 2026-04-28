@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
-// ✅ Ajusta estas rutas a las tuyas reales
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
@@ -18,23 +18,25 @@ function mysqlToDate(dt) {
 }
 
 const SolicitarPlanPage = () => {
+  const { t, i18n } = useTranslation();
+
   const categorias = useMemo(
     () => [
-      { value: "musica", label: "Música" },
-      { value: "cultural", label: "Cultural" },
-      { value: "historia", label: "Historia" },
-      { value: "gastronomia", label: "Gastronomía" },
-      { value: "deporte", label: "Deporte" },
-      { value: "arte", label: "Arte / Exposiciones" },
-      { value: "noche", label: "Noche / Fiesta" },
-      { value: "familia", label: "Familia / Niños" },
-      { value: "naturaleza", label: "Naturaleza" },
-      { value: "cine", label: "Cine / Teatro" },
-      { value: "mercado", label: "Mercados / Ferias" },
-      { value: "networking", label: "Networking / Social" },
-      { value: "otro", label: "Otro" },
+      { value: "musica", label: t("requestPlan.categories.music") },
+      { value: "cultural", label: t("requestPlan.categories.cultural") },
+      { value: "historia", label: t("requestPlan.categories.history") },
+      { value: "gastronomia", label: t("requestPlan.categories.gastronomy") },
+      { value: "deporte", label: t("requestPlan.categories.sport") },
+      { value: "arte", label: t("requestPlan.categories.art") },
+      { value: "noche", label: t("requestPlan.categories.nightlife") },
+      { value: "familia", label: t("requestPlan.categories.family") },
+      { value: "naturaleza", label: t("requestPlan.categories.nature") },
+      { value: "cine", label: t("requestPlan.categories.cinema") },
+      { value: "mercado", label: t("requestPlan.categories.markets") },
+      { value: "networking", label: t("requestPlan.categories.networking") },
+      { value: "otro", label: t("requestPlan.categories.other") },
     ],
-    []
+    [t, i18n.language]
   );
 
   const [form, setForm] = useState({
@@ -68,7 +70,7 @@ const SolicitarPlanPage = () => {
       }
 
       if (file.size > MAX_IMAGE_BYTES) {
-        alert("La imagen es demasiado grande. Máximo 2MB.");
+        alert(t("requestPlan.errors.imageTooLarge"));
         e.target.value = "";
         return;
       }
@@ -81,7 +83,6 @@ const SolicitarPlanPage = () => {
       return;
     }
 
-    // si escribes URL de imagen, quitamos archivo
     if (name === "imagen") {
       setForm((p) => ({ ...p, imagen: value, imagenArchivo: null }));
       return;
@@ -91,10 +92,10 @@ const SolicitarPlanPage = () => {
   };
 
   const buildPayload = () => {
-    if (!form.titulo.trim()) throw new Error("El título es obligatorio.");
-    if (!form.descripcion.trim()) throw new Error("La descripción es obligatoria.");
-    if (!form.fecha_inicio) throw new Error("La fecha de inicio es obligatoria.");
-    if (!form.hora_inicio) throw new Error("La hora de inicio es obligatoria.");
+    if (!form.titulo.trim()) throw new Error(t("requestPlan.errors.titleRequired"));
+    if (!form.descripcion.trim()) throw new Error(t("requestPlan.errors.descriptionRequired"));
+    if (!form.fecha_inicio) throw new Error(t("requestPlan.errors.startDateRequired"));
+    if (!form.hora_inicio) throw new Error(t("requestPlan.errors.startTimeRequired"));
 
     const start_at = toMySQLDatetime(form.fecha_inicio, form.hora_inicio);
     const end_at = toMySQLDatetime(
@@ -104,12 +105,13 @@ const SolicitarPlanPage = () => {
 
     const start = mysqlToDate(start_at);
     const end = mysqlToDate(end_at);
-    if (!start || !end) throw new Error("Fecha/hora inválida.");
-    if (end < start) throw new Error("La fecha/hora de fin no puede ser anterior al inicio.");
+
+    if (!start || !end) throw new Error(t("requestPlan.errors.invalidDateTime"));
+    if (end < start) throw new Error(t("requestPlan.errors.endBeforeStart"));
 
     const tagsArr = (form.tags || "")
       .split(",")
-      .map((t) => t.trim())
+      .map((tTag) => tTag.trim())
       .filter(Boolean)
       .slice(0, 12);
 
@@ -117,7 +119,7 @@ const SolicitarPlanPage = () => {
     const detalle = form.categoria_detalle.trim() || null;
 
     if (categoria === "otro" && !detalle) {
-      throw new Error('Si eliges "Otro", escribe un detalle.');
+      throw new Error(t("requestPlan.errors.otherNeedsDetail"));
     }
 
     return {
@@ -137,20 +139,23 @@ const SolicitarPlanPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       setSubmitting(true);
 
       const payload = buildPayload();
 
-      // ✅ Ajusta tu endpoint real:
       const res = await fetch("http://localhost:3001/api/eventos/solicitud", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Accept-Language": i18n.language,
+        },
         body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
-        let msg = "No se pudo enviar la solicitud.";
+        let msg = t("requestPlan.errors.submitFailed");
         try {
           const data = await res.json();
           msg = data?.message || msg;
@@ -158,7 +163,7 @@ const SolicitarPlanPage = () => {
         throw new Error(msg);
       }
 
-      alert("Solicitud enviada ✅");
+      alert(t("requestPlan.success.sent"));
 
       setForm({
         titulo: "",
@@ -177,7 +182,7 @@ const SolicitarPlanPage = () => {
         imagenArchivo: null,
       });
     } catch (err) {
-      alert(err?.message || "Error al enviar.");
+      alert(err?.message || t("requestPlan.errors.sendError"));
     } finally {
       setSubmitting(false);
     }
@@ -188,162 +193,165 @@ const SolicitarPlanPage = () => {
       <Header />
 
       <main className="solicitar-plan-container">
+        <form className="solicitar-plan-form" onSubmit={handleSubmit}>
+          <h1 className="solicitar-plan-title">{t("requestPlan.title")}</h1>
 
-  <form className="solicitar-plan-form" onSubmit={handleSubmit}>
+          <p className="solicitar-plan-subtitle">
+            {t("requestPlan.subtitle")}
+          </p>
 
-    <h1 className="solicitar-plan-title">Solicitar plan</h1>
+          <input
+            type="text"
+            name="titulo"
+            placeholder={t("requestPlan.placeholders.title")}
+            value={form.titulo}
+            onChange={handleChange}
+            required
+          />
 
-    <p className="solicitar-plan-subtitle">
-      Envíanos un evento y lo revisaremos para añadirlo.
-    </p>
+          <textarea
+            name="descripcion"
+            placeholder={t("requestPlan.placeholders.description")}
+            value={form.descripcion}
+            onChange={handleChange}
+            required
+          />
 
-    <input
-      type="text"
-      name="titulo"
-      placeholder="Título del evento"
-      value={form.titulo}
-      onChange={handleChange}
-      required
-    />
+          <label>{t("requestPlan.labels.category")}</label>
+          <select
+            name="categoria"
+            value={form.categoria}
+            onChange={handleChange}
+            required
+          >
+            {categorias.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+          </select>
 
-    <textarea
-      name="descripcion"
-      placeholder="Descripción"
-      value={form.descripcion}
-      onChange={handleChange}
-      required
-    />
+          <label>{t("requestPlan.labels.detail")}</label>
+          <input
+            type="text"
+            name="categoria_detalle"
+            placeholder={t("requestPlan.placeholders.detail")}
+            value={form.categoria_detalle}
+            onChange={handleChange}
+          />
 
-    <label>Categoría</label>
-    <select name="categoria" value={form.categoria} onChange={handleChange} required>
-      {categorias.map((c) => (
-        <option key={c.value} value={c.value}>
-          {c.label}
-        </option>
-      ))}
-    </select>
+          <div className="solicitar-plan-grid">
+            <div>
+              <label>{t("requestPlan.labels.startDate")}</label>
+              <input
+                type="date"
+                name="fecha_inicio"
+                value={form.fecha_inicio}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-    <label>Detalle (opcional)</label>
-    <input
-      type="text"
-      name="categoria_detalle"
-      placeholder='Ej: "techno", "taller", "ruta guiada"...'
-      value={form.categoria_detalle}
-      onChange={handleChange}
-    />
+            <div>
+              <label>{t("requestPlan.labels.startTime")}</label>
+              <input
+                type="time"
+                name="hora_inicio"
+                value={form.hora_inicio}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
 
-    <div className="solicitar-plan-grid">
-      <div>
-        <label>Fecha inicio</label>
-        <input
-          type="date"
-          name="fecha_inicio"
-          value={form.fecha_inicio}
-          onChange={handleChange}
-          required
-        />
-      </div>
+          <div className="solicitar-plan-grid">
+            <div>
+              <label>{t("requestPlan.labels.endDate")}</label>
+              <input
+                type="date"
+                name="fecha_fin"
+                value={form.fecha_fin}
+                onChange={handleChange}
+              />
+            </div>
 
-      <div>
-        <label>Hora inicio *</label>
-        <input
-          type="time"
-          name="hora_inicio"
-          value={form.hora_inicio}
-          onChange={handleChange}
-          required
-        />
-      </div>
-    </div>
+            <div>
+              <label>{t("requestPlan.labels.endTime")}</label>
+              <input
+                type="time"
+                name="hora_fin"
+                value={form.hora_fin}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
 
-    <div className="solicitar-plan-grid">
-      <div>
-        <label>Fecha fin</label>
-        <input
-          type="date"
-          name="fecha_fin"
-          value={form.fecha_fin}
-          onChange={handleChange}
-        />
-      </div>
+          <label>{t("requestPlan.labels.municipality")}</label>
+          <input
+            type="text"
+            name="municipio"
+            placeholder={t("requestPlan.placeholders.municipality")}
+            value={form.municipio}
+            onChange={handleChange}
+          />
 
-      <div>
-        <label>Hora fin (opcional)</label>
-        <input
-          type="time"
-          name="hora_fin"
-          value={form.hora_fin}
-          onChange={handleChange}
-        />
-      </div>
-    </div>
+          <label>{t("requestPlan.labels.address")}</label>
+          <input
+            type="text"
+            name="direccion"
+            placeholder={t("requestPlan.placeholders.address")}
+            value={form.direccion}
+            onChange={handleChange}
+          />
 
-    <label>Municipio (opcional)</label>
-    <input
-      type="text"
-      name="municipio"
-      placeholder="Ej: Madrid, Getafe..."
-      value={form.municipio}
-      onChange={handleChange}
-    />
+          <label>{t("requestPlan.labels.tags")}</label>
+          <input
+            type="text"
+            name="tags"
+            placeholder={t("requestPlan.placeholders.tags")}
+            value={form.tags}
+            onChange={handleChange}
+          />
 
-    <label>Dirección (opcional)</label>
-    <input
-      type="text"
-      name="direccion"
-      placeholder="Calle, número, sala..."
-      value={form.direccion}
-      onChange={handleChange}
-    />
+          <label>{t("requestPlan.labels.image")}</label>
 
-    <label>Tags (opcional)</label>
-    <input
-      type="text"
-      name="tags"
-      placeholder="Ej: gratis, terraza, entrada libre"
-      value={form.tags}
-      onChange={handleChange}
-    />
+          <div className="solicitar-plan-img-row">
+            <input
+              type="text"
+              name="imagen"
+              placeholder={t("requestPlan.placeholders.imageUrl")}
+              value={form.imagenArchivo ? "" : form.imagen}
+              onChange={handleChange}
+              disabled={!!form.imagenArchivo}
+            />
 
-    <label>Imagen (opcional)</label>
+            <label className="solicitar-plan-file-btn">
+              {t("requestPlan.buttons.uploadImage")}
+              <input
+                type="file"
+                name="imagenArchivo"
+                accept="image/*"
+                onChange={handleChange}
+                disabled={form.imagen.trim() !== ""}
+              />
+            </label>
+          </div>
 
-    <div className="solicitar-plan-img-row">
-      <input
-        type="text"
-        name="imagen"
-        placeholder="URL de imagen"
-        value={form.imagenArchivo ? "" : form.imagen}
-        onChange={handleChange}
-        disabled={!!form.imagenArchivo}
-      />
+          <button
+            type="submit"
+            className="solicitar-plan-submit"
+            disabled={submitting}
+          >
+            {submitting
+              ? t("requestPlan.buttons.sending")
+              : t("requestPlan.buttons.submit")}
+          </button>
 
-      <label className="solicitar-plan-file-btn">
-        Subir imagen
-        <input
-          type="file"
-          name="imagenArchivo"
-          accept="image/*"
-          onChange={handleChange}
-          disabled={form.imagen.trim() !== ""}
-        />
-      </label>
-    </div>
-
-    <button
-      type="submit"
-      className="solicitar-plan-submit"
-      disabled={submitting}
-    >
-      {submitting ? "Enviando..." : "Enviar solicitud"}
-    </button>
-
-    <p className="solicitar-plan-hint">
-      * Hora de inicio obligatoria
-    </p>
-
-  </form>
-
-</main>
+          <p className="solicitar-plan-hint">
+            {t("requestPlan.hint")}
+          </p>
+        </form>
+      </main>
 
       <Footer />
     </Page>

@@ -1,4 +1,3 @@
-// src/ServiciosBack/apiFetch.js
 import { auth } from "../firebase";
 
 const API =
@@ -6,16 +5,18 @@ const API =
   process.env.REACT_APP_API_BASE ||
   "http://localhost:3000/api";
 
-/**
- * apiFetch:
- * - Si hay usuario logueado -> añade Authorization Bearer <token>
- * - Si NO hay usuario -> hace la request sin token (para endpoints públicos)
- */
+function getCurrentLanguage() {
+  return localStorage.getItem("i18nextLng") || "es";
+}
+
 export async function apiFetch(
   path,
   { method = "GET", body, authRequired = false } = {}
 ) {
-  const headers = { "Content-Type": "application/json" };
+  const headers = {
+    "Content-Type": "application/json",
+    "Accept-Language": getCurrentLanguage(),
+  };
 
   const user = auth.currentUser;
 
@@ -33,6 +34,10 @@ export async function apiFetch(
   });
 
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data?.message || data?.error || "Error API");
+
+  if (!res.ok) {
+    throw new Error(data?.message || data?.error || "Error API");
+  }
+
   return data;
 }

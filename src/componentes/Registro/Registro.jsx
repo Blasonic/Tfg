@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
-// ✅ Firebase Auth
 import {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -10,7 +10,6 @@ import {
 } from "firebase/auth";
 import { auth } from "../../firebase";
 
-// ✅ llamadas al backend con token Firebase
 import {
   bootstrapUser,
   updateUserProfile,
@@ -20,7 +19,9 @@ import {
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
 
 const Registro = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     user: "",
@@ -32,13 +33,13 @@ const Registro = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState({ email: "", user: "" });
   const [emailValid, setEmailValid] = useState(null);
-  const [infoMessage, setInfoMessage] = useState(""); // ✅ para mensajes tipo "revisa tu email"
+  const [infoMessage, setInfoMessage] = useState("");
 
   const passwordRules = {
-    length: "Al menos 8 caracteres",
-    uppercase: "Al menos una letra mayúscula",
-    number: "Al menos un número",
-    special: "Al menos un carácter especial",
+    length: t("register.passwordRules.length"),
+    uppercase: t("register.passwordRules.uppercase"),
+    number: t("register.passwordRules.number"),
+    special: t("register.passwordRules.special"),
   };
 
   const getPasswordStatus = (password) => {
@@ -50,7 +51,6 @@ const Registro = () => {
     };
   };
 
-  // ✅ derivado (siempre consistente aunque borres)
   const passwordStatus = useMemo(
     () => getPasswordStatus(formData.password),
     [formData.password]
@@ -83,7 +83,6 @@ const Registro = () => {
   };
 
   const sendWelcomeEmail = async (firebaseUser, name) => {
-    // ✅ Bienvenida por tu backend (protegido con requireAuth)
     const token = await firebaseUser.getIdToken();
 
     const res = await fetch(`${API_URL}/api/email/bienvenida`, {
@@ -95,7 +94,6 @@ const Registro = () => {
       body: JSON.stringify({ name }),
     });
 
-    // Si falla, NO rompemos el registro (solo log)
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
       console.warn("⚠️ Welcome email no enviado:", data?.message || res.status);
@@ -109,75 +107,59 @@ const Registro = () => {
     setFieldErrors({ email: "", user: "" });
 
     if (!emailValid) {
-      setErrorMessage("El formato del correo es inválido");
+      setErrorMessage(t("register.errors.invalidEmailFormat"));
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setErrorMessage("Las contraseñas no coinciden");
+      setErrorMessage(t("register.errors.passwordsDoNotMatch"));
       return;
     }
 
     if (!allPasswordValid) {
-      setErrorMessage("La contraseña no cumple con todos los requisitos");
+      setErrorMessage(t("register.errors.passwordRequirements"));
       return;
     }
 
     try {
-      // ✅ 1) Crear usuario en Firebase Auth
       const cred = await createUserWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
 
-      // ✅ 2) Guardar displayName en Auth
       await updateProfile(cred.user, { displayName: formData.name });
-
-      // ✅ 3) Enviar email de verificación (Firebase)
-      // (Esto manda el correo "Verify your email")
       await sendEmailVerification(cred.user);
-
-      // ✅ 4) Backend: crear estructura users/{uid}
       await bootstrapUser();
 
-      // ✅ 5) Backend: guardar username + avatar + displayName
       await updateUserProfile({
         user: formData.user,
         displayName: formData.name,
         profilePicture: "/imagenes/avatares/avatar-en-blanco.webp",
       });
 
-      // ✅ 6) Leer perfil y guardarlo para header
       const profile = await getUserProfile();
       localStorage.setItem("user", JSON.stringify(profile));
       window.dispatchEvent(new Event("storage"));
 
-      // ✅ 7) Email de bienvenida (personalizado) por Nodemailer
-      // (si falla, no rompemos nada)
       await sendWelcomeEmail(cred.user, formData.name);
 
-      // ✅ Mensaje UX
-      setInfoMessage(
-        "Registro completado ✅. Te hemos enviado un correo de verificación. Revisa tu email (y spam)."
-      );
-
-      // ✅ Decide a dónde ir (recomendación: home)
+      setInfoMessage(t("register.success.verificationSent"));
       navigate("/");
     } catch (error) {
       const code = error?.code || "";
-      const message = error?.message || "Error al registrar la cuenta";
+      const message = error?.message || t("register.errors.generic");
 
       if (code === "auth/email-already-in-use") {
-        setFieldErrors({ email: "El correo ya está registrado", user: "" });
+        setFieldErrors({ email: t("register.errors.emailInUse"), user: "" });
         return;
       }
       if (code === "auth/invalid-email") {
-        setFieldErrors({ email: "Correo inválido", user: "" });
+        setFieldErrors({ email: t("register.errors.invalidEmail"), user: "" });
         return;
       }
       if (code === "auth/weak-password") {
-        setErrorMessage("Contraseña débil (mínimo 6). Mantén tus requisitos de 8+.");
+        setErrorMessage(t("register.errors.weakPassword"));
         return;
       }
 
@@ -193,16 +175,16 @@ const Registro = () => {
   return (
     <StyledWrapper>
       <form className="form" onSubmit={handleRegister}>
-        <h2>Crear Cuenta</h2>
+        <h2>{t("register.title")}</h2>
 
         <div className="flex-column">
-          <label>Nombre</label>
+          <label>{t("register.labels.name")}</label>
         </div>
         <div className="inputForm">
           <input
             type="text"
             id="name"
-            placeholder="Ingresa tu nombre"
+            placeholder={t("register.placeholders.name")}
             value={formData.name}
             onChange={handleChange}
             required
@@ -210,13 +192,13 @@ const Registro = () => {
         </div>
 
         <div className="flex-column">
-          <label>Nombre de Usuario</label>
+          <label>{t("register.labels.username")}</label>
         </div>
         <div className="inputForm">
           <input
             type="text"
             id="user"
-            placeholder="Ingresa un nombre de usuario"
+            placeholder={t("register.placeholders.username")}
             value={formData.user}
             onChange={handleChange}
             required
@@ -225,13 +207,13 @@ const Registro = () => {
         {fieldErrors.user && <p className="error-message">{fieldErrors.user}</p>}
 
         <div className="flex-column">
-          <label>Correo Electrónico</label>
+          <label>{t("register.labels.email")}</label>
         </div>
         <div className="inputForm">
           <input
             type="email"
             id="email"
-            placeholder="Ingresa tu correo"
+            placeholder={t("register.placeholders.email")}
             value={formData.email}
             onChange={handleChange}
             required
@@ -239,30 +221,30 @@ const Registro = () => {
         </div>
         {emailValid !== null && (
           <p className={emailValid ? "valid-message" : "invalid-message"}>
-            {emailValid ? "✔ Formato de correo válido" : "✘ Correo inválido"}
+            {emailValid
+              ? t("register.emailStatus.valid")
+              : t("register.emailStatus.invalid")}
           </p>
         )}
         {fieldErrors.email && <p className="error-message">{fieldErrors.email}</p>}
 
         <div className="flex-column">
-          <label>Contraseña</label>
+          <label>{t("register.labels.password")}</label>
         </div>
         <div className="inputForm">
           <input
             type="password"
             id="password"
-            placeholder="Ingresa tu contraseña"
+            placeholder={t("register.placeholders.password")}
             value={formData.password}
             onChange={handleChange}
             required
           />
         </div>
 
-        {/* ✅ Tics: se ven solo si hay password y NO cumple todo.
-            Si cumple todo, desaparece. Si borras y deja de cumplir, vuelve. */}
         {formData.password && !allPasswordValid && (
           <div className="password-status-box">
-            <p>La contraseña debe cumplir con:</p>
+            <p>{t("register.passwordRules.title")}</p>
             <ul className="password-status-list">
               {Object.entries(passwordRules).map(([key, label]) => (
                 <li key={key} className={passwordStatus[key] ? "valid" : "invalid"}>
@@ -274,13 +256,13 @@ const Registro = () => {
         )}
 
         <div className="flex-column">
-          <label>Confirmar Contraseña</label>
+          <label>{t("register.labels.confirmPassword")}</label>
         </div>
         <div className="inputForm">
           <input
             type="password"
             id="confirmPassword"
-            placeholder="Repita tu contraseña"
+            placeholder={t("register.placeholders.confirmPassword")}
             value={formData.confirmPassword}
             onChange={handleChange}
             required
@@ -291,13 +273,13 @@ const Registro = () => {
         {infoMessage && <p className="info-message">{infoMessage}</p>}
 
         <button type="submit" className="button-submit">
-          Registrarse
+          {t("register.submit")}
         </button>
 
         <p className="p">
-          ¿Ya tienes cuenta?{" "}
+          {t("register.alreadyHaveAccount")}{" "}
           <Link to="/Login" className="span">
-            Inicia sesión
+            {t("register.login")}
           </Link>
         </p>
       </form>

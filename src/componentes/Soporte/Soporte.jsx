@@ -5,6 +5,7 @@ import Header from "../Header/Header";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
@@ -12,6 +13,8 @@ import { auth } from "../../firebase";
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:3000/api";
 
 function Soporte() {
+  const { t } = useTranslation();
+
   const [email, setEmail] = useState("");
   const [user, setUser] = useState(null);
   const [authReady, setAuthReady] = useState(false);
@@ -30,13 +33,13 @@ function Soporte() {
       setAuthReady(true);
 
       if (!u) {
-        toast.warning("Es necesario iniciar sesión para acceder al soporte.");
+        toast.warning(t("support.toasts.loginRequiredAccess"));
         setTimeout(() => navigate("/Login"), 1200);
       }
     });
 
     return () => unsub();
-  }, [navigate]);
+  }, [navigate, t]);
 
   const obtenerMensajes = async () => {
     try {
@@ -53,7 +56,7 @@ function Soporte() {
     e.preventDefault();
 
     if (!user) {
-      toast.error("Debes iniciar sesión para enviar un mensaje.");
+      toast.error(t("support.toasts.loginRequiredSend"));
       return;
     }
 
@@ -75,18 +78,18 @@ function Soporte() {
         setEnviado(true);
         setAsunto("");
         setMensaje("");
-        toast.success("Mensaje enviado correctamente ✅");
+        toast.success(t("support.toasts.sentOk"));
         obtenerMensajes();
       } else {
-        toast.error(data.message || "Error al enviar el mensaje.");
+        toast.error(data.message || t("support.toasts.sendError"));
       }
     } catch (err) {
       console.error("Error en soporte/crear:", err);
-      toast.error("No se pudo conectar con el servidor.");
+      toast.error(t("support.toasts.serverError"));
     }
   };
 
-  if (!authReady) return <p style={{ padding: 20 }}>Cargando sesión...</p>;
+  if (!authReady) return <p style={{ padding: 20 }}>{t("support.loadingSession")}</p>;
   if (!user) return null;
 
   return (
@@ -96,41 +99,27 @@ function Soporte() {
       <div className="soporte-page">
         <div className="soporte-container">
           <div className="soporte-wrap">
-
-            {/* IZQUIERDA */}
             <section className="soporte-left">
-              <h2 className="titulo">Soporte técnico</h2>
+              <h2 className="titulo">{t("support.title")}</h2>
 
-              <p className="soporte-subtitle">
-                Si algo no funciona como debería, estamos aquí para ayudarte.
-              </p>
+              <p className="soporte-subtitle">{t("support.subtitle")}</p>
 
-              <p className="soporte-text">
-                En PLANZO trabajamos para que la tecnología sea un medio, no un problema.
-                Este espacio está pensado para resolver incidencias técnicas de forma rápida,
-                sencilla y eficaz, para que puedas seguir disfrutando de la plataforma sin
-                interrupciones.
-              </p>
+              <p className="soporte-text">{t("support.text1.before")} <strong>PLANZO</strong> {t("support.text1.after")}</p>
 
-              <p className="soporte-text">
-                ⚙️ ¿Qué tipo de incidencias resolvemos? Problemas de acceso a tu cuenta,
-                errores en reservas o pagos, dificultades para acceder a cursos o contenidos,
-                fallos de carga o visualización e incidencias al publicar o gestionar eventos.
-              </p>
+              <p className="soporte-text">{t("support.text2")}</p>
 
               {enviado && (
                 <p className="mensaje-exito">
-                  Tu mensaje ha sido enviado correctamente.
+                  {t("support.successMessage")}
                 </p>
               )}
             </section>
 
-            {/* DERECHA */}
             <section className="soporte-right">
               <form onSubmit={handleSubmit} className="espaciado-form">
                 <input
                   type="text"
-                  placeholder="ASUNTO"
+                  placeholder={t("support.form.subject")}
                   value={asunto}
                   onChange={(e) => setAsunto(e.target.value)}
                   className="campo"
@@ -138,7 +127,7 @@ function Soporte() {
                 />
 
                 <textarea
-                  placeholder="MENSAJE"
+                  placeholder={t("support.form.message")}
                   value={mensaje}
                   onChange={(e) => setMensaje(e.target.value)}
                   className="campo"
@@ -147,21 +136,23 @@ function Soporte() {
                 />
 
                 <button type="submit" className="boton">
-                  ENVIAR
+                  {t("support.form.send")}
                 </button>
               </form>
             </section>
-
           </div>
 
-          {/* HISTORIAL */}
           {mensajes.length > 0 && (
             <div className="historial">
-              <h3 className="subtitulo">Mensajes anteriores</h3>
+              <h3 className="subtitulo">{t("support.history.title")}</h3>
               {mensajes.map((m) => (
                 <div key={m.id} className="mensaje-card">
-                  <p><strong>Asunto:</strong> {m.asunto}</p>
-                  <p><strong>Mensaje:</strong> {m.mensaje}</p>
+                  <p>
+                    <strong>{t("support.history.subjectLabel")}</strong> {m.asunto}
+                  </p>
+                  <p>
+                    <strong>{t("support.history.messageLabel")}</strong> {m.mensaje}
+                  </p>
                 </div>
               ))}
             </div>

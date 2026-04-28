@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import EventoCard from "../Calendario/EventoCard";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3000";
@@ -25,6 +26,8 @@ function normalizarEvento(fiesta) {
 }
 
 function BuscadorFiestas() {
+  const { t } = useTranslation();
+
   const [q, setQ] = useState("");
   const [categoria, setCategoria] = useState("");
   const [categoriaDetalle, setCategoriaDetalle] = useState("");
@@ -66,14 +69,16 @@ function BuscadorFiestas() {
       const data = await res.json();
 
       if (!res.ok || !data.ok) {
-        throw new Error(data.message || "No se pudieron cargar los filtros");
+        throw new Error(data.message || t("eventsSearch.errors.loadFilters"));
       }
 
-      setFiltros(data.filtros || {
-        categorias: [],
-        categoriasDetalle: [],
-        municipios: [],
-      });
+      setFiltros(
+        data.filtros || {
+          categorias: [],
+          categoriasDetalle: [],
+          municipios: [],
+        }
+      );
     } catch (err) {
       console.error(err);
     }
@@ -100,13 +105,13 @@ function BuscadorFiestas() {
       const data = await res.json();
 
       if (!res.ok || !data.ok) {
-        throw new Error(data.message || "Error al buscar fiestas");
+        throw new Error(data.message || t("eventsSearch.errors.search"));
       }
 
       setEventos(Array.isArray(data.eventos) ? data.eventos : []);
     } catch (err) {
       console.error(err);
-      setError(err.message || "Error al buscar fiestas");
+      setError(err.message || t("eventsSearch.errors.search"));
       setEventos([]);
     } finally {
       setLoading(false);
@@ -130,7 +135,7 @@ function BuscadorFiestas() {
           type="text"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Buscar por evento, municipio o dirección..."
+          placeholder={t("eventsSearch.placeholder")}
           className="input-buscador"
         />
       </div>
@@ -141,7 +146,7 @@ function BuscadorFiestas() {
           onChange={(e) => setCategoria(e.target.value)}
           style={styles.control}
         >
-          <option value="">Todas las categorías</option>
+          <option value="">{t("eventsSearch.allCategories")}</option>
           {filtros.categorias.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
@@ -154,7 +159,7 @@ function BuscadorFiestas() {
           onChange={(e) => setCategoriaDetalle(e.target.value)}
           style={styles.control}
         >
-          <option value="">Todos los tipos</option>
+          <option value="">{t("eventsSearch.allTypes")}</option>
           {filtros.categoriasDetalle.map((subcat) => (
             <option key={subcat} value={subcat}>
               {subcat}
@@ -181,11 +186,11 @@ function BuscadorFiestas() {
           onChange={(e) => setSort(e.target.value)}
           style={styles.control}
         >
-          <option value="start_at_asc">Próximos primero</option>
-          <option value="start_at_desc">Más lejanos primero</option>
-          <option value="created_at_desc">Más recientes</option>
-          <option value="titulo_asc">Título A-Z</option>
-          <option value="titulo_desc">Título Z-A</option>
+          <option value="start_at_asc">{t("eventsSearch.sort.upcomingFirst")}</option>
+          <option value="start_at_desc">{t("eventsSearch.sort.farthestFirst")}</option>
+          <option value="created_at_desc">{t("eventsSearch.sort.mostRecent")}</option>
+          <option value="titulo_asc">{t("eventsSearch.sort.titleAZ")}</option>
+          <option value="titulo_desc">{t("eventsSearch.sort.titleZA")}</option>
         </select>
 
         <label style={styles.checkWrap}>
@@ -194,21 +199,21 @@ function BuscadorFiestas() {
             checked={soloFuturos}
             onChange={(e) => setSoloFuturos(e.target.checked)}
           />
-          Solo futuros
+          {t("eventsSearch.onlyUpcoming")}
         </label>
 
         <button type="button" onClick={limpiarFiltros} style={styles.btnLimpiar}>
-          Limpiar
+          {t("eventsSearch.clear")}
         </button>
       </div>
 
       <div style={{ marginTop: 20 }}>
-        {loading && <p>Cargando fiestas...</p>}
+        {loading && <p>{t("eventsSearch.loading")}</p>}
 
         {!loading && error && <p>{error}</p>}
 
         {!loading && !error && eventosNormalizados.length === 0 && (
-          <p>No se encontraron fiestas con esos filtros.</p>
+          <p>{t("eventsSearch.noResults")}</p>
         )}
 
         {!loading && !error && eventosNormalizados.length > 0 && (

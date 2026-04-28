@@ -1,8 +1,8 @@
-// src/componentes/VerPerfil/VerPerfil.jsx
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import "react-toastify/dist/ReactToastify.css";
 
 import { getUserProfile, updateUserProfile } from "../../ServiciosBack/servicioFirebase";
@@ -22,9 +22,9 @@ const avatarList = [
 ];
 
 const VerPerfil = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
-  // ✅ lo que el usuario ve/edita (BORRADOR)
   const [draft, setDraft] = useState({
     displayName: "",
     user: "",
@@ -32,7 +32,6 @@ const VerPerfil = () => {
     avatarUrl: "",
   });
 
-  // ✅ lo último guardado (SOURCE OF TRUTH local)
   const savedRef = useRef({
     displayName: "",
     user: "",
@@ -53,14 +52,17 @@ const VerPerfil = () => {
       displayName: updated?.displayName ?? prev?.displayName ?? "",
       user: updated?.user ?? prev?.user ?? "",
       email: updated?.email ?? prev?.email ?? "",
-      avatarUrl: updated?.avatarUrl ?? prev?.avatarUrl ?? auth?.currentUser?.photoURL ?? "",
+      avatarUrl:
+        updated?.avatarUrl ??
+        prev?.avatarUrl ??
+        auth?.currentUser?.photoURL ??
+        "",
     };
 
     localStorage.setItem("user", JSON.stringify(merged));
     window.dispatchEvent(new Event("user-updated"));
   };
 
-  // ✅ Cargar perfil (Firestore via backend) -> rellena draft y savedRef
   useEffect(() => {
     (async () => {
       try {
@@ -78,12 +80,12 @@ const VerPerfil = () => {
         setDirty(false);
       } catch (err) {
         console.error("Error perfil:", err);
-        toast.warning("Es necesario iniciar sesión para acceder al perfil.");
+        toast.warning(t("profile.toasts.loginRequired"));
         setTimeout(() => navigate("/Login"), 1200);
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate]);
+  }, [navigate, t]);
 
   const markDirtyIfChanged = (nextDraft) => {
     const s = savedRef.current;
@@ -103,7 +105,6 @@ const VerPerfil = () => {
     });
   };
 
-  // ✅ Avatar: SOLO cambia el borrador (NO guarda)
   const handleAvatarSelect = (avatarPath) => {
     const avatarUrl = `/${avatarPath}`;
     setDraft((prev) => {
@@ -114,11 +115,10 @@ const VerPerfil = () => {
     setShowAvatarOptions(false);
   };
 
-  // ✅ Guardar cambios (aquí sí se persiste a Firestore + localStorage)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!dirty) {
-      toast.info("No hay cambios para guardar");
+      toast.info(t("profile.toasts.noChanges"));
       return;
     }
 
@@ -130,7 +130,6 @@ const VerPerfil = () => {
         avatarUrl: draft.avatarUrl,
       });
 
-      // backend puede devolver parcial -> consolidamos con draft
       const committed = {
         ...draft,
         displayName: updated?.displayName ?? draft.displayName,
@@ -138,29 +137,26 @@ const VerPerfil = () => {
         avatarUrl: updated?.avatarUrl ?? draft.avatarUrl,
       };
 
-      // ✅ actualiza savedRef y el UI
       savedRef.current = committed;
       setDraft(committed);
       setDirty(false);
 
-      // ✅ AHORA sí: localStorage para Header + resto app
       persistUser(committed);
 
-      toast.success("Perfil actualizado");
+      toast.success(t("profile.toasts.updated"));
     } catch (error) {
       console.error("❌ Error update perfil:", error);
-      toast.error(error?.message || "Error al actualizar el perfil");
+      toast.error(error?.message || t("profile.toasts.updateError"));
     } finally {
       setSaving(false);
     }
   };
 
-  // ✅ Cancelar: vuelve a lo guardado (sin tocar Firestore)
   const handleCancel = () => {
     setDraft(savedRef.current);
     setDirty(false);
     setShowAvatarOptions(false);
-    toast.info("Cambios descartados");
+    toast.info(t("profile.toasts.discarded"));
   };
 
   const avatarSrc = draft.avatarUrl || "/imagenes/avatares/avatar-en-blanco.webp";
@@ -168,12 +164,12 @@ const VerPerfil = () => {
   return (
     <StyledWrapper>
       <form className="form" onSubmit={handleSubmit}>
-        <h2>Perfil de Usuario</h2>
+        <h2>{t("profile.title")}</h2>
 
         <div className="profile-picture-container">
           <img
             src={avatarSrc}
-            alt="Avatar"
+            alt={t("profile.avatarAlt")}
             className="profile-picture"
             onError={(e) => {
               e.currentTarget.src = "/imagenes/avatares/avatar-en-blanco.webp";
@@ -186,10 +182,10 @@ const VerPerfil = () => {
             onClick={() => setShowAvatarOptions((v) => !v)}
             disabled={saving}
           >
-            Elegir Avatar
+            {t("profile.chooseAvatar")}
           </button>
 
-          {dirty && <div className="dirty-badge">Tienes cambios sin guardar</div>}
+          {dirty && <div className="dirty-badge">{t("profile.unsavedChanges")}</div>}
         </div>
 
         {showAvatarOptions && (
@@ -198,7 +194,7 @@ const VerPerfil = () => {
               <img
                 key={avatar}
                 src={`/${avatar}`}
-                alt="Avatar"
+                alt={t("profile.avatarAlt")}
                 className="avatar-option"
                 onClick={() => handleAvatarSelect(avatar)}
                 onError={(e) => {
@@ -210,7 +206,7 @@ const VerPerfil = () => {
         )}
 
         <div className="inputForm">
-          <label>Nombre</label>
+          <label>{t("profile.labels.name")}</label>
           <input
             type="text"
             name="displayName"
@@ -221,7 +217,7 @@ const VerPerfil = () => {
         </div>
 
         <div className="inputForm">
-          <label>Nombre de Usuario</label>
+          <label>{t("profile.labels.username")}</label>
           <input
             type="text"
             name="user"
@@ -232,13 +228,13 @@ const VerPerfil = () => {
         </div>
 
         <div className="inputForm">
-          <label>Correo Electrónico</label>
+          <label>{t("profile.labels.email")}</label>
           <input type="email" value={draft.email} disabled />
         </div>
 
         <div className="buttons-row">
           <button type="submit" className="button-submit" disabled={saving || !dirty}>
-            {saving ? "Guardando..." : "Guardar Cambios"}
+            {saving ? t("profile.buttons.saving") : t("profile.buttons.save")}
           </button>
 
           <button
@@ -247,12 +243,12 @@ const VerPerfil = () => {
             onClick={handleCancel}
             disabled={saving || !dirty}
           >
-            Cancelar
+            {t("profile.buttons.cancel")}
           </button>
         </div>
 
         <Link to="/" className="button-link">
-          ← Volver al Home
+          {t("profile.buttons.backHome")}
         </Link>
       </form>
 

@@ -1,17 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { AiFillInstagram } from "react-icons/ai";
+import { useTranslation } from "react-i18next";
 import "./Footer.css";
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <footer className="footerV2">
       <div className="footerV2__inner">
-        
-        {/* IZQUIERDA */}
         <div className="footerV2__left">
-
-          {/* Marca */}
           <div className="footerV2__brand">
             <div className="footerV2__logoWrap">
               <Link to="/">
@@ -22,63 +21,72 @@ const Footer = () => {
                 />
               </Link>
             </div>
-            <p className="footerV2__tagline">
-              Eventos culturales y sociales de tu comunidad
-            </p>
+            <p className="footerV2__tagline">{t("footer.tagline")}</p>
           </div>
 
-          {/* 3 columnas superiores */}
           <div className="footerV2__colsTop">
-
             <nav className="footerV2__col">
-              <h3 className="footerV2__title">Eventos</h3>
-              <Link className="footerV2__link" to="/CalendarioGlobal">• Agenda</Link>
-              <Link className="footerV2__link" to="/EventosDestacados">• Eventos destacados</Link>
-              <Link className="footerV2__link" to="/FormularioAnadirFooter">• Enviar tu evento</Link>
+              <h3 className="footerV2__title">{t("footer.events.title")}</h3>
+              <Link className="footerV2__link" to="/CalendarioGlobal">
+                • {t("footer.events.agenda")}
+              </Link>
+              <Link className="footerV2__link" to="/EventosDestacados">
+                • {t("footer.events.featured")}
+              </Link>
+              <Link className="footerV2__link" to="/FormularioAnadirFooter">
+                • {t("footer.events.submit")}
+              </Link>
             </nav>
 
             <nav className="footerV2__col">
-              <h3 className="footerV2__title">Comunidad</h3>
-              <Link className="footerV2__link" to="/SobreNosotros">• Quiénes somos</Link>
-              <Link className="footerV2__link" to="/Ayuntamientos">• Ayuntamientos</Link>
+              <h3 className="footerV2__title">{t("footer.community.title")}</h3>
+              <Link className="footerV2__link" to="/SobreNosotros">
+                • {t("footer.community.about")}
+              </Link>
+              <Link className="footerV2__link" to="/Ayuntamientos">
+                • {t("footer.community.townHalls")}
+              </Link>
             </nav>
 
             <nav className="footerV2__col">
-              <h3 className="footerV2__title">Información</h3>
-              <Link className="footerV2__link" to="/Soporte">• Soporte</Link>
-              <Link className="footerV2__link" to="/Ayuda">• Preguntas frecuentes</Link>
-              <Link className="footerV2__link" to="/Contacto">• Contacto</Link>
+              <h3 className="footerV2__title">{t("footer.information.title")}</h3>
+              <Link className="footerV2__link" to="/Soporte">
+                • {t("footer.information.support")}
+              </Link>
+              <Link className="footerV2__link" to="/Ayuda">
+                • {t("footer.information.faq")}
+              </Link>
+              <Link className="footerV2__link" to="/Contacto">
+                • {t("footer.information.contact")}
+              </Link>
             </nav>
-
           </div>
 
-          {/* 3 columnas inferiores */}
           <div className="footerV2__colsBottom">
-
             <div className="footerV2__col">
-              <h3 className="footerV2__title">Contacto</h3>
+              <h3 className="footerV2__title">{t("footer.contact.title")}</h3>
 
               <a
                 className="footerV2__link"
                 href="mailto:planzo.eventos@gmail.com"
               >
-                planzo.eventos@gmail.com"
+                planzo.eventos@gmail.com
               </a>
 
               <a
                 className="footerV2__link"
                 href="tel:+34910000000"
               >
-                Tel. 91 000 00 00
+                {t("footer.contact.phone")}
               </a>
 
               <span className="footerV2__text">
-                Región Metropolitana
+                {t("footer.contact.region")}
               </span>
             </div>
 
             <div className="footerV2__col">
-              <h3 className="footerV2__title">Síguenos</h3>
+              <h3 className="footerV2__title">{t("footer.follow.title")}</h3>
 
               <a
                 className="footerV2__link footerV2__social"
@@ -87,46 +95,51 @@ const Footer = () => {
                 rel="noreferrer"
               >
                 <AiFillInstagram className="footerV2__icon" />
-                Instagram
+                {t("footer.follow.instagram")}
               </a>
             </div>
 
             <div className="footerV2__col footerV2__legal">
-              <h3 className="footerV2__title">Legal</h3>
-              <Link className="footerV2__link" to="/AvisoLegal">• Aviso legal</Link>
-              <Link className="footerV2__link" to="/PoliticaPrivacidad">• Política privacidad</Link>
-              <Link className="footerV2__link" to="/PoliticaCookies">• Cookies</Link>
-              <Link className="footerV2__link" to="/Accesibilidad">• Accesibilidad</Link>
+              <h3 className="footerV2__title">{t("footer.legal.title")}</h3>
+              <Link className="footerV2__link" to="/AvisoLegal">
+                • {t("footer.legal.legalNotice")}
+              </Link>
+              <Link className="footerV2__link" to="/PoliticaPrivacidad">
+                • {t("footer.legal.privacyPolicy")}
+              </Link>
+              <Link className="footerV2__link" to="/PoliticaCookies">
+                • {t("footer.legal.cookies")}
+              </Link>
+              <Link className="footerV2__link" to="/Accesibilidad">
+                • {t("footer.legal.accessibility")}
+              </Link>
             </div>
-
           </div>
         </div>
 
-        {/* CTA DERECHA */}
         <aside className="footerV2__cta">
-          <p className="footerV2__ctaTitle">¿Tienes un evento?</p>
+          <p className="footerV2__ctaTitle">{t("footer.cta.title")}</p>
 
           <Link
             className="footerV2__btn footerV2__btn--primary"
             to="/FormularioAnadirFooter"
           >
-            Publícalo aquí
+            {t("footer.cta.publish")}
           </Link>
 
           <Link
             className="footerV2__btn footerV2__btn--secondary"
             to="/Suscripcion"
           >
-            Suscríbete a la Agenda Semanal
+            {t("footer.cta.subscribe")}
           </Link>
         </aside>
-
       </div>
 
       <div className="footerV2__bottom">
         <div className="footerV2__divider" />
         <p className="footerV2__copyright">
-          2026 Planzo tu viaje en tu comunidad. Todos los derechos reservados
+          {t("footer.copyright")}
         </p>
       </div>
     </footer>

@@ -1,8 +1,8 @@
-// src/componentes/Login/Login.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaGoogle, FaApple } from "react-icons/fa";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 import "./Login.css";
 
 import {
@@ -12,9 +12,13 @@ import {
 } from "firebase/auth";
 
 import { auth } from "../../firebase";
-import { bootstrapUser, getUserProfile } from "../../ServiciosBack/servicioFirebase";
+import {
+  bootstrapUser,
+  getUserProfile,
+} from "../../ServiciosBack/servicioFirebase";
 
 const Login = () => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -35,17 +39,13 @@ const Login = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // ✅ flujo común post-login (robusto)
   const postLoginFlow = async () => {
-    // 1) guarda token para pantallas que lo lean de localStorage
     const token = await auth.currentUser.getIdToken();
     localStorage.setItem("token", token);
 
-    // 2) bootstrap + perfil desde backend
     await bootstrapUser();
     const profile = await getUserProfile();
 
-    // 3) normaliza lo que guardas (una convención)
     const merged = {
       uid: profile?.uid,
       email: profile?.email,
@@ -58,7 +58,6 @@ const Login = () => {
     localStorage.setItem("user", JSON.stringify(merged));
     window.dispatchEvent(new Event("user-updated"));
 
-    // 4) redirect
     if (merged.isAdmin) {
       setAdminRedirecting(true);
       setTimeout(() => navigate("/admin"), 300);
@@ -85,12 +84,12 @@ const Login = () => {
         code === "auth/wrong-password" ||
         code === "auth/user-not-found"
       ) {
-        setErrorMessage("Correo o contraseña incorrectos");
+        setErrorMessage(t("login.errors.invalidCredentials"));
       } else if (code === "auth/too-many-requests") {
-        setErrorMessage("Demasiados intentos. Espera un momento y prueba otra vez.");
+        setErrorMessage(t("login.errors.tooManyRequests"));
       } else {
         console.error("❌ Error en login:", error);
-        setErrorMessage(error?.message || "Error al intentar iniciar sesión");
+        setErrorMessage(error?.message || t("login.errors.generic"));
       }
     }
   };
@@ -105,14 +104,16 @@ const Login = () => {
       await postLoginFlow();
     } catch (error) {
       console.error("❌ Error Google login:", error);
-      setErrorMessage("Error al iniciar sesión con Google");
+      setErrorMessage(t("login.errors.google"));
     }
   };
 
   if (adminRedirecting) {
     return (
       <StyledWrapper>
-        <h2 style={{ textAlign: "center" }}>Cargando panel de administración...</h2>
+        <h2 style={{ textAlign: "center" }}>
+          {t("login.adminRedirecting")}
+        </h2>
       </StyledWrapper>
     );
   }
@@ -120,18 +121,18 @@ const Login = () => {
   return (
     <StyledWrapper>
       <form className="form" onSubmit={handleSubmit}>
-        <h2>Iniciar Sesión</h2>
+        <h2>{t("login.title")}</h2>
 
         {infoMessage && <div className="info-message">{infoMessage}</div>}
 
         <div className="flex-column">
-          <label>Email</label>
+          <label>{t("login.labels.email")}</label>
         </div>
         <div className="inputForm">
           <input
             type="email"
             id="email"
-            placeholder="Ingresa tu correo"
+            placeholder={t("login.placeholders.email")}
             value={formData.email}
             onChange={handleChange}
             required
@@ -139,13 +140,13 @@ const Login = () => {
         </div>
 
         <div className="flex-column">
-          <label>Contraseña</label>
+          <label>{t("login.labels.password")}</label>
         </div>
         <div className="inputForm">
           <input
             type="password"
             id="password"
-            placeholder="Ingresa tu contraseña"
+            placeholder={t("login.placeholders.password")}
             value={formData.password}
             onChange={handleChange}
             required
@@ -157,26 +158,26 @@ const Login = () => {
         <div className="flex-row">
           <div>
             <input type="checkbox" />
-            <label>Recordarme</label>
+            <label>{t("login.rememberMe")}</label>
           </div>
 
           <Link to="/OlvidarPassword" className="span">
-            ¿Olvidaste tu contraseña?
+            {t("login.forgotPassword")}
           </Link>
         </div>
 
         <button type="submit" className="button-submit">
-          Ingresar
+          {t("login.submit")}
         </button>
 
         <p className="p">
-          ¿No tienes cuenta?{" "}
+          {t("login.noAccount")}{" "}
           <Link to="/Registro" className="span">
-            Regístrate
+            {t("login.register")}
           </Link>
         </p>
 
-        <p className="p line">O ingresa con</p>
+        <p className="p line">{t("login.orContinueWith")}</p>
 
         <div className="flex-row">
           <button type="button" className="btn google" onClick={handleGoogleLogin}>

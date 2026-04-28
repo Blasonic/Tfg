@@ -1,71 +1,101 @@
 /* ===========================
-   CONTENEDOR PRINCIPAL (SECCIÓN)
+   CONTENEDOR PRINCIPAL PAGE
 =========================== */
+
+.sobre-nosotros-page {
+  width: 100%;
+  text-align: left;
+}
+
+/* ===========================
+   SECCIÓN PRINCIPAL
+=========================== */
+
 .sobre-nosotros {
   width: 100%;
   margin: 0;
-  padding: 40px 24px 50px;
-
+  padding: 40px 60px 50px;
   background: #ffffff;
-
-  border-radius: 0;
-  box-shadow: none;
+  line-height: 1.8;
+  box-sizing: border-box;
 }
 
 /* ===========================
-   BLOQUE INTERIOR (contenido centrado)
+   CONTENIDO INTERNO
+   (ahora ocupa todo el ancho)
 =========================== */
+
 .sobre-nosotros > .container {
-  max-width: 900px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* ===========================
-   TITULO
+   TÍTULO
 =========================== */
+
 .sobre-nosotros h1 {
   text-align: center;
   font-size: 2.4rem;
   color: #FF751F;
   font-weight: bold;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 /* ===========================
-   TEXTO
+   PÁRRAFOS
 =========================== */
+
 .sobre-nosotros p {
+  width: 100%;
   font-size: 1.05rem;
-  line-height: 1.75;
+  line-height: 1.9;
   color: #333;
   text-align: justify;
   margin-bottom: 18px;
+  box-sizing: border-box;
 }
 
 /* ===========================
-   ESTILOS ESPECIALES
+   TEXTO DESTACADO
 =========================== */
+
 .sobre-nosotros .highlight {
   font-weight: bold;
-  text-align: center;
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   margin-top: 30px;
+  text-align: justify;
 }
 
+/* ===========================
+   CTA FINAL
+=========================== */
+
 .sobre-nosotros .cta {
-  text-align: center;
   font-style: italic;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   color: #555;
   margin-top: 20px;
+  text-align: justify;
+}
+
+/* ===========================
+   STRONG
+=========================== */
+
+.sobre-nosotros strong {
+  color: #FF751F;
 }
 
 /* ===========================
    RESPONSIVE
 =========================== */
+
 @media (max-width: 768px) {
   .sobre-nosotros {
-    padding: 28px 16px 40px;
+    padding: 28px 20px 40px;
   }
 
   .sobre-nosotros h1 {
@@ -74,6 +104,7 @@
 
   .sobre-nosotros p {
     font-size: 1rem;
+    text-align: left;
   }
 
   .sobre-nosotros .highlight {

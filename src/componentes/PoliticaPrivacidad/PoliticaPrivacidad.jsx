@@ -2,71 +2,85 @@ import React from "react";
 import "./PoliticaPrivacidad.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import { useTranslation } from "react-i18next";
 
 function PoliticaPrivacidad() {
+  const { t } = useTranslation();
+
   return (
     <div>
       <Header />
 
       <section className="politica-privacidad">
-        <h1 className="titulo-privacidad">Política de Privacidad</h1>
+        <h1 className="titulo-privacidad">
+          {t("privacyPolicy.title")}
+        </h1>
 
-        <h2 className="subtitulo-privacidad">1. Información al usuario</h2>
+        <h2 className="subtitulo-privacidad">
+          {t("privacyPolicy.section1.title")}
+        </h2>
+
         <p className="parrafo-privacidad">
-          En cumplimiento del Reglamento (UE) 2016/679 (RGPD) y de la Ley
-          Orgánica 3/2018 de Protección de Datos Personales, informamos a los
-          usuarios sobre el tratamiento de sus datos personales.
+          {t("privacyPolicy.section1.paragraph1")}
         </p>
 
         <p className="parrafo-privacidad">
-          El responsable del tratamiento de los datos recogidos a través de
-          este sitio web es <strong>PLANZO</strong>.
+          {t("privacyPolicy.section1.paragraph2.before")}{" "}
+          <strong>PLANZO</strong>
+          {t("privacyPolicy.section1.paragraph2.after")}
         </p>
 
-        <h2 className="subtitulo-privacidad">2. Datos personales que se recopilan</h2>
+        <h2 className="subtitulo-privacidad">
+          {t("privacyPolicy.section2.title")}
+        </h2>
 
         <p className="parrafo-privacidad">
-          A través de esta web pueden recopilarse datos mediante:
-        </p>
-
-        <p className="parrafo-privacidad">
-          • Formularios de contacto <br/>
-          • Formularios de registro <br/>
-          • Correos electrónicos <br/>
-          • Navegación mediante cookies
-        </p>
-
-        <h2 className="subtitulo-privacidad">3. Finalidad del tratamiento</h2>
-
-        <p className="parrafo-privacidad">
-          Los datos personales se utilizan para:
+          {t("privacyPolicy.section2.paragraph1")}
         </p>
 
         <p className="parrafo-privacidad">
-          • Gestionar consultas <br/>
-          • Responder solicitudes <br/>
-          • Mejorar el funcionamiento del sitio web
+          • {t("privacyPolicy.section2.item1")} <br />
+          • {t("privacyPolicy.section2.item2")} <br />
+          • {t("privacyPolicy.section2.item3")} <br />
+          • {t("privacyPolicy.section2.item4")}
         </p>
 
-        <h2 className="subtitulo-privacidad">4. Conservación de los datos</h2>
+        <h2 className="subtitulo-privacidad">
+          {t("privacyPolicy.section3.title")}
+        </h2>
 
         <p className="parrafo-privacidad">
-          Los datos se conservarán únicamente durante el tiempo necesario para
-          cumplir la finalidad para la que fueron recogidos.
+          {t("privacyPolicy.section3.paragraph1")}
         </p>
 
-        <h2 className="subtitulo-privacidad">5. Derechos de los usuarios</h2>
-
         <p className="parrafo-privacidad">
-          El usuario puede ejercer los derechos de acceso, rectificación,
-          supresión, oposición, limitación y portabilidad de sus datos.
+          • {t("privacyPolicy.section3.item1")} <br />
+          • {t("privacyPolicy.section3.item2")} <br />
+          • {t("privacyPolicy.section3.item3")}
         </p>
 
-        <h2 className="subtitulo-privacidad">6. Seguridad de los datos</h2>
+        <h2 className="subtitulo-privacidad">
+          {t("privacyPolicy.section4.title")}
+        </h2>
 
         <p className="parrafo-privacidad">
-          El responsable adopta las medidas técnicas necesarias para proteger
-          los datos personales de accesos no autorizados.
+          {t("privacyPolicy.section4.paragraph1")}
+        </p>
+
+        <h2 className="subtitulo-privacidad">
+          {t("privacyPolicy.section5.title")}
+        </h2>
+
+        <p className="parrafo-privacidad">
+          {t("privacyPolicy.section5.paragraph1")}
+        </p>
+
+        <h2 className="subtitulo-privacidad">
+          {t("privacyPolicy.section6.title")}
+        </h2>
+
+        <p className="parrafo-privacidad">
+          {t("privacyPolicy.section6.paragraph1")}
         </p>
       </section>
 

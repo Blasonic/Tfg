@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Logo from "../Logo/Logo";
 import { AiOutlineSearch } from "react-icons/ai";
 import "./Header.css";
@@ -7,6 +8,9 @@ import "./Header.css";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import EventoCard from "../Calendario/EventoCard";
+
+const banderaES = "/imagenes/spain.jpeg";
+const banderaEN = "/imagenes/unitedKingdom.jpeg";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
@@ -42,9 +46,12 @@ function normalizarEvento(ev) {
 }
 
 function Header() {
+  const { t, i18n } = useTranslation();
+
   const [user, setUser] = useState(null);
   const [abrirPopup, setAbrirPopup] = useState(false);
   const [menuUsuario, setMenuUsuario] = useState(false);
+  const [menuIdioma, setMenuIdioma] = useState(false);
   const [textoBusqueda, setTextoBusqueda] = useState("");
 
   const [categoria, setCategoria] = useState("");
@@ -62,6 +69,11 @@ function Header() {
   const [eventoSeleccionado, setEventoSeleccionado] = useState(null);
 
   const navigate = useNavigate();
+
+  const cambiarIdioma = (lng) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem("i18nextLng", lng);
+  };
 
   useEffect(() => {
     const load = () => {
@@ -100,13 +112,23 @@ function Header() {
     return () => clearTimeout(timer);
   }, [textoBusqueda, categoria, categoriaDetalle, soloFuturos, abrirPopup]);
 
+  useEffect(() => {
+    const cerrarMenus = () => {
+      setMenuUsuario(false);
+      setMenuIdioma(false);
+    };
+
+    window.addEventListener("click", cerrarMenus);
+    return () => window.removeEventListener("click", cerrarMenus);
+  }, []);
+
   const cargarFiltros = async () => {
     try {
       const res = await fetch(`${API_URL}/api/fiestas/filtros`);
       const data = await res.json();
 
       if (!res.ok || !data.ok) {
-        throw new Error(data.message || "No se pudieron cargar los filtros");
+        throw new Error(data.message || t("header.errors.loadFilters"));
       }
 
       setFiltros(
@@ -148,7 +170,7 @@ function Header() {
       const data = await res.json();
 
       if (!res.ok || !data.ok) {
-        throw new Error(data.message || "Error al buscar");
+        throw new Error(data.message || t("header.errors.search"));
       }
 
       const normalizados = Array.isArray(data.eventos)
@@ -216,26 +238,41 @@ function Header() {
 
         <div className="header-right">
           <nav className="nav-links">
-            <Link to="/" className="nav-link">Home</Link>
-            <Link to="/SobreNosotros" className="nav-link">About</Link>
-            <Link to="/Contacto" className="nav-link">Contacto</Link>
+            <Link to="/" className="nav-link">
+              {t("header.nav.home")}
+            </Link>
+            <Link to="/SobreNosotros" className="nav-link">
+              {t("header.nav.about")}
+            </Link>
+            <Link to="/Contacto" className="nav-link">
+              {t("header.nav.contact")}
+            </Link>
             <Link to="/CalendarioGlobal" className="nav-link nav-link-calendario">
-              Calendario
+              {t("header.nav.calendar")}
             </Link>
           </nav>
 
           <AiOutlineSearch
             className="icono-buscar"
-            onClick={() => setAbrirPopup(true)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setAbrirPopup(true);
+              setMenuUsuario(false);
+              setMenuIdioma(false);
+            }}
+            title={t("header.search.openSearch")}
           />
 
           {user ? (
-            <div className="avatar-wrapper">
+            <div className="avatar-wrapper" onClick={(e) => e.stopPropagation()}>
               <img
                 src={avatarSrc}
-                alt="Avatar"
+                alt={t("header.user.avatarAlt")}
                 className="avatar-img"
-                onClick={() => setMenuUsuario((v) => !v)}
+                onClick={() => {
+                  setMenuUsuario((v) => !v);
+                  setMenuIdioma(false);
+                }}
               />
 
               {menuUsuario && (
@@ -245,7 +282,7 @@ function Header() {
                     className="menu-usuario-item"
                     onClick={() => setMenuUsuario(false)}
                   >
-                    Ver Perfil
+                    {t("header.user.viewProfile")}
                   </Link>
 
                   <button
@@ -260,21 +297,87 @@ function Header() {
                       padding: 0,
                     }}
                   >
-                    Favoritos
+                    {t("header.user.favorites")}
                   </button>
 
                   <button
                     className="menu-usuario-item cerrar-sesion"
                     onClick={handleLogout}
                   >
-                    Cerrar Sesión
+                    {t("header.user.logout")}
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <Link to="/Login" className="login-btn">Log-in</Link>
+            <Link to="/Login" className="login-btn">
+              {t("header.user.login")}
+            </Link>
           )}
+
+          <div
+            className="language-dropdown"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="language-current"
+              onClick={() => {
+                setMenuIdioma((prev) => !prev);
+                setMenuUsuario(false);
+              }}
+            >
+              <img
+                src={i18n.language?.startsWith("en") ? banderaEN : banderaES}
+                alt={
+                  i18n.language?.startsWith("en")
+                    ? t("header.language.english")
+                    : t("header.language.spanish")
+                }
+                className="flag-icon-large"
+              />
+            </button>
+
+            {menuIdioma && (
+              <div className="language-menu">
+                {!i18n.language?.startsWith("es") && (
+                  <button
+                    type="button"
+                    className="language-option"
+                    onClick={() => {
+                      cambiarIdioma("es");
+                      setMenuIdioma(false);
+                    }}
+                  >
+                    <img
+                      src={banderaES}
+                      alt={t("header.language.spanish")}
+                      className="flag-icon-large"
+                    />
+                    <span>{t("header.language.spanish")}</span>
+                  </button>
+                )}
+
+                {!i18n.language?.startsWith("en") && (
+                  <button
+                    type="button"
+                    className="language-option"
+                    onClick={() => {
+                      cambiarIdioma("en");
+                      setMenuIdioma(false);
+                    }}
+                  >
+                    <img
+                      src={banderaEN}
+                      alt={t("header.language.english")}
+                      className="flag-icon-large"
+                    />
+                    <span>{t("header.language.english")}</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -288,14 +391,15 @@ function Header() {
               ✕
             </button>
 
-            <h2 className="popup-titulo">Buscar eventos</h2>
-<div className="popup-filtros">
+            <h2 className="popup-titulo">{t("header.search.title")}</h2>
+
+            <div className="popup-filtros">
               <select
                 value={categoria}
                 onChange={(e) => setCategoria(e.target.value)}
                 className="popup-select"
               >
-                <option value="">Todas las categorías</option>
+                <option value="">{t("header.search.allCategories")}</option>
                 {filtros.categorias.map((cat) => (
                   <option key={cat} value={cat}>
                     {cat}
@@ -308,7 +412,7 @@ function Header() {
                 onChange={(e) => setCategoriaDetalle(e.target.value)}
                 className="popup-select"
               >
-                <option value="">Todos los tipos</option>
+                <option value="">{t("header.search.allTypes")}</option>
                 {filtros.categoriasDetalle.map((sub) => (
                   <option key={sub} value={sub}>
                     {sub}
@@ -322,7 +426,7 @@ function Header() {
                   checked={soloFuturos}
                   onChange={(e) => setSoloFuturos(e.target.checked)}
                 />
-                Solo futuros
+                {t("header.search.onlyUpcoming")}
               </label>
 
               <button
@@ -330,13 +434,14 @@ function Header() {
                 className="popup-boton-secundario"
                 onClick={limpiarBusqueda}
               >
-                Limpiar
+                {t("header.search.clear")}
               </button>
             </div>
+
             <div className="popup-busqueda-box">
               <input
                 type="text"
-                placeholder="Escribe un evento, municipio o dirección..."
+                placeholder={t("header.search.placeholder")}
                 className="popup-input"
                 autoFocus
                 value={textoBusqueda}
@@ -344,17 +449,15 @@ function Header() {
               />
             </div>
 
-            
-
             {!eventoSeleccionado && (
               <div className="popup-resultados">
                 {loadingBusqueda ? (
-                  <p className="popup-info">Buscando eventos...</p>
+                  <p className="popup-info">{t("header.search.loading")}</p>
                 ) : resultadosPreview.length === 0 ? (
                   <p className="popup-info">
                     {textoBusqueda || categoria || categoriaDetalle
-                      ? "No se encontraron eventos."
-                      : "Empieza a escribir o elige filtros para ver resultados."}
+                      ? t("header.search.noResults")
+                      : t("header.search.initialMessage")}
                   </p>
                 ) : (
                   resultadosPreview.map((ev) => (
@@ -377,7 +480,11 @@ function Header() {
                           {[ev.municipio, ev.direccion].filter(Boolean).join(" · ")}
                         </span>
                         <span>
-                          {ev.start ? ev.start.toLocaleDateString() : "Sin fecha"}
+                          {ev.start
+                            ? ev.start.toLocaleDateString(
+                                i18n.language?.startsWith("en") ? "en-GB" : "es-ES"
+                              )
+                            : t("header.search.noDate")}
                         </span>
                       </div>
                     </button>
@@ -394,7 +501,7 @@ function Header() {
                     className="popup-boton-secundario"
                     onClick={() => setEventoSeleccionado(null)}
                   >
-                    ← Volver a resultados
+                    {t("header.search.backToResults")}
                   </button>
                 </div>
 

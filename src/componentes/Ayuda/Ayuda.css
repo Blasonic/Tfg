@@ -12,7 +12,7 @@
 
 .ayuda-container h1 {
   text-align: center;
-  color: black;
+  color: #FF751F;
   margin-bottom: 40px;
   font-size: 2.5rem;
 }
@@ -22,7 +22,7 @@
 }
 
 .faq-section h2 {
-  color: black;
+  color: #FF751F;
   font-size: 1.8rem;
   margin-bottom: 15px;
   border-bottom: 2px solid #ccc;
@@ -41,7 +41,7 @@
 }
 
 .faq-question h3 {
-  color: #222;
+  color: #FF751F;
   font-size: 1.2rem;
   margin-bottom: 5px;
   padding: 10px;

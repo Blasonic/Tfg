@@ -5,13 +5,21 @@ const API_USERS =
   process.env.REACT_APP_API_USERS_BASE ||
   "http://localhost:3001/api";
 
+function getCurrentLanguage() {
+  return localStorage.getItem("i18nextLng") || "es";
+}
+
 export async function apiFetchUsers(
   path,
   { method = "GET", body, authRequired = false } = {}
 ) {
-  const headers = { "Content-Type": "application/json" };
+  const headers = {
+    "Content-Type": "application/json",
+    "Accept-Language": getCurrentLanguage(),
+  };
 
   const user = auth.currentUser;
+
   if (user) {
     const token = await user.getIdToken();
     headers.Authorization = `Bearer ${token}`;
@@ -26,6 +34,10 @@ export async function apiFetchUsers(
   });
 
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data?.message || data?.error || "Error API");
+
+  if (!res.ok) {
+    throw new Error(data?.message || data?.error || "Error API");
+  }
+
   return data;
 }
