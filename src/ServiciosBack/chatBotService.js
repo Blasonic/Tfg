@@ -5,6 +5,7 @@ export async function sendChatMessage({
   conversationState = null,
   visibleEventIds = [],
   selectedEventId = null,
+  language = localStorage.getItem("i18nextLng") || "es",
 }) {
   return apiFetch("/chatbot/message", {
     method: "POST",
@@ -14,6 +15,7 @@ export async function sendChatMessage({
       conversationState,
       visibleEventIds,
       selectedEventId,
+      language,
     },
   });
 }
@@ -35,33 +37,46 @@ export async function getPreferences() {
   });
 }
 
-export async function updateBaseLocation({ address }) {
+export async function updateBaseLocation({
+  address,
+  language = localStorage.getItem("i18nextLng") || "es",
+}) {
   return apiFetch("/chatbot/preferences/base-location", {
     method: "PUT",
     authRequired: true,
     body: {
       address,
+      language,
     },
   });
 }
 
-export async function updateTemporaryLocation({ query, label = "Hotel" }) {
+export async function updateTemporaryLocation({
+  query,
+  label = "Hotel",
+  language = localStorage.getItem("i18nextLng") || "es",
+}) {
   return apiFetch("/chatbot/preferences/temporary-location", {
     method: "PUT",
     authRequired: true,
     body: {
       query,
       label,
+      language,
     },
   });
 }
 
-export async function resolveLocation({ query }) {
+export async function resolveLocation({
+  query,
+  language = localStorage.getItem("i18nextLng") || "es",
+}) {
   return apiFetch("/chatbot/location/resolve", {
     method: "POST",
     authRequired: true,
     body: {
       query,
+      language,
     },
   });
 }

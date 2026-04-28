@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Chatbot.css";
+import { useTranslation } from "react-i18next";
 import {
   sendChatMessage,
   updateBaseLocation,
@@ -22,10 +23,12 @@ function createMessage({ role, text, data = null, action = null, type = "text" }
 }
 
 export default function ChatBot() {
+  const { t, i18n } = useTranslation();
+
   const [messages, setMessages] = useState([
     createMessage({
       role: "bot",
-      text: "Hola, ¿necesitas ayuda para encontrar planes?",
+      text: t("chatbot.initialMessage"),
       type: "text",
     }),
   ]);
@@ -41,6 +44,23 @@ export default function ChatBot() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
+
+  useEffect(() => {
+    setMessages((prev) => {
+      if (
+        prev.length === 1 &&
+        prev[0].role === "bot"
+      ) {
+        return [
+          {
+            ...prev[0],
+            text: t("chatbot.initialMessage"),
+          },
+        ];
+      }
+      return prev;
+    });
+  }, [t, i18n.language]);
 
   const inferMessageType = (response) => {
     if (response?.data?.route) return "route";
@@ -87,11 +107,12 @@ export default function ChatBot() {
         conversationState,
         visibleEventIds,
         selectedEventId: extra.selectedEventId || selectedEventId || null,
+        language: i18n.language,
       });
 
       const botMessage = createMessage({
         role: "bot",
-        text: res?.reply || "No he encontrado respuesta.",
+        text: res?.reply || t("chatbot.fallback.noResponse"),
         data: res?.data || null,
         action: res?.action || null,
         type: inferMessageType(res),
@@ -109,7 +130,7 @@ export default function ChatBot() {
       }
     } catch (error) {
       console.error("Error chatbot:", error);
-      appendBotError(error.message || "Error al conectar con el chatbot.");
+      appendBotError(error.message || t("chatbot.errors.connect"));
     } finally {
       setLoading(false);
     }
@@ -123,13 +144,13 @@ export default function ChatBot() {
     if (!eventId || loading) return;
 
     setSelectedEventId(eventId);
-    await handleSendMessage("¿Cómo llego a este plan?", {
+    await handleSendMessage(t("chatbot.quick.howToGet"), {
       selectedEventId: eventId,
     });
   };
 
   const handleSaveHome = async () => {
-    const address = window.prompt("Escribe la dirección de tu casa:");
+    const address = window.prompt(t("chatbot.prompts.homeAddress"));
     if (!address || !address.trim()) return;
 
     setLoading(true);
@@ -139,36 +160,38 @@ export default function ChatBot() {
         ...prev,
         createMessage({
           role: "user",
-          text: `Guardar mi casa: ${address.trim()}`,
+          text: `${t("chatbot.prompts.saveHomePrefix")}: ${address.trim()}`,
         }),
       ]);
 
-      const res = await updateBaseLocation({ address: address.trim() });
+      const res = await updateBaseLocation({
+        address: address.trim(),
+        language: i18n.language,
+      });
 
       setMessages((prev) => [
         ...prev,
         createMessage({
           role: "bot",
-          text:
-            res?.location?.address
-              ? `Perfecto. He guardado tu casa en ${res.location.address}.`
-              : "He guardado tu ubicación de casa.",
+          text: res?.location?.address
+            ? t("chatbot.responses.homeSavedWithAddress", {
+                address: res.location.address,
+              })
+            : t("chatbot.responses.homeSaved"),
           data: res?.location ? { location: res.location } : null,
           type: "text",
         }),
       ]);
     } catch (error) {
       console.error("Error guardando casa:", error);
-      appendBotError("No he podido guardar tu casa. Prueba con una dirección más concreta.");
+      appendBotError(t("chatbot.errors.saveHome"));
     } finally {
       setLoading(false);
     }
   };
 
   const handleSaveTemporaryLocation = async () => {
-    const query = window.prompt(
-      "¿Dónde estás ahora? Puedes poner hotel, calle o dirección:"
-    );
+    const query = window.prompt(t("chatbot.prompts.currentLocation"));
     if (!query || !query.trim()) return;
 
     setLoading(true);
@@ -178,32 +201,32 @@ export default function ChatBot() {
         ...prev,
         createMessage({
           role: "user",
-          text: `Mi ubicación actual: ${query.trim()}`,
+          text: `${t("chatbot.prompts.currentLocationPrefix")}: ${query.trim()}`,
         }),
       ]);
 
       const res = await updateTemporaryLocation({
         query: query.trim(),
-        label: "Ubicación actual",
+        label: t("chatbot.labels.currentLocation"),
+        language: i18n.language,
       });
 
       setMessages((prev) => [
         ...prev,
         createMessage({
           role: "bot",
-          text:
-            res?.location?.address
-              ? `Perfecto. Tomaré ${res.location.address} como tu ubicación actual para próximas consultas.`
-              : "He guardado tu ubicación actual.",
+          text: res?.location?.address
+            ? t("chatbot.responses.currentLocationSavedWithAddress", {
+                address: res.location.address,
+              })
+            : t("chatbot.responses.currentLocationSaved"),
           data: res?.location ? { location: res.location } : null,
           type: "text",
         }),
       ]);
     } catch (error) {
       console.error("Error guardando ubicación temporal:", error);
-      appendBotError(
-        "No he podido guardar tu ubicación actual. Prueba con una dirección o nombre más concreto."
-      );
+      appendBotError(t("chatbot.errors.saveCurrentLocation"));
     } finally {
       setLoading(false);
     }
@@ -224,17 +247,17 @@ export default function ChatBot() {
 
     if (lastBotMessage.action === "ask_location") {
       return [
-        "Estoy en Calle Gran Vía 33, Madrid",
-        "Estoy en Hotel Meliá Madrid",
-        "Estoy en Plaza de España, Madrid",
+        t("chatbot.suggestions.location1"),
+        t("chatbot.suggestions.location2"),
+        t("chatbot.suggestions.location3"),
       ];
     }
 
     if (lastBotMessage.action === "ask_area") {
       return [
-        "Quiero una ruta en Madrid este finde",
-        "Quiero una ruta en El Escorial este finde",
-        "Ruta en Alcalá de Henares esta tarde",
+        t("chatbot.suggestions.area1"),
+        t("chatbot.suggestions.area2"),
+        t("chatbot.suggestions.area3"),
       ];
     }
 
@@ -252,7 +275,7 @@ export default function ChatBot() {
           onClick={handleSaveHome}
           disabled={loading}
         >
-          Guardar casa
+          {t("chatbot.buttons.saveHome")}
         </button>
 
         <button
@@ -261,7 +284,7 @@ export default function ChatBot() {
           onClick={handleSaveTemporaryLocation}
           disabled={loading}
         >
-          Guardar ubicación actual
+          {t("chatbot.buttons.saveCurrentLocation")}
         </button>
       </div>
 
@@ -289,25 +312,25 @@ export default function ChatBot() {
             <button
               type="button"
               className="chatbot-quick-button"
-              onClick={() => handleQuickQuestion("¿Qué hay este finde?")}
+              onClick={() => handleQuickQuestion(t("chatbot.quick.thisWeekend"))}
             >
-              ¿Qué hay este finde?
+              {t("chatbot.quick.thisWeekend")}
             </button>
 
             <button
               type="button"
               className="chatbot-quick-button"
-              onClick={() => handleQuickQuestion("Recomiéndame planes en Madrid")}
+              onClick={() => handleQuickQuestion(t("chatbot.quick.plansInMadrid"))}
             >
-              Planes en Madrid
+              {t("chatbot.quick.plansInMadrid")}
             </button>
 
             <button
               type="button"
               className="chatbot-quick-button"
-              onClick={() => handleQuickQuestion("Planes de techno este mes")}
+              onClick={() => handleQuickQuestion(t("chatbot.quick.technoThisMonth"))}
             >
-              Planes techno
+              {t("chatbot.quick.technoThisMonth")}
             </button>
           </div>
         )}
@@ -334,13 +357,13 @@ export default function ChatBot() {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Escribe algo..."
+          placeholder={t("chatbot.placeholder")}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
           disabled={loading}
         />
 
         <button onClick={handleSend} disabled={loading} type="button">
-          Enviar
+          {t("chatbot.buttons.send")}
         </button>
       </div>
     </div>

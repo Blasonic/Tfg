@@ -28,6 +28,7 @@ import Accesibilidad from './componentes/Accesibilidad/Accesibilidad';
 import PoliticaPrivacidad from './componentes/PoliticaPrivacidad/PoliticaPrivacidad';
 import ChatBot from './componentes/Chatbot/Chatbot';
 import ChatBotWidget from './componentes/Chatbot/ChatBotWidget';
+import Ayuntamientos from './componentes/Ayuntamientos/Ayuntamientos';
 
 
 
@@ -64,6 +65,7 @@ function App() {
           <Route path="/PoliticaPrivacidad" element={<PoliticaPrivacidad />} />
           <Route path="/ChatBot" element={<ChatBot />} />
           <Route path="/ChatBotWidget" element={<ChatBotWidget />} />
+          <Route path="/Ayuntamientos" element={<Ayuntamientos />} />
 
           <Route
   path="/admin"

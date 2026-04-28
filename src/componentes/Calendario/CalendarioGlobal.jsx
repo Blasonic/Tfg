@@ -11,9 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { listarFiestasPublicadas, crearFiesta } from "../../ServiciosBack/eventsService";
 import { auth } from "../../firebase";
-
-// 🆕 IMPORTANTE
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function mysqlToDate(dt) {
   if (!dt) return null;
@@ -31,16 +30,16 @@ function ymd(date) {
 }
 
 const CalendarioGlobal = () => {
+  const { t } = useTranslation();
+
   const [eventos, setEventos] = useState([]);
   const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // 🆕 PARA ABRIR EVENTO DESDE CHAT
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 👇 leer query param
   const queryParams = new URLSearchParams(location.search);
   const eventoId = queryParams.get("eventoId");
 
@@ -83,7 +82,7 @@ const CalendarioGlobal = () => {
       setEventos(normalizados);
     } catch (e) {
       console.error(e);
-      toast.error("Error al cargar los eventos");
+      toast.error(t("calendar.errors.loadEvents"));
     } finally {
       setLoading(false);
     }
@@ -93,26 +92,22 @@ const CalendarioGlobal = () => {
     cargarEventos();
   }, []);
 
-  // 🆕 AUTO ABRIR EVENTO
   useEffect(() => {
     if (!eventoId || eventos.length === 0) return;
 
     const evento = eventos.find((e) => String(e.id) === String(eventoId));
 
     if (evento) {
-      // 👉 CAMBIAMOS EL DÍA PARA QUE SE VEA
       setFechaSeleccionada(new Date(evento.start));
 
-      // 👉 ESPERAMOS A QUE RENDERICE Y ABRIMOS
       setTimeout(() => {
         const btn = document.querySelector(`[data-evento-id="${evento.id}"]`);
         if (btn) btn.click();
       }, 300);
 
-      // 👉 LIMPIAR URL
       navigate("/CalendarioGlobal", { replace: true });
     }
-  }, [eventoId, eventos]);
+  }, [eventoId, eventos, navigate]);
 
   const eventosDelDia = useMemo(() => {
     const dia = ymd(fechaSeleccionada);
@@ -151,7 +146,9 @@ const CalendarioGlobal = () => {
 
         <div className="eventos-panel">
           <div style={{ position: "relative", marginBottom: "1.5rem" }}>
-            <h3 style={{ textAlign: "center", margin: 0 }}>Planes</h3>
+            <h3 style={{ textAlign: "center", margin: 0 }}>
+              {t("calendar.title")}
+            </h3>
 
             {(usuario || auth.currentUser) && (
               <button
@@ -164,15 +161,15 @@ const CalendarioGlobal = () => {
                   transform: "translateY(-50%)",
                 }}
               >
-                Añadir evento
+                {t("calendar.addEvent")}
               </button>
             )}
           </div>
 
           {loading ? (
-            <p>Cargando eventos...</p>
+            <p>{t("calendar.loading")}</p>
           ) : eventosDelDia.length === 0 ? (
-            <p>No hay eventos para este día.</p>
+            <p>{t("calendar.noEventsForDay")}</p>
           ) : (
             eventosDelDia.map((ev) => (
               <EventoCard key={ev.id} evento={ev} />
@@ -187,11 +184,11 @@ const CalendarioGlobal = () => {
           onSubmit={async (payload) => {
             try {
               await crearFiesta(payload);
-              toast.success("🎉 Evento enviado correctamente.");
+              toast.success(t("calendar.success.eventSubmitted"));
               setMostrarFormulario(false);
               await cargarEventos();
             } catch (e) {
-              toast.error(e.message || "Error al enviar el evento");
+              toast.error(e.message || t("calendar.errors.submitEvent"));
             }
           }}
         />

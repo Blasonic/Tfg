@@ -1,14 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function ChatEventItem({ event, onAskHowToGet }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const fecha = event?.start_at
     ? new Date(event.start_at).toLocaleString()
     : event?.start
     ? new Date(event.start).toLocaleString()
-    : "Fecha no disponible";
+    : t("chatEventItem.dateUnavailable");
 
   const rating =
     typeof event?.rating === "number"
@@ -19,9 +21,13 @@ export default function ChatEventItem({ event, onAskHowToGet }) {
 
   return (
     <div className="chat-event-item">
-      <p className="chat-event-title">{event?.titulo || "Evento sin título"}</p>
+      <p className="chat-event-title">
+        {event?.titulo || t("chatEventItem.noTitle")}
+      </p>
 
-      {event?.municipio && <p className="chat-event-text">{event.municipio}</p>}
+      {event?.municipio && (
+        <p className="chat-event-text">{event.municipio}</p>
+      )}
 
       <p className="chat-event-text">{fecha}</p>
 
@@ -33,7 +39,9 @@ export default function ChatEventItem({ event, onAskHowToGet }) {
       )}
 
       {typeof rating === "number" && (
-        <p className="chat-event-text">⭐ {rating.toFixed(1)}</p>
+        <p className="chat-event-text">
+          ⭐ {rating.toFixed(1)}
+        </p>
       )}
 
       <div className="chat-event-actions">
@@ -42,7 +50,7 @@ export default function ChatEventItem({ event, onAskHowToGet }) {
           onClick={() => navigate(`/CalendarioGlobal?eventoId=${event.id}`)}
           type="button"
         >
-          Ver evento
+          {t("chatEventItem.viewEvent")}
         </button>
 
         <button
@@ -50,7 +58,7 @@ export default function ChatEventItem({ event, onAskHowToGet }) {
           onClick={() => onAskHowToGet?.(event.id)}
           type="button"
         >
-          ¿Cómo llegar?
+          {t("chatEventItem.howToGet")}
         </button>
       </div>
     </div>

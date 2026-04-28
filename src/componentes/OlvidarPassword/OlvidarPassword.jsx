@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { auth } from "../../firebase";
 
 export default function OlvidarPassword() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState({ type: "", text: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const successMessage = t("forgotPassword.success");
+  const loginInfoMessage = t("forgotPassword.loginInfo");
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -16,45 +21,39 @@ export default function OlvidarPassword() {
 
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!isValid) {
-      setMsg({ type: "error", text: "Introduce un correo válido." });
+      setMsg({ type: "error", text: t("forgotPassword.errors.invalidEmail") });
       return;
     }
 
     try {
       setLoading(true);
 
-      // ✅ Enviar email (Firebase)
       await sendPasswordResetEmail(auth, email);
 
-      // ✅ Mensaje de éxito (sin filtrar si existe o no)
       setMsg({
         type: "success",
-        text: "Si el correo existe, te hemos enviado un enlace. Revisa tu email (y spam).",
+        text: successMessage,
       });
 
-      // ✅ Espera corta y vuelve a Login con state
       setTimeout(() => {
         navigate("/Login", {
           replace: true,
           state: {
-            resetInfo:
-              "Si el correo existe, se ha enviado un enlace para restablecer la contraseña. Revisa tu email (y spam).",
+            resetInfo: loginInfoMessage,
           },
         });
       }, 1200);
     } catch (err) {
-      // Por seguridad: mismo mensaje aunque falle
       setMsg({
         type: "success",
-        text: "Si el correo existe, te hemos enviado un enlace. Revisa tu email (y spam).",
+        text: successMessage,
       });
 
       setTimeout(() => {
         navigate("/Login", {
           replace: true,
           state: {
-            resetInfo:
-              "Si el correo existe, se ha enviado un enlace para restablecer la contraseña. Revisa tu email (y spam).",
+            resetInfo: loginInfoMessage,
           },
         });
       }, 1200);
@@ -66,14 +65,12 @@ export default function OlvidarPassword() {
   return (
     <Wrap>
       <form className="card" onSubmit={handleSend}>
-        <h2>Recuperar contraseña</h2>
-        <p className="sub">
-          Escribe tu correo y te enviaremos un enlace para cambiar la contraseña.
-        </p>
+        <h2>{t("forgotPassword.title")}</h2>
+        <p className="sub">{t("forgotPassword.subtitle")}</p>
 
         <input
           type="email"
-          placeholder="Correo electrónico"
+          placeholder={t("forgotPassword.placeholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={loading}
@@ -83,7 +80,9 @@ export default function OlvidarPassword() {
         {msg.text && <div className={`msg ${msg.type}`}>{msg.text}</div>}
 
         <button disabled={loading} type="submit">
-          {loading ? "Enviando..." : "Enviar enlace"}
+          {loading
+            ? t("forgotPassword.buttons.sending")
+            : t("forgotPassword.buttons.sendLink")}
         </button>
       </form>
     </Wrap>

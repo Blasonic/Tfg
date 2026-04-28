@@ -1,15 +1,20 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-import Header from "../Header/Header"; // ajusta si tu ruta cambia
-import Footer from "../Footer/Footer"; // ajusta si tu ruta cambia
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import EventoCard from "../Calendario/EventoCard";
 
-import EventoCard from "../Calendario/EventoCard"; // ajusta a tu path real
-
-import { listarFiestasPublicadas, listFavoritos } from "../../ServiciosBack/eventsService";
+import {
+  listarFiestasPublicadas,
+  listFavoritos,
+} from "../../ServiciosBack/eventsService";
 import { auth } from "../../firebase";
 
 export default function FavoritosPage() {
+  const { t } = useTranslation();
+
   const [loading, setLoading] = useState(true);
   const [favoritosIds, setFavoritosIds] = useState(new Set());
   const [eventos, setEventos] = useState([]);
@@ -24,8 +29,7 @@ export default function FavoritosPage() {
       setError("");
       setLoading(true);
 
-      // 1) favoritos (users 3001)
-      const favRes = await listFavoritos(); // { items: [...] }
+      const favRes = await listFavoritos();
       const ids = new Set(
         (favRes?.items || [])
           .map((x) => Number(x.fiestaId))
@@ -33,12 +37,11 @@ export default function FavoritosPage() {
       );
       setFavoritosIds(ids);
 
-      // 2) eventos publicados (events 3000)
       const evs = await listarFiestasPublicadas();
       setEventos(Array.isArray(evs) ? evs : []);
     } catch (e) {
       console.error(e);
-      setError(e?.message || "Error cargando favoritos");
+      setError(e?.message || t("favorites.errors.load"));
     } finally {
       setLoading(false);
     }
@@ -56,10 +59,8 @@ export default function FavoritosPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // si no hay sesión
   if (!auth.currentUser) return <Navigate to="/Login" />;
 
-  // callback desde EventoCard: si se desmarca (false), quitamos del listado al instante
   const handleFavoriteChange = (fiestaId, isFavorite) => {
     setFavoritosIds((prev) => {
       const next = new Set(prev);
@@ -74,8 +75,15 @@ export default function FavoritosPage() {
       <Header />
 
       <div style={{ minHeight: "70vh", padding: 20 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
-          <h2 style={{ margin: 0 }}>Mis favoritos</h2>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 12,
+          }}
+        >
+          <h2 style={{ margin: 0 }}>{t("favorites.title")}</h2>
 
           <button
             type="button"
@@ -84,23 +92,25 @@ export default function FavoritosPage() {
             className="btn-nuevo-evento"
             style={{ height: 40 }}
           >
-            {loading ? "Cargando..." : "Refrescar"}
+            {loading ? t("favorites.loadingShort") : t("favorites.refresh")}
           </button>
         </div>
 
         {error && <p style={{ color: "crimson" }}>{error}</p>}
 
         {loading ? (
-          <p>Cargando favoritos...</p>
+          <p>{t("favorites.loading")}</p>
         ) : favoritosEventos.length === 0 ? (
-          <p>No tienes favoritos guardados todavía.</p>
+          <p>{t("favorites.empty")}</p>
         ) : (
           <div style={{ display: "grid", gap: 16, marginTop: 16 }}>
             {favoritosEventos.map((evento) => (
               <EventoCard
                 key={evento.id}
                 evento={evento}
-                onFavoriteChange={(isFav) => handleFavoriteChange(evento.id, isFav)}
+                onFavoriteChange={(isFav) =>
+                  handleFavoriteChange(evento.id, isFav)
+                }
               />
             ))}
           </div>

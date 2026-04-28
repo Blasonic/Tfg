@@ -1,0 +1,893 @@
+{
+  "accessibility": {
+    "title": "Accesibilidad",
+    "section1": {
+      "title": "1. Introducción",
+      "paragraph1": {
+        "before": "Las presentes Condiciones de Uso regulan el acceso y utilización del sitio web",
+        "after": "."
+      },
+      "paragraph2": "El acceso al sitio web implica la aceptación plena y sin reservas de estas condiciones por parte del usuario."
+    },
+    "section2": {
+      "title": "2. Uso del sitio web",
+      "paragraph1": "El usuario se compromete a utilizar el sitio web de forma responsable, respetando la legislación vigente y los derechos de terceros.",
+      "prohibitedTitle": "Queda prohibido:",
+      "prohibited1": "Publicar contenidos ofensivos, ilegales o que vulneren derechos de terceros.",
+      "prohibited2": "Utilizar el sitio web con fines fraudulentos o engañosos.",
+      "prohibited3": "Introducir virus o elementos que puedan afectar al funcionamiento del sitio."
+    },
+    "section3": {
+      "title": "3. Contenidos del sitio web",
+      "paragraph1": "ofrece información sobre pueblos, cultura, tradiciones y eventos con carácter divulgativo.",
+      "paragraph2": "Aunque se procura mantener la información actualizada y precisa, no se garantiza la ausencia de errores o cambios en los eventos o actividades descritas."
+    },
+    "section4": {
+      "title": "4. Enlaces externos",
+      "paragraph1": {
+        "before": "El sitio web puede incluir enlaces a páginas de terceros para facilitar información adicional.",
+        "after": "no se responsabiliza del contenido o funcionamiento de dichos sitios externos."
+      }
+    },
+    "section5": {
+      "title": "5. Modificaciones",
+      "paragraph1": "se reserva el derecho de modificar estas condiciones en cualquier momento para adaptarlas a cambios legales o al funcionamiento del sitio web."
+    },
+    "section6": {
+      "title": "6. Legislación aplicable",
+      "paragraph1": "Estas condiciones se regirán por la legislación española vigente."
+    }
+    },
+  "header": {
+    "nav": {
+      "home": "Inicio",
+      "about": "Sobre nosotros",
+      "contact": "Contacto",
+      "calendar": "Calendario"
+    },
+    "language": {
+      "spanish": "Español",
+      "english": "Inglés"
+    },
+    "user": {
+      "avatarAlt": "Avatar de usuario",
+      "viewProfile": "Ver perfil",
+      "favorites": "Favoritos",
+      "logout": "Cerrar sesión",
+      "login": "Iniciar sesión"
+    },
+    "search": {
+      "openSearch": "Abrir buscador",
+      "title": "Buscar eventos",
+      "allCategories": "Todas las categorías",
+      "allTypes": "Todos los tipos",
+      "onlyUpcoming": "Solo futuros",
+      "clear": "Limpiar",
+      "placeholder": "Escribe un evento, municipio o dirección...",
+      "loading": "Buscando eventos...",
+      "noResults": "No se encontraron eventos.",
+      "initialMessage": "Empieza a escribir o elige filtros para ver resultados.",
+      "noDate": "Sin fecha",
+      "backToResults": "← Volver a resultados"
+    },
+    "errors": {
+      "loadFilters": "No se pudieron cargar los filtros",
+      "search": "Error al buscar"
+    }
+  },
+  "legalNotice": {
+    "title": "Aviso Legal",
+    "section1": {
+      "title": "1. Datos identificativos",
+      "paragraph1": "En cumplimiento del deber de información establecido en la Ley 34/2002 de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSI-CE), se informa a los usuarios de este sitio web de los siguientes datos:",
+      "websiteOwnerLabel": "Titular del sitio web:",
+      "activityLabel": "Actividad:",
+      "activityValue": "Plataforma digital de información cultural, turística y de eventos.",
+      "emailLabel": "Correo electrónico de contacto:",
+      "websiteLabel": "Sitio web:",
+      "paragraph2": "El acceso y uso del sitio web atribuye la condición de usuario e implica la aceptación plena de las condiciones establecidas en el presente Aviso Legal."
+    },
+    "section2": {
+      "title": "2. Objeto del sitio web",
+      "paragraph1": {
+        "before": "El sitio web",
+        "after": "tiene como finalidad ofrecer información sobre pueblos, tradiciones, fiestas, cultura y eventos, principalmente en la Comunidad de Madrid, con el objetivo de promover el conocimiento cultural y el turismo local."
+      },
+      "paragraph2": "Los contenidos publicados tienen carácter informativo y pueden ser actualizados, modificados o eliminados sin previo aviso."
+    },
+    "section3": {
+      "title": "3. Condiciones de uso",
+      "paragraph1": "El usuario se compromete a hacer un uso adecuado del sitio web y de sus contenidos, respetando la legislación vigente, la buena fe y el orden público.",
+      "prohibitedTitle": "Queda prohibido:",
+      "prohibited1": "Utilizar el sitio web con fines ilícitos o contrarios a la normativa vigente.",
+      "prohibited2": "Provocar daños en los sistemas informáticos del sitio web o de terceros.",
+      "prohibited3": "Intentar acceder a áreas restringidas sin autorización.",
+      "prohibited4": "Utilizar los contenidos del sitio para fines comerciales sin autorización expresa."
+    },
+    "section4": {
+      "title": "4. Propiedad intelectual e industrial",
+      "paragraph1": "Todos los contenidos del sitio web, incluyendo textos, imágenes, logotipos, diseño, estructura, código fuente y demás elementos, están protegidos por los derechos de propiedad intelectual e industrial.",
+      "paragraph2": "Queda prohibida la reproducción, distribución o comunicación pública de los contenidos sin la autorización expresa del titular del sitio web."
+    },
+    "section5": {
+      "title": "5. Responsabilidad",
+      "paragraph1": "El titular del sitio web no se hace responsable de:",
+      "item1": "Posibles errores u omisiones en los contenidos.",
+      "item2": "La falta de disponibilidad temporal del sitio web.",
+      "item3": "Los daños derivados del uso de la información publicada.",
+      "paragraph2": "Asimismo, el sitio web puede incluir enlaces a páginas externas sobre las que no tiene control ni responsabilidad."
+    },
+    "section6": {
+      "title": "6. Legislación aplicable",
+      "paragraph1": "La relación entre el usuario y el titular del sitio web se regirá por la legislación española vigente, siendo competentes los juzgados y tribunales que correspondan conforme a la normativa aplicable."
+    }
+  },
+  
+  "help": {
+    "title": "Centro de Ayuda",
+    "sections": [
+      {
+        "category": "Eventos",
+        "questions": [
+          {
+            "question": "¿Cómo puedo añadir un nuevo evento?",
+            "answer": "Haz clic en \"Añadir evento\" en la página principal del calendario. Completa el formulario con los datos del evento y envíalo para su revisión."
+          },
+          {
+            "question": "¿Por qué mi evento no aparece de inmediato?",
+            "answer": "Todos los eventos enviados deben ser aprobados por un moderador. Una vez aprobado, se mostrará en el calendario."
+          },
+          {
+            "question": "¿Cómo puedo ver los detalles de un evento?",
+            "answer": "Haz clic en un día del calendario. Aparecerán los eventos programados para ese día y podrás ver sus detalles."
+          },
+          {
+            "question": "¿Puedo editar o eliminar un evento que creé?",
+            "answer": "Por el momento, no es posible editar o eliminar eventos desde la interfaz. Contacta con el soporte si necesitas hacer cambios."
+          }
+        ]
+      },
+      {
+        "category": "Cuenta de Usuario",
+        "questions": [
+          {
+            "question": "¿Necesito estar registrado para ver los eventos?",
+            "answer": "No, puedes ver los eventos sin registrarte. Sin embargo, necesitas una cuenta para añadir eventos o comentar."
+          },
+          {
+            "question": "¿Cómo me registro?",
+            "answer": "Haz clic en \"Crear cuenta\" en la parte superior del sitio y completa el formulario de registro."
+          },
+          {
+            "question": "¿Qué pasa si olvido mi contraseña?",
+            "answer": "En la página de inicio de sesión, haz clic en “¿Olvidaste tu contraseña?” y sigue las instrucciones para restablecerla."
+          }
+        ]
+      },
+      {
+        "category": "Comentarios",
+        "questions": [
+          {
+            "question": "¿Cómo puedo dejar un comentario en un evento?",
+            "answer": "Haz clic en el evento y luego en \"Comentar este evento\". Selecciona una puntuación y escribe tu opinión."
+          },
+          {
+            "question": "¿Puedo editar o borrar mi comentario?",
+            "answer": "Actualmente no es posible editar ni eliminar comentarios una vez enviados."
+          },
+          {
+            "question": "¿Por qué no puedo comentar en algunos eventos?",
+            "answer": "Solo los usuarios registrados pueden comentar. Además, no puedes comentar en eventos que tú mismo creaste."
+          }
+        ]
+      },
+      {
+        "category": "Problemas Técnicos",
+        "questions": [
+          {
+            "question": "El calendario no carga, ¿qué hago?",
+            "answer": "Asegúrate de tener conexión a internet. Si el problema persiste, intenta recargar la página o borrar la caché del navegador."
+          },
+          {
+            "question": "No se envía el formulario del evento, ¿qué puede estar mal?",
+            "answer": "Verifica que todos los campos obligatorios estén completos y que tengas sesión iniciada. Si el error persiste, contacta con soporte."
+          }
+        ]
+      },
+      {
+        "category": "Privacidad y Seguridad",
+        "questions": [
+          {
+            "question": "¿Qué datos míos son públicos al crear un evento?",
+            "answer": "Solo se muestra tu nombre y foto de perfil. Tu dirección de correo y otros datos personales no son visibles públicamente."
+          },
+          {
+            "question": "¿Cómo puedo eliminar mi cuenta?",
+            "answer": "Para eliminar tu cuenta, contacta con nuestro equipo de soporte indicando tu nombre de usuario y correo registrado."
+          },
+          {
+            "question": "¿Mis comentarios pueden ser vistos por otros usuarios?",
+            "answer": "Sí, los comentarios son públicos y visibles para cualquier persona que acceda al evento."
+          }
+        ]
+      }
+    ]
+  },
+
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "¿Tienes un evento, una experiencia o una idea que merece ser descubierta?",
+    "text1": {
+      "before": "¿Quieres colaborar con",
+      "after": "o simplemente tienes una duda rápida? Este es el lugar correcto. Escríbenos y te respondemos rápido, claro y sin rodeos."
+    },
+    "text2": "Prometido: leemos todos los mensajes (y contestan personas, no bots). Completa el formulario y cuéntanos en qué podemos ayudarte. Cuanto más contexto nos des, mejor podremos orientarte.",
+    "topics": [
+      "Eventos culturales",
+      "Colaboraciones con ayuntamientos o creadores",
+      "Dudas sobre experiencias, cursos o agenda",
+      "Sugerencias para mejorar PLANZO"
+    ],
+    "cta": "Nos gusta la gente con iniciativa.",
+    "requiredFields": "Nombre, email y mensaje son obligatorios.",
+    "sendError": "Error al enviar el mensaje.",
+    "sendSuccess": "Mensaje enviado con éxito ✅",
+    "sendFail": "No se pudo enviar el mensaje.",
+    "form": {
+      "name": "NOMBRE",
+      "email": "E-MAIL",
+      "subject": "ASUNTO",
+      "message": "MENSAJE",
+      "send": "ENVIAR",
+      "sending": "ENVIANDO..."
+    }
+  },
+  "footer": {
+    "tagline": "Eventos culturales y sociales de tu comunidad",
+    "events": {
+      "title": "Eventos",
+      "agenda": "Agenda",
+      "featured": "Eventos destacados",
+      "submit": "Enviar tu evento"
+    },
+    "community": {
+      "title": "Comunidad",
+      "about": "Quiénes somos",
+      "townHalls": "Ayuntamientos"
+    },
+    "information": {
+      "title": "Información",
+      "support": "Soporte",
+      "faq": "Preguntas frecuentes",
+      "contact": "Contacto"
+    },
+    "contact": {
+      "title": "Contacto",
+      "phone": "Tel. 91 000 00 00",
+      "region": "Región Metropolitana"
+    },
+    "follow": {
+      "title": "Síguenos",
+      "instagram": "Instagram"
+    },
+    "legal": {
+      "title": "Legal",
+      "legalNotice": "Aviso legal",
+      "privacyPolicy": "Política de privacidad",
+      "cookies": "Cookies",
+      "accessibility": "Accesibilidad"
+    },
+    "cta": {
+      "title": "¿Tienes un evento?",
+      "publish": "Publícalo aquí",
+      "subscribe": "Suscríbete a la Agenda Semanal"
+    },
+    "copyright": "2026 Planzo, tu viaje en tu comunidad. Todos los derechos reservados"
+  },
+  "cookiesPolicy": {
+    "title": "Política de Cookies",
+    "section1": {
+      "title": "1. Qué son las cookies",
+      "paragraph1": "Las cookies son pequeños archivos de texto que se almacenan en el dispositivo del usuario cuando visita un sitio web. Su finalidad es mejorar la experiencia de navegación, analizar el uso del sitio y ofrecer contenidos adaptados a los intereses del usuario."
+    },
+    "section2": {
+      "title": "2. Tipos de cookies utilizadas",
+      "paragraph1": "Este sitio web puede utilizar los siguientes tipos de cookies:",
+      "technical": {
+        "title": "Cookies técnicas",
+        "text": "Permiten el funcionamiento básico del sitio web y el acceso a determinadas funciones."
+      },
+      "analytics": {
+        "title": "Cookies de análisis",
+        "text": "Permiten analizar el comportamiento de los usuarios en el sitio web para mejorar la experiencia de navegación y optimizar los contenidos."
+      },
+      "customization": {
+        "title": "Cookies de personalización",
+        "text": "Permiten recordar preferencias del usuario, como idioma o configuración de navegación."
+      },
+      "thirdParty": {
+        "title": "Cookies de terceros",
+        "text": "En algunos casos pueden utilizarse servicios de terceros para analizar el uso del sitio web o mejorar determinados servicios."
+      }
+    },
+    "section3": {
+      "title": "3. Gestión de cookies",
+      "paragraph1": "El usuario puede permitir, bloquear o eliminar las cookies instaladas en su dispositivo mediante la configuración del navegador que utilice.",
+      "paragraph2": "Cada navegador dispone de opciones específicas para gestionar las cookies."
+    },
+    "section4": {
+      "title": "4. Aceptación de la política de cookies",
+      "paragraph1": "Al acceder al sitio web, el usuario verá un aviso informativo sobre el uso de cookies. Al continuar navegando, se considera que acepta su uso en las condiciones descritas en esta política."
+    },
+    "section5": {
+      "title": "5. Actualización de la política de cookies",
+      "paragraph1": "El responsable del sitio web puede modificar esta política de cookies en función de cambios legislativos o técnicos. Se recomienda revisar esta sección periódicamente."
+    }
+  },
+  "privacyPolicy": {
+    "title": "Política de Privacidad",
+    "section1": {
+      "title": "1. Información al usuario",
+      "paragraph1": "En cumplimiento del Reglamento (UE) 2016/679 (RGPD) y de la Ley Orgánica 3/2018 de Protección de Datos Personales, informamos a los usuarios sobre el tratamiento de sus datos personales.",
+      "paragraph2": {
+        "before": "El responsable del tratamiento de los datos recogidos a través de este sitio web es",
+        "after": "."
+      }
+    },
+    "section2": {
+      "title": "2. Datos personales que se recopilan",
+      "paragraph1": "A través de esta web pueden recopilarse datos mediante:",
+      "item1": "Formularios de contacto",
+      "item2": "Formularios de registro",
+      "item3": "Correos electrónicos",
+      "item4": "Navegación mediante cookies"
+    },
+    "section3": {
+      "title": "3. Finalidad del tratamiento",
+      "paragraph1": "Los datos personales se utilizan para:",
+      "item1": "Gestionar consultas",
+      "item2": "Responder solicitudes",
+      "item3": "Mejorar el funcionamiento del sitio web"
+    },
+    "section4": {
+      "title": "4. Conservación de los datos",
+      "paragraph1": "Los datos se conservarán únicamente durante el tiempo necesario para cumplir la finalidad para la que fueron recogidos."
+    },
+    "section5": {
+      "title": "5. Derechos de los usuarios",
+      "paragraph1": "El usuario puede ejercer los derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad de sus datos."
+    },
+    "section6": {
+      "title": "6. Seguridad de los datos",
+      "paragraph1": "El responsable adopta las medidas técnicas necesarias para proteger los datos personales de accesos no autorizados."
+    }
+  },
+  "section": {
+    "backgroundAlt": "Fondo principal",
+    "images": {
+      "exp1": "Experiencia 1",
+      "exp2": "Experiencia 2",
+      "exp3": "Experiencia 3",
+      "exp4": "Experiencia 4",
+      "plan1": "Plan 1",
+      "plan2": "Plan 2",
+      "plan3": "Plan 3"
+    },
+    "top": {
+      "titleLine1": "Descubre",
+      "titleHighlight": "tu comunidad",
+      "subtitle": "PLANES CON HISTORIA",
+      "description": "Experiencias culturales, gastronómicas y de naturaleza para vivir tu entorno como nunca. Reserva en minutos y guarda tus favoritos."
+    },
+    "bottom": {
+      "title": "EXPERIENCIAS DESTACADAS ESTE MES",
+      "text1": "Cada mes seleccionamos planes únicos para que descubras tu entorno desde una mirada diferente: historia, gastronomía, naturaleza y tradiciones que merecen ser contadas.",
+      "text2": "Consulta el calendario y reserva tu próxima experiencia",
+      "button": "VER DESTACADOS DEL MES"
+    }
+  },
+  "about": {
+    "title": "Quiénes Somos",
+    "paragraph1": {
+      "before": "En",
+      "after": "creemos que los mejores planes no siempre están en las guías, ni en las grandes ciudades, ni en los algoritmos que deciden por nosotros."
+    },
+    "paragraph2": "A menudo, están más cerca: en un pueblo, en un barrio, en una plaza donde alguien ha decidido mantener viva una tradición.",
+    "paragraph3": {
+      "before": "",
+      "after": "nace con una idea clara: dar visibilidad a esos eventos locales que forman parte de nuestra cultura, pero que muchas veces pasan desapercibidos. Fiestas populares, verbenas, ferias, romerías o celebraciones que, sin difusión, corren el riesgo de perderse con el tiempo."
+    },
+    "paragraph4": "Somos una plataforma colaborativa que conecta personas, lugares y tradiciones. Un espacio donde cualquier usuario puede descubrir planes auténticos o compartir aquellos que merece la pena vivir. Cada evento publicado pasa por un proceso de revisión, porque creemos que la calidad y el respeto por la cultura local son fundamentales.",
+    "paragraph5": "Nuestro objetivo va más allá de informar: buscamos impulsar un turismo más consciente, descentralizado y humano, que apoye a pequeños municipios y ayude a mantener vivas sus costumbres.",
+    "highlight": "no es solo una agenda de planes.",
+    "paragraph6": "Es una comunidad que cree en lo auténtico, en lo cercano y en el valor de lo que no siempre se ve.",
+    "cta": "Porque a veces, el mejor plan… todavía no lo conoces."
+  },
+  "eventsSearch": {
+    "placeholder": "Buscar por evento, municipio o dirección...",
+    "allCategories": "Todas las categorías",
+    "allTypes": "Todos los tipos",
+    "onlyUpcoming": "Solo futuros",
+    "clear": "Limpiar",
+    "loading": "Cargando fiestas...",
+    "noResults": "No se encontraron fiestas con esos filtros.",
+    "errors": {
+      "loadFilters": "No se pudieron cargar los filtros",
+      "search": "Error al buscar fiestas"
+    },
+    "sort": {
+      "upcomingFirst": "Próximos primero",
+      "farthestFirst": "Más lejanos primero",
+      "mostRecent": "Más recientes",
+      "titleAZ": "Título A-Z",
+      "titleZA": "Título Z-A"
+    }
+  },
+  "calendar": {
+    "title": "Planes",
+    "addEvent": "Añadir evento",
+    "loading": "Cargando eventos...",
+    "noEventsForDay": "No hay eventos para este día.",
+    "success": {
+      "eventSubmitted": "🎉 Evento enviado correctamente."
+    },
+    "errors": {
+      "loadEvents": "Error al cargar los eventos",
+      "submitEvent": "Error al enviar el evento"
+    }
+  },
+  "eventCard": {
+    "meta": {
+      "date": "Fecha",
+      "time": "Hora",
+      "category": "Categoría"
+    },
+    "sections": {
+      "description": "Descripción",
+      "location": "Ubicación",
+      "comments": "Comentarios",
+      "yourComment": "Tu comentario"
+    },
+    "buttons": {
+      "showLess": "Ver menos",
+      "readMore": "Leer más",
+      "removeFavorite": "Quitar de favoritos",
+      "saveFavorite": "Guardar en favoritos",
+      "viewDetails": "Ver detalles",
+      "favorite": "❤️ Favorito",
+      "save": "🤍 Guardar",
+      "viewOnMaps": "Ver en Google Maps",
+      "toggleMap": "Mostrar / Ocultar mapa",
+      "hide": "Ocultar",
+      "view": "Ver",
+      "comment": "Comentar",
+      "send": "Enviar",
+      "cancel": "Cancelar"
+    },
+    "placeholders": {
+      "comment": "Escribe tu comentario..."
+    },
+    "errors": {
+      "loginToSave": "Inicia sesión para guardar favoritos",
+      "updateFavorite": "No se pudo actualizar favorito",
+      "loginToComment": "Inicia sesión para comentar",
+      "selectStars": "Selecciona 1-5 estrellas",
+      "commentError": "Error al comentar"
+    },
+    "success": {
+      "commentSaved": "Comentario guardado"
+    },
+    "noLocation": "No hay ubicación disponible.",
+    "noComments": "No hay comentarios aún.",
+    "defaultUser": "Usuario",
+    "tip": "Consejo: usa “Guardar” para favoritos y “Ver en Google Maps” para llegar rápido.",
+    "alt": {
+      "avatar": "avatar"
+    }
+  },
+  "addEvent": {
+    "title": "Solicitar plan",
+    "submit": "Enviar solicitud",
+    "uploadButton": "Subir imagen (máx 2MB)",
+    "imageMax": "Máximo 2MB",
+    "hint": "* Hora de inicio obligatoria para que el calendario y recomendaciones funcionen bien.",
+    "labels": {
+      "category": "Categoría (temática)",
+      "detail": "Detalle (opcional)",
+      "startDate": "Fecha de inicio",
+      "startTime": "Hora de inicio *",
+      "endDate": "Fecha de fin",
+      "endTime": "Hora de fin (opcional)",
+      "province": "Provincia",
+      "city": "Ciudad / Municipio",
+      "address": "Dirección (opcional)",
+      "tags": "Tags (opcional)"
+    },
+    "placeholders": {
+      "title": "Título (ej: Concierto techno en Malasaña)",
+      "description": "Descripción (ambiente, precio, requisitos...)",
+      "detail": "Ej: \"techno\", \"flamenco\", \"ruta guiada\", \"museo\"...",
+      "city": "Ej: Madrid, Alcalá, Getafe...",
+      "address": "Calle, número, sala / punto de encuentro...",
+      "tags": "Ej: gratis, turistas, terraza, entrada libre (separa por comas)",
+      "imageUrl": "URL de imagen (opcional)"
+    },
+    "categories": {
+      "music": "Música",
+      "cultural": "Cultural",
+      "history": "Historia",
+      "gastronomy": "Gastronomía",
+      "sport": "Deporte",
+      "art": "Arte / Exposiciones",
+      "nightlife": "Noche / Fiesta",
+      "family": "Familia / Niños",
+      "nature": "Naturaleza",
+      "cinema": "Cine / Teatro",
+      "markets": "Mercados / Ferias",
+      "networking": "Networking / Social",
+      "other": "Otro"
+    },
+    "errors": {
+      "imageTooLarge": "La imagen es demasiado grande. Máximo 2MB.",
+      "titleRequired": "El título es obligatorio.",
+      "descriptionRequired": "La descripción es obligatoria.",
+      "startDateRequired": "La fecha de inicio es obligatoria.",
+      "endDateRequired": "La fecha de fin es obligatoria.",
+      "startTimeRequired": "La hora de inicio es obligatoria.",
+      "invalidDateTime": "Fecha/hora inválida.",
+      "endBeforeStart": "La fecha/hora de fin no puede ser anterior al inicio.",
+      "otherNeedsDetail": "Si eliges \"Otro\", escribe un detalle (ej: \"ruta guiada\", \"taller\", etc.)",
+      "checkForm": "Revisa los datos del formulario."
+    }
+  },
+  "requestPlan": {
+    "title": "Solicitar plan",
+    "subtitle": "Envíanos un evento y lo revisaremos para añadirlo.",
+    "hint": "* Hora de inicio obligatoria",
+    "labels": {
+      "category": "Categoría",
+      "detail": "Detalle (opcional)",
+      "startDate": "Fecha inicio",
+      "startTime": "Hora inicio *",
+      "endDate": "Fecha fin",
+      "endTime": "Hora fin (opcional)",
+      "municipality": "Municipio (opcional)",
+      "address": "Dirección (opcional)",
+      "tags": "Tags (opcional)",
+      "image": "Imagen (opcional)"
+    },
+    "placeholders": {
+      "title": "Título del evento",
+      "description": "Descripción",
+      "detail": "Ej: \"techno\", \"taller\", \"ruta guiada\"...",
+      "municipality": "Ej: Madrid, Getafe...",
+      "address": "Calle, número, sala...",
+      "tags": "Ej: gratis, terraza, entrada libre",
+      "imageUrl": "URL de imagen"
+    },
+    "buttons": {
+      "uploadImage": "Subir imagen",
+      "sending": "Enviando...",
+      "submit": "Enviar solicitud"
+    },
+    "categories": {
+      "music": "Música",
+      "cultural": "Cultural",
+      "history": "Historia",
+      "gastronomy": "Gastronomía",
+      "sport": "Deporte",
+      "art": "Arte / Exposiciones",
+      "nightlife": "Noche / Fiesta",
+      "family": "Familia / Niños",
+      "nature": "Naturaleza",
+      "cinema": "Cine / Teatro",
+      "markets": "Mercados / Ferias",
+      "networking": "Networking / Social",
+      "other": "Otro"
+    },
+    "success": {
+      "sent": "Solicitud enviada ✅"
+    },
+    "errors": {
+      "imageTooLarge": "La imagen es demasiado grande. Máximo 2MB.",
+      "titleRequired": "El título es obligatorio.",
+      "descriptionRequired": "La descripción es obligatoria.",
+      "startDateRequired": "La fecha de inicio es obligatoria.",
+      "startTimeRequired": "La hora de inicio es obligatoria.",
+      "invalidDateTime": "Fecha/hora inválida.",
+      "endBeforeStart": "La fecha/hora de fin no puede ser anterior al inicio.",
+      "otherNeedsDetail": "Si eliges \"Otro\", escribe un detalle.",
+      "submitFailed": "No se pudo enviar la solicitud.",
+      "sendError": "Error al enviar."
+    }
+  },
+  "chatbot": {
+    "initialMessage": "Hola, ¿necesitas ayuda para encontrar planes?",
+    "placeholder": "Escribe algo...",
+    "labels": {
+      "currentLocation": "Ubicación actual"
+    },
+    "buttons": {
+      "saveHome": "Guardar casa",
+      "saveCurrentLocation": "Guardar ubicación actual",
+      "send": "Enviar"
+    },
+    "quick": {
+      "thisWeekend": "¿Qué hay este finde?",
+      "plansInMadrid": "Recomiéndame planes en Madrid",
+      "technoThisMonth": "Planes de techno este mes",
+      "howToGet": "¿Cómo llego a este plan?"
+    },
+    "prompts": {
+      "homeAddress": "Escribe la dirección de tu casa:",
+      "saveHomePrefix": "Guardar mi casa",
+      "currentLocation": "¿Dónde estás ahora? Puedes poner hotel, calle o dirección:",
+      "currentLocationPrefix": "Mi ubicación actual"
+    },
+    "responses": {
+      "homeSavedWithAddress": "Perfecto. He guardado tu casa en {{address}}.",
+      "homeSaved": "He guardado tu ubicación de casa.",
+      "currentLocationSavedWithAddress": "Perfecto. Tomaré {{address}} como tu ubicación actual para próximas consultas.",
+      "currentLocationSaved": "He guardado tu ubicación actual."
+    },
+    "suggestions": {
+      "location1": "Estoy en Calle Gran Vía 33, Madrid",
+      "location2": "Estoy en Hotel Meliá Madrid",
+      "location3": "Estoy en Plaza de España, Madrid",
+      "area1": "Quiero una ruta en Madrid este finde",
+      "area2": "Quiero una ruta en El Escorial este finde",
+      "area3": "Ruta en Alcalá de Henares esta tarde"
+    },
+    "fallback": {
+      "noResponse": "No he encontrado respuesta."
+    },
+    "errors": {
+      "connect": "Error al conectar con el chatbot.",
+      "saveHome": "No he podido guardar tu casa. Prueba con una dirección más concreta.",
+      "saveCurrentLocation": "No he podido guardar tu ubicación actual. Prueba con una dirección o nombre más concreto."
+    }
+  },
+  "chatbotWidget": {
+    "title": "Asistente de planes",
+    "subtitle": "Encuentra eventos, rutas y cómo llegar",
+    "needHelp": "¿Necesitas ayuda?",
+    "open": "Abrir chat",
+    "close": "Cerrar chat"
+  },
+  "chatEventItem": {
+    "dateUnavailable": "Fecha no disponible",
+    "noTitle": "Evento sin título",
+    "viewEvent": "Ver evento",
+    "howToGet": "¿Cómo llegar?"
+  },
+  "chatMessage": {
+    "helpers": {
+      "location": {
+        "title": "Puedes escribir, por ejemplo:",
+        "example1": "Calle Gran Vía 33, Madrid",
+        "example2": "Hotel Meliá Madrid",
+        "example3": "Plaza de España, Madrid"
+      },
+      "area": {
+        "title": "Prueba con algo como:",
+        "example1": "Ruta en El Escorial este finde",
+        "example2": "Ruta en Madrid para esta tarde",
+        "example3": "Ruta cultural en Alcalá esta semana"
+      }
+    },
+    "route": {
+      "stop": "Parada",
+      "distanceFromPrevious": "Distancia desde el anterior:"
+    },
+    "routeInfo": {
+      "distance": "Distancia:",
+      "walking": "Andando:",
+      "byCar": "En coche:",
+      "publicTransport": "Transporte público:",
+      "recommended": "Recomendado:"
+    },
+    "links": {
+      "walking": "Ver andando",
+      "driving": "Ver en coche",
+      "transit": "Ver transporte público"
+    },
+    "location": {
+      "defaultLabel": "Ubicación"
+    }
+  },
+  "commentsPanel": {
+    "title": "📝 Comentarios",
+    "alt": {
+      "avatar": "avatar"
+    },
+    "labels": {
+      "from": "De:"
+    },
+    "tabs": {
+      "received": "Recibidos",
+      "sent": "Enviados"
+    },
+    "summary": {
+      "average": "⭐ Valoración promedio:",
+      "total": "Total de comentarios:",
+      "noRatings": "Aún no hay valoraciones."
+    },
+    "empty": {
+      "received": "No hay comentarios recibidos.",
+      "sent": "No hay comentarios enviados."
+    },
+    "chart": {
+      "starsLabel": "{{count}} ⭐"
+    }
+  },
+    "favorites": {
+    "title": "Mis favoritos",
+    "refresh": "Refrescar",
+    "loadingShort": "Cargando...",
+    "loading": "Cargando favoritos...",
+    "empty": "No tienes favoritos guardados todavía.",
+    "errors": {
+      "load": "Error cargando favoritos"
+    }
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "adminRedirecting": "Cargando panel de administración...",
+    "labels": {
+      "email": "Email",
+      "password": "Contraseña"
+    },
+    "placeholders": {
+      "email": "Ingresa tu correo",
+      "password": "Ingresa tu contraseña"
+    },
+    "rememberMe": "Recordarme",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "submit": "Ingresar",
+    "noAccount": "¿No tienes cuenta?",
+    "register": "Regístrate",
+    "orContinueWith": "O ingresa con",
+    "errors": {
+      "invalidCredentials": "Correo o contraseña incorrectos",
+      "tooManyRequests": "Demasiados intentos. Espera un momento y prueba otra vez.",
+      "generic": "Error al intentar iniciar sesión",
+      "google": "Error al iniciar sesión con Google"
+    }
+  },
+  "forgotPassword": {
+    "title": "Recuperar contraseña",
+    "subtitle": "Escribe tu correo y te enviaremos un enlace para cambiar la contraseña.",
+    "placeholder": "Correo electrónico",
+    "success": "Si el correo existe, te hemos enviado un enlace. Revisa tu email (y spam).",
+    "loginInfo": "Si el correo existe, se ha enviado un enlace para restablecer la contraseña. Revisa tu email (y spam).",
+    "buttons": {
+      "sending": "Enviando...",
+      "sendLink": "Enviar enlace"
+    },
+    "errors": {
+      "invalidEmail": "Introduce un correo válido."
+    }
+  },
+  "register": {
+    "title": "Crear cuenta",
+    "submit": "Registrarse",
+    "alreadyHaveAccount": "¿Ya tienes cuenta?",
+    "login": "Inicia sesión",
+    "labels": {
+      "name": "Nombre",
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña"
+    },
+    "placeholders": {
+      "name": "Ingresa tu nombre",
+      "username": "Ingresa un nombre de usuario",
+      "email": "Ingresa tu correo",
+      "password": "Ingresa tu contraseña",
+      "confirmPassword": "Repite tu contraseña"
+    },
+    "emailStatus": {
+      "valid": "✔ Formato de correo válido",
+      "invalid": "✘ Correo inválido"
+    },
+    "passwordRules": {
+      "title": "La contraseña debe cumplir con:",
+      "length": "Al menos 8 caracteres",
+      "uppercase": "Al menos una letra mayúscula",
+      "number": "Al menos un número",
+      "special": "Al menos un carácter especial"
+    },
+    "success": {
+      "verificationSent": "Registro completado ✅. Te hemos enviado un correo de verificación. Revisa tu email (y spam)."
+    },
+    "errors": {
+      "invalidEmailFormat": "El formato del correo es inválido",
+      "passwordsDoNotMatch": "Las contraseñas no coinciden",
+      "passwordRequirements": "La contraseña no cumple con todos los requisitos",
+      "emailInUse": "El correo ya está registrado",
+      "invalidEmail": "Correo inválido",
+      "weakPassword": "Contraseña débil (mínimo 6). Mantén tus requisitos de 8+.",
+      "generic": "Error al registrar la cuenta"
+    }
+  },
+  "support": {
+    "title": "Soporte técnico",
+    "subtitle": "Si algo no funciona como debería, estamos aquí para ayudarte.",
+    "text1": {
+      "before": "En",
+      "after": "trabajamos para que la tecnología sea un medio, no un problema. Este espacio está pensado para resolver incidencias técnicas de forma rápida, sencilla y eficaz, para que puedas seguir disfrutando de la plataforma sin interrupciones."
+    },
+    "text2": "⚙️ ¿Qué tipo de incidencias resolvemos? Problemas de acceso a tu cuenta, errores en reservas o pagos, dificultades para acceder a cursos o contenidos, fallos de carga o visualización e incidencias al publicar o gestionar eventos.",
+    "successMessage": "Tu mensaje ha sido enviado correctamente.",
+    "loadingSession": "Cargando sesión...",
+    "form": {
+      "subject": "ASUNTO",
+      "message": "MENSAJE",
+      "send": "ENVIAR"
+    },
+    "history": {
+      "title": "Mensajes anteriores",
+      "subjectLabel": "Asunto:",
+      "messageLabel": "Mensaje:"
+    },
+    "toasts": {
+      "loginRequiredAccess": "Es necesario iniciar sesión para acceder al soporte.",
+      "loginRequiredSend": "Debes iniciar sesión para enviar un mensaje.",
+      "sentOk": "Mensaje enviado correctamente ✅",
+      "sendError": "Error al enviar el mensaje.",
+      "serverError": "No se pudo conectar con el servidor."
+    }
+  },
+  "profile": {
+    "title": "Perfil de usuario",
+    "avatarAlt": "Avatar",
+    "chooseAvatar": "Elegir avatar",
+    "unsavedChanges": "Tienes cambios sin guardar",
+    "labels": {
+      "name": "Nombre",
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico"
+    },
+    "buttons": {
+      "saving": "Guardando...",
+      "save": "Guardar cambios",
+      "cancel": "Cancelar",
+      "backHome": "← Volver al Home"
+    },
+    "toasts": {
+      "loginRequired": "Es necesario iniciar sesión para acceder al perfil.",
+      "noChanges": "No hay cambios para guardar",
+      "updated": "Perfil actualizado",
+      "updateError": "Error al actualizar el perfil",
+      "discarded": "Cambios descartados"
+    }
+  },
+  "ayuntamientos": {
+  "titulo": "Ayuntamientos",
+  "descripcion": "Descubre los municipios de la Comunidad de Madrid, su historia, patrimonio, naturaleza y planes destacados.",
+  "cargando": "Cargando ayuntamientos...",
+  "sinAyuntamientos": "No hay ayuntamientos disponibles.",
+  "verInformacion": "Ver información",
+  "verPlanes": "Ver planes",
+  "ocultarPlanes": "Ocultar planes",
+  "cargandoPlanes": "Cargando planes...",
+  "sinPlanesMunicipio": "No hay planes disponibles para este municipio.",
+  "verEvento": "Ver evento",
+  "cerrar": "Cerrar",
+  "ubicacion": "Ubicación",
+  "mapaDe": "Mapa de {{municipio}}",
+  "verGoogleMaps": "Ver en Google Maps",
+  "campos": {
+    "datosClave": "Datos clave",
+    "entornoNatural": "Entorno natural",
+    "patrimonioArquitectura": "Patrimonio y arquitectura",
+    "turismoHistoriaActividades": "Turismo, historia y actividades",
+    "vidaLocal": "Vida local",
+    "vidaLocalTradiciones": "Vida local y tradiciones",
+    "economiaTurismo": "Economía y turismo"
+  }
+}
+
+
+}

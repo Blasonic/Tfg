@@ -29,16 +29,18 @@
 }
 
 /* ===========================================
-   DERECHA (ENLACES + LUPA + AVATAR)
+   DERECHA (ENLACES + LUPA + BANDERA + AVATAR)
 =========================================== */
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 22px; /* distancia uniforme entre todos */
 }
 
-/* ===== Enlaces ===== */
+/* ===========================================
+   ENLACES
+=========================================== */
 
 .nav-links {
   display: flex;
@@ -68,7 +70,9 @@
   color: #FF751F;
 }
 
-/* ===== LUPA ===== */
+/* ===========================================
+   LUPA
+=========================================== */
 
 .icono-buscar {
   font-size: 28px;
@@ -81,7 +85,82 @@
   transform: scale(1.15);
 }
 
-/* ===== AVATAR ===== */
+/* ===========================================
+   BANDERA IDIOMA
+=========================================== */
+
+.language-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 0; /* quitamos separación extra */
+}
+
+.language-current {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flag-icon-large {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.flag-icon-large:hover {
+  transform: scale(1.06);
+}
+
+.language-menu {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  min-width: 160px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  padding: 8px;
+  z-index: 1200;
+}
+
+.language-option {
+  width: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.language-option:hover {
+  background: #f3f3f3;
+}
+
+.language-option span {
+  font-size: 14px;
+  color: #222;
+  font-weight: 500;
+}
+
+/* ===========================================
+   AVATAR
+=========================================== */
+
+.avatar-wrapper {
+  position: relative;
+}
 
 .avatar-img {
   width: 45px;
@@ -89,10 +168,13 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #FF751F;
-  margin-right: 120px;
+  margin-right: 0; /* quitamos el espacio gigante */
+  cursor: pointer;
 }
 
-/* ===== Login ===== */
+/* ===========================================
+   LOGIN
+=========================================== */
 
 .login-btn {
   padding: 8px 16px;
@@ -101,262 +183,16 @@
   border-radius: 6px;
   text-decoration: none;
   font-weight: bold;
-  margin-right: 120px;
+  margin-right: 0; /* quitamos el espacio gigante */
 }
 
-/* ===================================== */
-/*          POPUP OVERLAY OSCURO         */
-/* ===================================== */
-
-.popup-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.25s ease forwards;
-  z-index: 4000;
-  padding: 20px;
-}
-
-/* ===================================== */
-/*          CONTENEDOR DEL POPUP         */
-/* ===================================== */
-
-.popup-busqueda {
-  background: #fff;
-  width: 90%;
-  max-width: 600px;
-  padding: 40px 50px;
-  border-radius: 18px;
-  position: relative;
-  animation: scaleIn 0.25s ease forwards;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.20);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.popup-busqueda-grande {
-  width: min(920px, 96%);
-  max-width: 920px;
-  max-height: 88vh;
-  overflow-y: auto;
-  padding: 34px 36px;
-}
-
-/* Título */
-.popup-titulo {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #333;
-  margin: 0;
-}
-
-/* Caja input */
-.popup-busqueda-box {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-}
-
-/* Input */
-.popup-input {
-  width: 100%;
-  padding: 15px 20px;
-  font-size: 1.1rem;
-  border-radius: 12px;
-  border: 2px solid #FF751F;
-  outline: none;
-  transition: 0.25s ease;
-  box-sizing: border-box;
-}
-
-.popup-input:focus {
-  border-color: #FF751F;
-}
-
-/* Botones popup */
-.popup-boton-buscar,
-.popup-boton-secundario {
-  min-height: 44px;
-  padding: 0 16px;
-  border-radius: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.popup-boton-buscar {
-  border: none;
-  background: #FF751F;
-  color: #fff;
-}
-
-.popup-boton-buscar:hover {
+.login-btn:hover {
   opacity: 0.92;
 }
 
-.popup-boton-secundario {
-  border: 1px solid #d9d9d9;
-  background: #fff;
-  color: #333;
-}
-
-.popup-boton-secundario:hover {
-  background: #f8f8f8;
-}
-
-/* Filtros */
-.popup-filtros {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-}
-
-.popup-select {
-  min-height: 44px;
-  padding: 0 14px;
-  border-radius: 12px;
-  border: 1.5px solid #ddd;
-  background: #fff;
-  color: #333;
-  font-size: 0.98rem;
-  outline: none;
-}
-
-.popup-select:focus {
-  border-color: #FF751F;
-}
-
-.popup-check {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  font-weight: 600;
-  color: #333;
-}
-
-/* Resultados */
-.popup-resultados {
-  display: grid;
-  gap: 12px;
-  margin-top: 6px;
-}
-
-.popup-info {
-  color: #666;
-  margin: 0;
-  font-size: 0.98rem;
-}
-
-.resultado-item {
-  display: grid;
-  grid-template-columns: 80px 1fr;
-  gap: 14px;
-  width: 100%;
-  border: 1px solid #eee;
-  border-radius: 14px;
-  background: #fff;
-  padding: 10px;
-  cursor: pointer;
-  text-align: left;
-  transition: 0.22s ease;
-}
-
-.resultado-item:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  border-color: #ffd7bd;
-}
-
-.resultado-item-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #f3f3f3;
-  flex-shrink: 0;
-}
-
-.resultado-item-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.resultado-item-body {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-
-.resultado-item-body strong {
-  font-size: 1rem;
-  color: #222;
-  line-height: 1.2;
-}
-
-.resultado-item-body span {
-  font-size: 0.92rem;
-  color: #666;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Detalle del evento dentro del popup */
-.popup-detalle-evento {
-  margin-top: 6px;
-}
-
-.popup-detalle-top {
-  margin-bottom: 14px;
-}
-
-/* Botón cerrar */
-.popup-cerrar {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: none;
-  border: none;
-  font-size: 28px;
-  cursor: pointer;
-  color: #444;
-  transition: 0.2s ease;
-}
-
-.popup-cerrar:hover {
-  color: #FF751F;
-}
-
-/* ===================================== */
-/*              ANIMACIONES              */
-/* ===================================== */
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes scaleIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* ====================================== */
-/*        MENÚ DESPLEGABLE USUARIO        */
-/* ====================================== */
-
-.avatar-wrapper {
-  position: relative;
-}
+/* ===========================================
+   MENÚ USUARIO
+=========================================== */
 
 .menu-usuario {
   position: absolute;
@@ -407,9 +243,78 @@
   }
 }
 
-/* ====================================== */
-/*              RESPONSIVE                */
-/* ====================================== */
+/* ===========================================
+   POPUP OVERLAY
+=========================================== */
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease forwards;
+  z-index: 4000;
+  padding: 20px;
+}
+
+.popup-busqueda {
+  background: #fff;
+  width: 90%;
+  max-width: 600px;
+  padding: 40px 50px;
+  border-radius: 18px;
+  position: relative;
+  animation: scaleIn 0.25s ease forwards;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.20);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.popup-cerrar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #444;
+}
+
+.popup-cerrar:hover {
+  color: #FF751F;
+}
+
+/* ===========================================
+   ANIMACIONES
+=========================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===========================================
+   RESPONSIVE
+=========================================== */
 
 @media (max-width: 1024px) {
   .header-container {
@@ -418,21 +323,11 @@
   }
 
   .header-right {
-    gap: 18px;
+    gap: 16px;
   }
 
   .nav-links {
     gap: 18px;
-  }
-
-  .avatar-img,
-  .login-btn {
-    margin-right: 0;
-  }
-
-  .popup-busqueda-grande {
-    width: min(96%, 96%);
-    padding: 28px 22px;
   }
 }
 
@@ -462,30 +357,5 @@
   .popup-busqueda {
     width: 100%;
     padding: 24px 18px;
-  }
-
-  .popup-filtros {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .popup-select,
-  .popup-boton-secundario,
-  .popup-boton-buscar {
-    width: 100%;
-  }
-
-  .popup-busqueda-box {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .resultado-item {
-    grid-template-columns: 64px 1fr;
-  }
-
-  .resultado-item-img {
-    width: 64px;
-    height: 64px;
   }
 }

@@ -1,0 +1,427 @@
+/* ===========================
+   AYUNTAMIENTOS - ESTILO EVENT CARD
+=========================== */
+
+.ayuntamientos-page {
+  width: 100%;
+  min-height: calc(100vh - 84px);
+  background: var(--bg);
+  padding: 24px 24px 40px;
+}
+
+/* ===========================
+   HERO
+=========================== */
+
+.ayuntamientos-hero {
+  background: var(--panel);
+  border-radius: 0;
+  padding: 28px 24px 32px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.ayuntamientos-hero h1 {
+  font-family: 'Playfair Display', serif;
+  color: var(--accent);
+  font-size: 2.6rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.ayuntamientos-hero h1::after {
+  content: '';
+  display: block;
+  margin: 12px auto 0;
+  width: 72px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+.ayuntamientos-hero p {
+  max-width: 850px;
+  margin: 18px auto 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* ===========================
+   GRID
+=========================== */
+
+.ayuntamientos-grid {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+}
+
+.ayuntamientos-info {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* ===========================
+   CARD
+=========================== */
+
+.ayuntamiento-card {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  background: var(--cream);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  position: relative;
+  min-height: 210px;
+}
+
+.ayuntamiento-info {
+  grid-column: 1 / 2;
+  padding: 18px 18px 16px;
+}
+
+.ayuntamiento-info h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.ayuntamiento-zona {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(224, 123, 57, 0.13);
+  border: 1px solid rgba(224, 123, 57, 0.25);
+  color: #9b4a12;
+  border-radius: 999px;
+  padding: 6px 11px;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.ayuntamiento-desc {
+  color: #333;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  margin: 0;
+  max-width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ayuntamiento-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.ayuntamiento-actions button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(224, 123, 57, .28);
+}
+
+.ayuntamiento-actions button:hover {
+  filter: brightness(.95);
+}
+
+.ayuntamiento-actions button:first-child {
+  background: #fff;
+  color: var(--accent);
+  border: 1px solid rgba(224, 123, 57, 0.35);
+  box-shadow: none;
+}
+
+.ayuntamiento-actions button:first-child:hover {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.ayuntamiento-img {
+  grid-column: 2 / 3;
+  grid-row: 1 / 4;
+  width: 100%;
+  height: 100%;
+  min-height: 210px;
+  background: #eee;
+}
+
+.ayuntamiento-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  border-top-left-radius: 70px;
+  border-bottom-left-radius: 22px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* ===========================
+   PLANES DESPLEGABLES
+=========================== */
+
+.ayuntamiento-planes {
+  grid-column: 1 / 2;
+  margin-top: 16px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: grid;
+  gap: 12px;
+}
+
+.ayuntamiento-plan-item {
+  background: #fff;
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+}
+
+.ayuntamiento-plan-item h4 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #222;
+}
+
+.ayuntamiento-plan-item p {
+  margin: 0 0 4px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.ayuntamiento-planes-info {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* ===========================
+   MODAL
+=========================== */
+
+.ayuntamiento-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(7px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+  padding: 16px;
+}
+
+.ayuntamiento-modal {
+  width: min(980px, 100%);
+  max-height: 86vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: var(--radius-xl);
+  padding: 18px;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+
+.ayuntamiento-modal-close {
+  position: absolute;
+  right: 14px;
+  top: 12px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.ayuntamiento-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 18px;
+}
+
+.ayuntamiento-modal-img {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #f5f5f5;
+  min-height: 430px;
+}
+
+.ayuntamiento-modal-img img {
+  width: 100%;
+  height: 100%;
+  max-height: 520px;
+  object-fit: cover;
+  display: block;
+}
+
+.ayuntamiento-modal-content {
+  padding: 6px;
+}
+
+.ayuntamiento-modal-content h2 {
+  font-family: 'Playfair Display', serif;
+  color: var(--accent);
+  font-size: 2.1rem;
+  font-weight: 800;
+  margin: 0 0 8px;
+}
+
+.ayuntamiento-pill {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eaf2ff;
+  border: 1px solid #d6e6ff;
+  font-size: 12px;
+  color: #2a3b5c;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.ayuntamiento-modal-desc {
+  margin: 12px 0 18px;
+  color: #333;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.ayuntamiento-section {
+  border-top: 1px solid #eee;
+  padding-top: 14px;
+  margin-top: 14px;
+}
+
+.ayuntamiento-section h4 {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.ayuntamiento-section p {
+  color: #444;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.ayuntamiento-map {
+  margin-top: 12px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #eee;
+}
+
+.ayuntamiento-map iframe {
+  display: block;
+}
+
+.ayuntamiento-maps-link {
+  margin-top: 12px;
+  text-decoration: none;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 1100px) {
+  .ayuntamientos-page {
+    padding: 20px 16px 32px;
+  }
+
+  .ayuntamiento-card {
+    grid-template-columns: 1fr;
+  }
+
+  .ayuntamiento-img {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    min-height: 230px;
+  }
+
+  .ayuntamiento-img img {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 22px;
+    border-bottom-left-radius: 22px;
+  }
+
+  .ayuntamiento-info {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+  }
+
+  .ayuntamiento-modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ayuntamiento-modal-img {
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 700px) {
+  .ayuntamiento-plan-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ayuntamiento-plan-item .btn-nuevo-evento {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .ayuntamientos-page {
+    padding: 14px 10px 28px;
+  }
+
+  .ayuntamientos-hero {
+    padding: 24px 14px 26px;
+  }
+
+  .ayuntamientos-hero h1 {
+    font-size: 2rem;
+  }
+
+  .ayuntamientos-hero p {
+    font-size: 1rem;
+  }
+
+  .ayuntamiento-actions {
+    flex-direction: column;
+  }
+
+  .ayuntamiento-actions button {
+    width: 100%;
+  }
+}

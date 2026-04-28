@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Calendario.css";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 import {
   listarComentariosPorFiesta,
@@ -13,19 +14,22 @@ import {
 import { auth } from "../../firebase";
 
 // helpers
-function formatDateRange(start, end) {
+function formatDateRange(start, end, locale = "es-ES") {
   if (!start) return "";
-  const s = start.toLocaleDateString();
-  const e = end ? end.toLocaleDateString() : null;
+  const s = start.toLocaleDateString(locale);
+  const e = end ? end.toLocaleDateString(locale) : null;
   return e && e !== s ? `${s} - ${e}` : s;
 }
-function formatTimeRange(start, end) {
+
+function formatTimeRange(start, end, locale = "es-ES") {
   if (!start) return null;
-  const hhmm = (d) => d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const hhmm = (d) =>
+    d.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
   const s = hhmm(start);
   const e = end ? hhmm(end) : null;
   return e && e !== s ? `${s} - ${e}` : s;
 }
+
 function buildMapsUrl(evento) {
   const parts = [];
   if (evento.direccion) parts.push(evento.direccion);
@@ -35,12 +39,15 @@ function buildMapsUrl(evento) {
   const q = encodeURIComponent(parts.join(", "));
   return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
+
 function safeArray(x) {
   return Array.isArray(x) ? x : [];
 }
 
-// ✅ onFavoriteChange(opcional): (isFavorite:boolean) => void
+// onFavoriteChange(opcional): (isFavorite:boolean) => void
 const EventoCard = ({ evento, onFavoriteChange }) => {
+  const { t, i18n } = useTranslation();
+
   const [comentarios, setComentarios] = useState([]);
   const [mostrarComentarios, setMostrarComentarios] = useState(false);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -53,7 +60,6 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
   const [expandedDesc, setExpandedDesc] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // ✅ NO useMemo([]): si no, se queda congelado tras login
   const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
@@ -78,15 +84,21 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
 
   const esCreador =
     Boolean(evento.creado_por_uid) &&
-    (usuario?.uid === evento.creado_por_uid || auth.currentUser?.uid === evento.creado_por_uid);
+    (usuario?.uid === evento.creado_por_uid ||
+      auth.currentUser?.uid === evento.creado_por_uid);
 
-  const fechaTxt = evento.start ? formatDateRange(evento.start, evento.end) : "";
-  const horaTxt = evento.start ? formatTimeRange(evento.start, evento.end) : null;
+  const locale = i18n.language?.startsWith("en") ? "en-GB" : "es-ES";
+
+  const fechaTxt = evento.start
+    ? formatDateRange(evento.start, evento.end, locale)
+    : "";
+  const horaTxt = evento.start
+    ? formatTimeRange(evento.start, evento.end, locale)
+    : null;
 
   const tags = safeArray(evento.tags);
   const mapsUrl = buildMapsUrl(evento);
 
-  // comentarios
   useEffect(() => {
     const run = async () => {
       try {
@@ -99,15 +111,14 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
     run();
   }, [evento.id]);
 
-  // favorito inicial
   useEffect(() => {
     const run = async () => {
       try {
         if (!auth.currentUser) return;
-        const data = await getFavorito(evento.id); // { isFavorite }
+        const data = await getFavorito(evento.id);
         setFav(Boolean(data?.isFavorite));
       } catch {
-        // no rompas UI
+        // no romper UI
       }
     };
     run();
@@ -115,25 +126,25 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
 
   const toggleFav = async () => {
     if (!auth.currentUser) {
-      toast.error("Inicia sesión para guardar favoritos");
+      toast.error(t("eventCard.errors.loginToSave"));
       return;
     }
 
     setLoadingFav(true);
     try {
       if (fav) {
-        const r = await removeFavorito(evento.id); // { isFavorite:false }
+        const r = await removeFavorito(evento.id);
         const next = Boolean(r?.isFavorite);
         setFav(next);
         onFavoriteChange?.(next);
       } else {
-        const r = await addFavorito(evento.id); // { isFavorite:true }
+        const r = await addFavorito(evento.id);
         const next = Boolean(r?.isFavorite);
         setFav(next);
         onFavoriteChange?.(next);
       }
     } catch (e) {
-      toast.error(e.message || "No se pudo actualizar favorito");
+      toast.error(e.message || t("eventCard.errors.updateFavorite"));
     } finally {
       setLoadingFav(false);
     }
@@ -143,17 +154,18 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
     e.preventDefault();
 
     if (!auth.currentUser) {
-      toast.error("Inicia sesión para comentar");
+      toast.error(t("eventCard.errors.loginToComment"));
       return;
     }
+
     if (!estrellas || estrellas < 1 || estrellas > 5) {
-      toast.error("Selecciona 1-5 estrellas");
+      toast.error(t("eventCard.errors.selectStars"));
       return;
     }
 
     try {
       await upsertComentario({ fiestaId: evento.id, estrellas, texto });
-      toast.success("Comentario guardado");
+      toast.success(t("eventCard.success.commentSaved"));
 
       const data = await listarComentariosPorFiesta(evento.id);
       setComentarios(safeArray(data));
@@ -162,7 +174,7 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
       setMostrarFormulario(false);
       setMostrarComentarios(true);
     } catch (e2) {
-      toast.error(e2.message || "Error al comentar");
+      toast.error(e2.message || t("eventCard.errors.commentError"));
     }
   };
 
@@ -187,9 +199,16 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
           type="button"
           className="btn-link"
           onClick={() => setExpandedDesc((v) => !v)}
-          style={{ padding: 0, border: "none", background: "transparent", cursor: "pointer" }}
+          style={{
+            padding: 0,
+            border: "none",
+            background: "transparent",
+            cursor: "pointer",
+          }}
         >
-          {expandedDesc ? "Ver menos" : "Read more"}
+          {expandedDesc
+            ? t("eventCard.buttons.showLess")
+            : t("eventCard.buttons.readMore")}
         </button>
       )}
     </div>
@@ -204,7 +223,6 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
 
   return (
     <>
-      {/* CARD */}
       <div className="evento-card-mini" style={styles.card}>
         <div style={styles.imgWrap}>
           <img
@@ -215,7 +233,11 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
           <button
             onClick={toggleFav}
             disabled={loadingFav}
-            title={fav ? "Quitar de favoritos" : "Guardar en favoritos"}
+            title={
+              fav
+                ? t("eventCard.buttons.removeFavorite")
+                : t("eventCard.buttons.saveFavorite")
+            }
             style={styles.favBtn}
           >
             {fav ? "❤️" : "🤍"}
@@ -225,23 +247,25 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
         <div style={styles.body}>
           <div style={styles.headRow}>
             <h4 style={{ margin: 0, fontSize: 18 }}>{evento.titulo}</h4>
-           <button
-  data-evento-id={evento.id}
-  className="btn-nuevo-evento"
-  onClick={() => setOpen(true)}
-  style={styles.detailsBtn}
->
-  Ver detalles
-</button>
+            <button
+              data-evento-id={evento.id}
+              className="btn-nuevo-evento"
+              onClick={() => setOpen(true)}
+              style={styles.detailsBtn}
+            >
+              {t("eventCard.buttons.viewDetails")}
+            </button>
           </div>
 
-          <MetaLine label="Fecha" value={fechaTxt} />
-          <MetaLine label="Hora" value={horaTxt} />
+          <MetaLine label={t("eventCard.meta.date")} value={fechaTxt} />
+          <MetaLine label={t("eventCard.meta.time")} value={horaTxt} />
           <MetaLine
-            label="Categoría"
+            label={t("eventCard.meta.category")}
             value={
               evento.categoria
-                ? `${evento.categoria}${evento.categoria_detalle ? ` · ${evento.categoria_detalle}` : ""}`
+                ? `${evento.categoria}${
+                    evento.categoria_detalle ? ` · ${evento.categoria_detalle}` : ""
+                  }`
                 : null
             }
           />
@@ -250,18 +274,19 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
 
           {tags.length > 0 && (
             <div style={styles.tagsRow}>
-              {tags.slice(0, 5).map((t) => (
-                <span key={t} style={styles.tag}>
-                  {t}
+              {tags.slice(0, 5).map((tTag) => (
+                <span key={tTag} style={styles.tag}>
+                  {tTag}
                 </span>
               ))}
-              {tags.length > 5 && <span style={styles.tag}>+{tags.length - 5}</span>}
+              {tags.length > 5 && (
+                <span style={styles.tag}>+{tags.length - 5}</span>
+              )}
             </div>
           )}
         </div>
       </div>
 
-      {/* MODAL */}
       {open && (
         <div style={styles.overlay} onClick={() => setOpen(false)}>
           <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
@@ -279,7 +304,14 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
               </div>
 
               <div style={styles.modalRight}>
-                <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: 12,
+                    alignItems: "flex-start",
+                  }}
+                >
                   <div>
                     <h2 style={{ margin: 0 }}>{evento.titulo}</h2>
                     <div style={{ marginTop: 8, color: "#555" }}>
@@ -294,7 +326,9 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
                     className="btn-nuevo-evento"
                     style={{ padding: "8px 12px", height: 40 }}
                   >
-                    {fav ? "❤️ Favorito" : "🤍 Guardar"}
+                    {fav
+                      ? t("eventCard.buttons.favorite")
+                      : t("eventCard.buttons.save")}
                   </button>
                 </div>
 
@@ -302,15 +336,24 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
                   {evento.categoria && (
                     <div style={styles.pill}>
                       {evento.categoria}
-                      {evento.categoria_detalle ? ` · ${evento.categoria_detalle}` : ""}
+                      {evento.categoria_detalle
+                        ? ` · ${evento.categoria_detalle}`
+                        : ""}
                     </div>
                   )}
 
                   {tags.length > 0 && (
-                    <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 8 }}>
-                      {tags.map((t) => (
-                        <span key={t} style={styles.tag}>
-                          {t}
+                    <div
+                      style={{
+                        marginTop: 10,
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 8,
+                      }}
+                    >
+                      {tags.map((tTag) => (
+                        <span key={tTag} style={styles.tag}>
+                          {tTag}
                         </span>
                       ))}
                     </div>
@@ -318,29 +361,58 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
                 </div>
 
                 <div style={{ marginTop: 16 }}>
-                  <h4 style={{ margin: "0 0 6px 0" }}>Descripción</h4>
-                  <p style={{ margin: 0, color: "#333", lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
+                  <h4 style={{ margin: "0 0 6px 0" }}>
+                    {t("eventCard.sections.description")}
+                  </h4>
+                  <p
+                    style={{
+                      margin: 0,
+                      color: "#333",
+                      lineHeight: 1.4,
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
                     {evento.descripcion}
                   </p>
                 </div>
 
                 <div style={{ marginTop: 16 }}>
-                  <h4 style={{ margin: "0 0 6px 0" }}>Ubicación</h4>
+                  <h4 style={{ margin: "0 0 6px 0" }}>
+                    {t("eventCard.sections.location")}
+                  </h4>
                   {evento.direccion || evento.municipio || evento.provincia ? (
                     <>
                       <div style={{ color: "#333" }}>
-                        📍 {[evento.direccion, evento.municipio, evento.provincia || "Madrid"].filter(Boolean).join(", ")}
+                        📍{" "}
+                        {[
+                          evento.direccion,
+                          evento.municipio,
+                          evento.provincia || "Madrid",
+                        ]
+                          .filter(Boolean)
+                          .join(", ")}
                       </div>
 
-                      <div style={{ display: "flex", gap: 10, marginTop: 10, flexWrap: "wrap" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: 10,
+                          marginTop: 10,
+                          flexWrap: "wrap",
+                        }}
+                      >
                         <a
                           href={mapsUrl}
                           target="_blank"
                           rel="noreferrer"
                           className="btn-nuevo-evento"
-                          style={{ textDecoration: "none", display: "inline-flex", alignItems: "center" }}
+                          style={{
+                            textDecoration: "none",
+                            display: "inline-flex",
+                            alignItems: "center",
+                          }}
                         >
-                          Ver en Google Maps
+                          {t("eventCard.buttons.viewOnMaps")}
                         </a>
 
                         <button
@@ -348,16 +420,23 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
                           className="btn-nuevo-evento"
                           onClick={() => {
                             const el = document.getElementById(`map-${evento.id}`);
-                            if (el) el.style.display = el.style.display === "none" ? "block" : "none";
+                            if (el)
+                              el.style.display =
+                                el.style.display === "none" ? "block" : "none";
                           }}
                         >
-                          Mostrar / Ocultar mapa
+                          {t("eventCard.buttons.toggleMap")}
                         </button>
                       </div>
 
                       <div
                         id={`map-${evento.id}`}
-                        style={{ marginTop: 12, borderRadius: 12, overflow: "hidden", display: "none" }}
+                        style={{
+                          marginTop: 12,
+                          borderRadius: 12,
+                          overflow: "hidden",
+                          display: "none",
+                        }}
                       >
                         <iframe
                           title="map"
@@ -367,26 +446,47 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
                           loading="lazy"
                           referrerPolicy="no-referrer-when-downgrade"
                           src={`https://www.google.com/maps?q=${encodeURIComponent(
-                            [evento.direccion, evento.municipio, evento.provincia || "Madrid"].filter(Boolean).join(", ")
+                            [
+                              evento.direccion,
+                              evento.municipio,
+                              evento.provincia || "Madrid",
+                            ]
+                              .filter(Boolean)
+                              .join(", ")
                           )}&output=embed`}
                         />
                       </div>
                     </>
                   ) : (
-                    <div style={{ color: "#777" }}>No hay ubicación disponible.</div>
+                    <div style={{ color: "#777" }}>
+                      {t("eventCard.noLocation")}
+                    </div>
                   )}
                 </div>
 
                 <hr style={{ margin: "18px 0" }} />
 
-                {/* Comentarios */}
                 <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-                    <h3 style={{ margin: 0 }}>Comentarios ({comentarios.length})</h3>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 10,
+                    }}
+                  >
+                    <h3 style={{ margin: 0 }}>
+                      {t("eventCard.sections.comments")} ({comentarios.length})
+                    </h3>
 
                     <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                      <button className="btn-nuevo-evento" onClick={() => setMostrarComentarios((v) => !v)}>
-                        {mostrarComentarios ? "Ocultar" : "Ver"}
+                      <button
+                        className="btn-nuevo-evento"
+                        onClick={() => setMostrarComentarios((v) => !v)}
+                      >
+                        {mostrarComentarios
+                          ? t("eventCard.buttons.hide")
+                          : t("eventCard.buttons.view")}
                       </button>
 
                       {!esCreador && auth.currentUser && (
@@ -397,7 +497,7 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
                             setMostrarComentarios(true);
                           }}
                         >
-                          Comentar
+                          {t("eventCard.buttons.comment")}
                         </button>
                       )}
                     </div>
@@ -405,7 +505,9 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
 
                   {mostrarFormulario && (
                     <div style={styles.commentBox}>
-                      <h4 style={{ margin: "0 0 10px 0" }}>Tu comentario</h4>
+                      <h4 style={{ margin: "0 0 10px 0" }}>
+                        {t("eventCard.sections.yourComment")}
+                      </h4>
 
                       <form onSubmit={enviarComentario}>
                         <div style={{ marginBottom: 10 }}>
@@ -428,18 +530,34 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
                         <textarea
                           value={texto}
                           onChange={(e) => setTexto(e.target.value)}
-                          placeholder="Escribe tu comentario..."
+                          placeholder={t("eventCard.placeholders.comment")}
                           required
                           rows={4}
-                          style={{ width: "100%", padding: 10, borderRadius: 10, border: "1px solid #ddd" }}
+                          style={{
+                            width: "100%",
+                            padding: 10,
+                            borderRadius: 10,
+                            border: "1px solid #ddd",
+                          }}
                         />
 
-                        <div style={{ display: "flex", gap: 10, marginTop: 10, flexWrap: "wrap" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: 10,
+                            marginTop: 10,
+                            flexWrap: "wrap",
+                          }}
+                        >
                           <button type="submit" className="btn-nuevo-evento">
-                            Enviar
+                            {t("eventCard.buttons.send")}
                           </button>
-                          <button type="button" className="btn-nuevo-evento" onClick={() => setMostrarFormulario(false)}>
-                            Cancelar
+                          <button
+                            type="button"
+                            className="btn-nuevo-evento"
+                            onClick={() => setMostrarFormulario(false)}
+                          >
+                            {t("eventCard.buttons.cancel")}
                           </button>
                         </div>
                       </form>
@@ -449,27 +567,49 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
                   {mostrarComentarios && (
                     <div style={{ marginTop: 14 }}>
                       {comentarios.length === 0 ? (
-                        <p style={{ margin: 0, color: "#666" }}>No hay comentarios aún.</p>
+                        <p style={{ margin: 0, color: "#666" }}>
+                          {t("eventCard.noComments")}
+                        </p>
                       ) : (
                         comentarios.map((c, i) => (
                           <div key={i} style={styles.commentItem}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 10,
+                              }}
+                            >
                               <img
                                 src={c.autor_avatar || "/imagenes/default-user.jpg"}
-                                alt="avatar"
-                                style={{ width: 34, height: 34, borderRadius: "50%" }}
+                                alt={t("eventCard.alt.avatar")}
+                                style={{
+                                  width: 34,
+                                  height: 34,
+                                  borderRadius: "50%",
+                                }}
                               />
                               <div>
-                                <strong>{c.autor_nombre || "Usuario"}</strong>
-                                <div style={{ color: "#f4c542" }}>{"⭐".repeat(Number(c.estrellas || 0))}</div>
+                                <strong>
+                                  {c.autor_nombre || t("eventCard.defaultUser")}
+                                </strong>
+                                <div style={{ color: "#f4c542" }}>
+                                  {"⭐".repeat(Number(c.estrellas || 0))}
+                                </div>
                               </div>
                             </div>
 
                             <p style={{ margin: "8px 0 0 0" }}>{c.texto}</p>
 
                             {c.created_at && (
-                              <p style={{ fontSize: "0.8rem", color: "#888", margin: "6px 0 0 0" }}>
-                                {new Date(c.created_at).toLocaleString()}
+                              <p
+                                style={{
+                                  fontSize: "0.8rem",
+                                  color: "#888",
+                                  margin: "6px 0 0 0",
+                                }}
+                              >
+                                {new Date(c.created_at).toLocaleString(locale)}
                               </p>
                             )}
                           </div>
@@ -482,7 +622,7 @@ const EventoCard = ({ evento, onFavoriteChange }) => {
             </div>
 
             <div style={{ marginTop: 14, color: "#777", fontSize: 12 }}>
-              Consejo: usa “Guardar” para favoritos y “Ver en Google Maps” para llegar rápido.
+              {t("eventCard.tip")}
             </div>
           </div>
         </div>
@@ -515,7 +655,12 @@ const styles = {
     boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
   },
   body: { padding: 14 },
-  headRow: { display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center" },
+  headRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: 12,
+    alignItems: "center",
+  },
   detailsBtn: { padding: "8px 10px", height: 40 },
   tagsRow: { display: "flex", gap: 8, flexWrap: "wrap", marginTop: 10 },
   tag: {
@@ -560,7 +705,13 @@ const styles = {
     gap: 16,
   },
   modalLeft: { borderRadius: 14, overflow: "hidden", background: "#f5f5f5" },
-  modalImg: { width: "100%", height: "100%", maxHeight: 460, objectFit: "cover", display: "block" },
+  modalImg: {
+    width: "100%",
+    height: "100%",
+    maxHeight: 460,
+    objectFit: "cover",
+    display: "block",
+  },
   modalRight: { padding: 6 },
   pill: {
     display: "inline-flex",

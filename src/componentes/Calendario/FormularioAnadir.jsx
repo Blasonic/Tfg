@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024; // 2MB
 
@@ -14,46 +15,40 @@ function mysqlToDate(dt) {
 }
 
 const FormularioAnadir = ({ onSubmit, onClose }) => {
-  // Categorías temáticas (IA-friendly)
+  const { t } = useTranslation();
+
   const categorias = useMemo(
     () => [
-      { value: "musica", label: "Música" },
-      { value: "cultural", label: "Cultural" },
-      { value: "historia", label: "Historia" },
-      { value: "gastronomia", label: "Gastronomía" },
-      { value: "deporte", label: "Deporte" },
-      { value: "arte", label: "Arte / Exposiciones" },
-      { value: "noche", label: "Noche / Fiesta" },
-      { value: "familia", label: "Familia / Niños" },
-      { value: "naturaleza", label: "Naturaleza" },
-      { value: "cine", label: "Cine / Teatro" },
-      { value: "mercado", label: "Mercados / Ferias" },
-      { value: "networking", label: "Networking / Social" },
-      { value: "otro", label: "Otro" },
+      { value: "musica", label: t("addEvent.categories.music") },
+      { value: "cultural", label: t("addEvent.categories.cultural") },
+      { value: "historia", label: t("addEvent.categories.history") },
+      { value: "gastronomia", label: t("addEvent.categories.gastronomy") },
+      { value: "deporte", label: t("addEvent.categories.sport") },
+      { value: "arte", label: t("addEvent.categories.art") },
+      { value: "noche", label: t("addEvent.categories.nightlife") },
+      { value: "familia", label: t("addEvent.categories.family") },
+      { value: "naturaleza", label: t("addEvent.categories.nature") },
+      { value: "cine", label: t("addEvent.categories.cinema") },
+      { value: "mercado", label: t("addEvent.categories.markets") },
+      { value: "networking", label: t("addEvent.categories.networking") },
+      { value: "otro", label: t("addEvent.categories.other") },
     ],
-    []
+    [t]
   );
 
   const [form, setForm] = useState({
     titulo: "",
     descripcion: "",
-
     fecha_inicio: "",
     fecha_fin: "",
     hora_inicio: "",
     hora_fin: "",
-
-    // ✅ provincia fija
     provincia: "Madrid",
     municipio: "",
     direccion: "",
-
-    // ✅ IA: categoría temática + detalle
     categoria: "musica",
-    categoria_detalle: "", // ej: "techno", "flamenco", "museo", "ruta guiada"
-
+    categoria_detalle: "",
     tags: "",
-
     imagen: "",
     imagenArchivo: null,
   });
@@ -70,7 +65,7 @@ const FormularioAnadir = ({ onSubmit, onClose }) => {
       }
 
       if (file.size > MAX_IMAGE_BYTES) {
-        alert("La imagen es demasiado grande. Máximo 2MB.");
+        alert(t("addEvent.errors.imageTooLarge"));
         e.target.value = "";
         return;
       }
@@ -92,11 +87,11 @@ const FormularioAnadir = ({ onSubmit, onClose }) => {
   };
 
   const buildPayload = () => {
-    if (!form.titulo.trim()) throw new Error("El título es obligatorio.");
-    if (!form.descripcion.trim()) throw new Error("La descripción es obligatoria.");
-    if (!form.fecha_inicio) throw new Error("La fecha de inicio es obligatoria.");
-    if (!form.fecha_fin) throw new Error("La fecha de fin es obligatoria.");
-    if (!form.hora_inicio) throw new Error("La hora de inicio es obligatoria.");
+    if (!form.titulo.trim()) throw new Error(t("addEvent.errors.titleRequired"));
+    if (!form.descripcion.trim()) throw new Error(t("addEvent.errors.descriptionRequired"));
+    if (!form.fecha_inicio) throw new Error(t("addEvent.errors.startDateRequired"));
+    if (!form.fecha_fin) throw new Error(t("addEvent.errors.endDateRequired"));
+    if (!form.hora_inicio) throw new Error(t("addEvent.errors.startTimeRequired"));
 
     const fi = form.fecha_inicio;
     const ff = form.fecha_fin || form.fecha_inicio;
@@ -109,39 +104,35 @@ const FormularioAnadir = ({ onSubmit, onClose }) => {
 
     const start = mysqlToDate(start_at);
     const end = mysqlToDate(end_at);
-    if (!start || !end) throw new Error("Fecha/hora inválida.");
-    if (end < start) throw new Error("La fecha/hora de fin no puede ser anterior al inicio.");
+
+    if (!start || !end) throw new Error(t("addEvent.errors.invalidDateTime"));
+    if (end < start) throw new Error(t("addEvent.errors.endBeforeStart"));
 
     const tagsArr = (form.tags || "")
       .split(",")
-      .map((t) => t.trim())
+      .map((tTag) => tTag.trim())
       .filter(Boolean)
       .slice(0, 12);
 
     const imagen = form.imagen?.trim() || "";
 
-    // ✅ categoría: si es "otro", obliga a detalle mínimo
     const categoria = form.categoria;
     const detalle = form.categoria_detalle.trim() || null;
+
     if (categoria === "otro" && !detalle) {
-      throw new Error('Si eliges "Otro", escribe un detalle (ej: "ruta guiada", "taller", etc.)');
+      throw new Error(t("addEvent.errors.otherNeedsDetail"));
     }
 
     return {
       titulo: form.titulo.trim(),
       descripcion: form.descripcion.trim(),
-
-      // ✅ IA-friendly
       categoria,
       categoria_detalle: detalle,
-
       provincia: "Madrid",
       municipio: form.municipio.trim() || null,
       direccion: form.direccion.trim() || null,
-
       tags: tagsArr,
       imagen,
-
       start_at,
       end_at,
     };
@@ -157,7 +148,7 @@ const FormularioAnadir = ({ onSubmit, onClose }) => {
             try {
               onSubmit(buildPayload());
             } catch (err) {
-              alert(err.message || "Revisa los datos del formulario.");
+              alert(err.message || t("addEvent.errors.checkForm"));
             }
           }}
         >
@@ -165,12 +156,12 @@ const FormularioAnadir = ({ onSubmit, onClose }) => {
             ✖
           </button>
 
-          <h2>Solicitar plan</h2>
+          <h2>{t("addEvent.title")}</h2>
 
           <input
             type="text"
             name="titulo"
-            placeholder="Título (ej: Concierto techno en Malasaña)"
+            placeholder={t("addEvent.placeholders.title")}
             value={form.titulo}
             onChange={handleChange}
             required
@@ -179,13 +170,13 @@ const FormularioAnadir = ({ onSubmit, onClose }) => {
           <textarea
             className="descripcion"
             name="descripcion"
-            placeholder="Descripción (ambiente, precio, requisitos...)"
+            placeholder={t("addEvent.placeholders.description")}
             value={form.descripcion}
             onChange={handleChange}
             required
           />
 
-          <label>Categoría (temática)</label>
+          <label>{t("addEvent.labels.category")}</label>
           <select name="categoria" value={form.categoria} onChange={handleChange} required>
             {categorias.map((c) => (
               <option key={c.value} value={c.value}>
@@ -194,68 +185,91 @@ const FormularioAnadir = ({ onSubmit, onClose }) => {
             ))}
           </select>
 
-          <label>Detalle (opcional)</label>
+          <label>{t("addEvent.labels.detail")}</label>
           <input
             type="text"
             name="categoria_detalle"
-            placeholder='Ej: "techno", "flamenco", "ruta guiada", "museo"...'
+            placeholder={t("addEvent.placeholders.detail")}
             value={form.categoria_detalle}
             onChange={handleChange}
           />
 
           <div className="grid2">
             <div>
-              <label>Fecha de inicio</label>
-              <input type="date" name="fecha_inicio" value={form.fecha_inicio} onChange={handleChange} required />
+              <label>{t("addEvent.labels.startDate")}</label>
+              <input
+                type="date"
+                name="fecha_inicio"
+                value={form.fecha_inicio}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div>
-              <label>Hora de inicio *</label>
-              <input type="time" name="hora_inicio" value={form.hora_inicio} onChange={handleChange} required />
+              <label>{t("addEvent.labels.startTime")}</label>
+              <input
+                type="time"
+                name="hora_inicio"
+                value={form.hora_inicio}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
 
           <div className="grid2">
             <div>
-              <label>Fecha de fin</label>
-              <input type="date" name="fecha_fin" value={form.fecha_fin} onChange={handleChange} required />
+              <label>{t("addEvent.labels.endDate")}</label>
+              <input
+                type="date"
+                name="fecha_fin"
+                value={form.fecha_fin}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div>
-              <label>Hora de fin (opcional)</label>
-              <input type="time" name="hora_fin" value={form.hora_fin} onChange={handleChange} />
+              <label>{t("addEvent.labels.endTime")}</label>
+              <input
+                type="time"
+                name="hora_fin"
+                value={form.hora_fin}
+                onChange={handleChange}
+              />
             </div>
           </div>
 
           <div className="grid2">
             <div>
-              <label>Provincia</label>
+              <label>{t("addEvent.labels.province")}</label>
               <input type="text" value="Madrid" disabled />
             </div>
             <div>
-              <label>Ciudad / Municipio</label>
+              <label>{t("addEvent.labels.city")}</label>
               <input
                 type="text"
                 name="municipio"
-                placeholder="Ej: Madrid, Alcalá, Getafe..."
+                placeholder={t("addEvent.placeholders.city")}
                 value={form.municipio}
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          <label>Dirección (opcional)</label>
+          <label>{t("addEvent.labels.address")}</label>
           <input
             type="text"
             name="direccion"
-            placeholder="Calle, número, sala / punto de encuentro..."
+            placeholder={t("addEvent.placeholders.address")}
             value={form.direccion}
             onChange={handleChange}
           />
 
-          <label>Tags (opcional)</label>
+          <label>{t("addEvent.labels.tags")}</label>
           <input
             type="text"
             name="tags"
-            placeholder="Ej: gratis, turistas, terraza, entrada libre (separa por comas)"
+            placeholder={t("addEvent.placeholders.tags")}
             value={form.tags}
             onChange={handleChange}
           />
@@ -264,14 +278,14 @@ const FormularioAnadir = ({ onSubmit, onClose }) => {
             <input
               type="text"
               name="imagen"
-              placeholder="URL de imagen (opcional)"
+              placeholder={t("addEvent.placeholders.imageUrl")}
               value={form.imagenArchivo ? "" : form.imagen}
               onChange={handleChange}
               disabled={!!form.imagenArchivo}
             />
 
-            <label className="file-btn" title="Máximo 2MB">
-              Subir imagen (máx 2MB)
+            <label className="file-btn" title={t("addEvent.imageMax")}>
+              {t("addEvent.uploadButton")}
               <input
                 type="file"
                 name="imagenArchivo"
@@ -283,12 +297,10 @@ const FormularioAnadir = ({ onSubmit, onClose }) => {
           </div>
 
           <button type="submit" className="btn-enviar">
-            Enviar solicitud
+            {t("addEvent.submit")}
           </button>
 
-          <p className="hint">
-            * Hora de inicio obligatoria para que el calendario y recomendaciones funcionen bien.
-          </p>
+          <p className="hint">{t("addEvent.hint")}</p>
         </form>
       </div>
     </StyledWrapper>

@@ -1,16 +1,17 @@
 import React from "react";
 import "./Section.css";
-// Si usas react-router:
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Section() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <section className="section">
       {/* FONDO */}
       <div className="bg">
-        <img src="/imagenes/fondo-section.jpg" alt="fondo" />
+        <img src="/imagenes/fondo-section.jpg" alt={t("section.backgroundAlt")} />
       </div>
 
       {/* ========================= */}
@@ -19,24 +20,39 @@ export default function Section() {
       <div className="top-row">
         {/* IZQUIERDA: POLAROIDES */}
         <div className="top-left">
-          <div className="polaroid p1"><img src="/imagenes/foto 7.jpg" alt="Experiencia 1" /></div>
-          <div className="polaroid p2"><img src="/imagenes/foto 5.webp" alt="Experiencia 2" /></div>
-          <div className="polaroid p3"><img src="/imagenes/foto 8.jpg" alt="Experiencia 3" /></div>
-          <div className="polaroid p4"><img src="/imagenes/foto 6.jpg" alt="Experiencia 4" /></div>
+          <div className="polaroid p1">
+            <img src="/imagenes/foto 7.jpg" alt={t("section.images.exp1")} />
+          </div>
+
+          <div className="polaroid p2">
+            <img src="/imagenes/foto 5.webp" alt={t("section.images.exp2")} />
+          </div>
+
+          <div className="polaroid p3">
+            <img src="/imagenes/foto 8.jpg" alt={t("section.images.exp3")} />
+          </div>
+
+          <div className="polaroid p4">
+            <img src="/imagenes/foto 6.jpg" alt={t("section.images.exp4")} />
+          </div>
         </div>
 
-        {/* DERECHA: TEXTO (placeholder hasta que me pases el texto de arriba) */}
+        {/* DERECHA: TEXTO */}
         <div className="top-right">
           <h2 className="title">
-            Descubre<br />
-            <span className="highlight">tu comunidad</span>
+            {t("section.top.titleLine1")}
+            <br />
+            <span className="highlight">
+              {t("section.top.titleHighlight")}
+            </span>
           </h2>
 
-          <h3 className="subtitle">PLANES CON HISTORIA</h3>
+          <h3 className="subtitle">
+            {t("section.top.subtitle")}
+          </h3>
 
           <p className="desc">
-            Experiencias culturales, gastronómicas y de naturaleza para vivir tu entorno
-            como nunca. Reserva en minutos y guarda tus favoritos.
+            {t("section.top.description")}
           </p>
         </div>
       </div>
@@ -47,28 +63,42 @@ export default function Section() {
       <div className="bottom-row">
         {/* TEXTO + BOTÓN */}
         <div className="bottom-left">
-          <h3 className="bottom-title">EXPERIENCIAS DESTACADAS ESTE MES</h3>
+          <h3 className="bottom-title">
+            {t("section.bottom.title")}
+          </h3>
 
           <p className="bottom-text">
-            Cada mes seleccionamos planes únicos para que descubras tu entorno desde una
-            mirada diferente: historia, gastronomía, naturaleza y tradiciones que merecen
-            ser contadas.
+            {t("section.bottom.text1")}
           </p>
 
           <p className="bottom-text">
-            - Consulta el calendario y reserva tu próxima experiencia
+            - {t("section.bottom.text2")}
           </p>
 
-          <button className="read-btn" onClick={() => navigate("/EventosDestacados")}>
-            VER DESTACADOS DEL MES
+          <button
+            className="read-btn"
+            onClick={() => navigate("/EventosDestacados")}
+          >
+            {t("section.bottom.button")}
           </button>
         </div>
 
         {/* IMÁGENES */}
         <div className="bottom-right">
-          <img src="/imagenes/foto9.jpeg" alt="Plan 1" />
-          <img src="/imagenes/foto3.webp" alt="Plan 2" />
-          <img src="/imagenes/foto 10.jpg" alt="Plan 3" />
+          <img
+            src="/imagenes/foto9.jpeg"
+            alt={t("section.images.plan1")}
+          />
+
+          <img
+            src="/imagenes/foto3.webp"
+            alt={t("section.images.plan2")}
+          />
+
+          <img
+            src="/imagenes/foto 10.jpg"
+            alt={t("section.images.plan3")}
+          />
         </div>
       </div>
     </section>

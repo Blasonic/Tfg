@@ -1,0 +1,893 @@
+{
+  "accessibility": {
+    "title": "Accessibility",
+    "section1": {
+      "title": "1. Introduction",
+      "paragraph1": {
+        "before": "These Terms of Use govern access to and use of the website",
+        "after": "."
+      },
+      "paragraph2": "Access to the website implies full and unreserved acceptance of these conditions by the user."
+    },
+    "section2": {
+      "title": "2. Use of the website",
+      "paragraph1": "The user agrees to use the website responsibly, respecting current legislation and the rights of third parties.",
+      "prohibitedTitle": "The following is prohibited:",
+      "prohibited1": "Publishing offensive or illegal content, or content that infringes the rights of third parties.",
+      "prohibited2": "Using the website for fraudulent or misleading purposes.",
+      "prohibited3": "Introducing viruses or elements that may affect the operation of the website."
+    },
+    "section3": {
+      "title": "3. Website content",
+      "paragraph1": "provides information about towns, culture, traditions, and events for informational purposes.",
+      "paragraph2": "Although every effort is made to keep the information updated and accurate, the absence of errors or changes in the events or activities described cannot be guaranteed."
+    },
+    "section4": {
+      "title": "4. External links",
+      "paragraph1": {
+        "before": "The website may include links to third-party pages to provide additional information.",
+        "after": "is not responsible for the content or operation of such external sites."
+      }
+    },
+    "section5": {
+      "title": "5. Modifications",
+      "paragraph1": "reserves the right to modify these conditions at any time in order to adapt them to legal changes or to the operation of the website."
+    },
+    "section6": {
+      "title": "6. Applicable law",
+      "paragraph1": "These conditions shall be governed by current Spanish law."
+    }
+  },
+  
+  "header": {
+    "nav": {
+      "home": "Home",
+      "about": "About us",
+      "contact": "Contact",
+      "calendar": "Calendar"
+    },
+    "language": {
+      "spanish": "Spanish",
+      "english": "English"
+    },
+    "user": {
+      "avatarAlt": "User avatar",
+      "viewProfile": "View profile",
+      "favorites": "Favorites",
+      "logout": "Log out",
+      "login": "Log in"
+    },
+    "search": {
+      "openSearch": "Open search",
+      "title": "Search events",
+      "allCategories": "All categories",
+      "allTypes": "All types",
+      "onlyUpcoming": "Upcoming only",
+      "clear": "Clear",
+      "placeholder": "Type an event, municipality or address...",
+      "loading": "Searching events...",
+      "noResults": "No events found.",
+      "initialMessage": "Start typing or choose filters to see results.",
+      "noDate": "No date",
+      "backToResults": "← Back to results"
+    },
+    "errors": {
+      "loadFilters": "Filters could not be loaded",
+      "search": "Search error"
+    }
+  },
+  "legalNotice": {
+    "title": "Legal Notice",
+    "section1": {
+      "title": "1. Identification details",
+      "paragraph1": "In compliance with the information duty established in Law 34/2002 on Information Society Services and Electronic Commerce (LSSI-CE), users of this website are informed of the following details:",
+      "websiteOwnerLabel": "Website owner:",
+      "activityLabel": "Activity:",
+      "activityValue": "Digital platform for cultural, tourism, and event information.",
+      "emailLabel": "Contact email:",
+      "websiteLabel": "Website:",
+      "paragraph2": "Access to and use of the website grants the status of user and implies full acceptance of the conditions established in this Legal Notice."
+    },
+    "section2": {
+      "title": "2. Purpose of the website",
+      "paragraph1": {
+        "before": "The website",
+        "after": "aims to provide information about towns, traditions, festivities, culture, and events, mainly in the Community of Madrid, in order to promote cultural knowledge and local tourism."
+      },
+      "paragraph2": "The published content is for informational purposes and may be updated, modified, or removed without prior notice."
+    },
+    "section3": {
+      "title": "3. Conditions of use",
+      "paragraph1": "The user agrees to make appropriate use of the website and its contents, respecting current legislation, good faith, and public order.",
+      "prohibitedTitle": "The following is prohibited:",
+      "prohibited1": "Using the website for unlawful purposes or purposes contrary to current regulations.",
+      "prohibited2": "Causing damage to the computer systems of the website or third parties.",
+      "prohibited3": "Attempting to access restricted areas without authorization.",
+      "prohibited4": "Using the site's content for commercial purposes without express authorization."
+    },
+    "section4": {
+      "title": "4. Intellectual and industrial property",
+      "paragraph1": "All website content, including texts, images, logos, design, structure, source code, and other elements, is protected by intellectual and industrial property rights.",
+      "paragraph2": "The reproduction, distribution, or public communication of the content without the express authorization of the website owner is prohibited."
+    },
+    "section5": {
+      "title": "5. Liability",
+      "paragraph1": "The website owner is not responsible for:",
+      "item1": "Possible errors or omissions in the content.",
+      "item2": "Temporary unavailability of the website.",
+      "item3": "Damage resulting from the use of the published information.",
+      "paragraph2": "Likewise, the website may include links to external pages over which it has no control or responsibility."
+    },
+    "section6": {
+      "title": "6. Applicable law",
+      "paragraph1": "The relationship between the user and the website owner shall be governed by current Spanish law, and the corresponding courts and tribunals shall have jurisdiction in accordance with the applicable regulations."
+    }
+  },
+  "help": {
+    "title": "Help Center",
+    "sections": [
+      {
+        "category": "Events",
+        "questions": [
+          {
+            "question": "How can I add a new event?",
+            "answer": "Click on \"Add event\" on the main calendar page. Complete the form with the event details and submit it for review."
+          },
+          {
+            "question": "Why does my event not appear immediately?",
+            "answer": "All submitted events must be approved by a moderator. Once approved, they will appear on the calendar."
+          },
+          {
+            "question": "How can I see the details of an event?",
+            "answer": "Click on a day in the calendar. The events scheduled for that day will appear and you will be able to view their details."
+          },
+          {
+            "question": "Can I edit or delete an event I created?",
+            "answer": "At the moment, it is not possible to edit or delete events from the interface. Contact support if you need to make changes."
+          }
+        ]
+      },
+      {
+        "category": "User Account",
+        "questions": [
+          {
+            "question": "Do I need to be registered to view events?",
+            "answer": "No, you can view events without registering. However, you need an account to add events or comment."
+          },
+          {
+            "question": "How do I register?",
+            "answer": "Click on \"Create account\" at the top of the site and complete the registration form."
+          },
+          {
+            "question": "What happens if I forget my password?",
+            "answer": "On the login page, click on \"Forgot your password?\" and follow the instructions to reset it."
+          }
+        ]
+      },
+      {
+        "category": "Comments",
+        "questions": [
+          {
+            "question": "How can I leave a comment on an event?",
+            "answer": "Click on the event and then on \"Comment on this event\". Select a rating and write your opinion."
+          },
+          {
+            "question": "Can I edit or delete my comment?",
+            "answer": "It is currently not possible to edit or delete comments once they have been submitted."
+          },
+          {
+            "question": "Why can't I comment on some events?",
+            "answer": "Only registered users can comment. Also, you cannot comment on events that you created yourself."
+          }
+        ]
+      },
+      {
+        "category": "Technical Issues",
+        "questions": [
+          {
+            "question": "The calendar does not load, what should I do?",
+            "answer": "Make sure you have an internet connection. If the problem persists, try reloading the page or clearing your browser cache."
+          },
+          {
+            "question": "The event form is not being submitted, what could be wrong?",
+            "answer": "Check that all required fields are completed and that you are logged in. If the error persists, contact support."
+          }
+        ]
+      },
+      {
+        "category": "Privacy and Security",
+        "questions": [
+          {
+            "question": "What data of mine is public when creating an event?",
+            "answer": "Only your name and profile picture are shown. Your email address and other personal data are not publicly visible."
+          },
+          {
+            "question": "How can I delete my account?",
+            "answer": "To delete your account, contact our support team indicating your username and registered email."
+          },
+          {
+            "question": "Can my comments be seen by other users?",
+            "answer": "Yes, comments are public and visible to anyone who accesses the event."
+          }
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Do you have an event, an experience, or an idea that deserves to be discovered?",
+    "text1": {
+      "before": "Do you want to collaborate with",
+      "after": "or do you simply have a quick question? This is the right place. Write to us and we will reply quickly, clearly, and without any fuss."
+    },
+    "text2": "Promise: we read every message (and real people reply, not bots). Fill out the form and tell us how we can help. The more context you give us, the better we can guide you.",
+    "topics": [
+      "Cultural events",
+      "Collaborations with town councils or creators",
+      "Questions about experiences, courses, or schedule",
+      "Suggestions to improve PLANZO"
+    ],
+    "cta": "We like proactive people.",
+    "requiredFields": "Name, email, and message are required.",
+    "sendError": "Error sending the message.",
+    "sendSuccess": "Message sent successfully ✅",
+    "sendFail": "The message could not be sent.",
+    "form": {
+      "name": "NAME",
+      "email": "E-MAIL",
+      "subject": "SUBJECT",
+      "message": "MESSAGE",
+      "send": "SEND",
+      "sending": "SENDING..."
+    }
+  },
+  "footer": {
+    "tagline": "Cultural and social events in your community",
+    "events": {
+      "title": "Events",
+      "agenda": "Agenda",
+      "featured": "Featured events",
+      "submit": "Submit your event"
+    },
+    "community": {
+      "title": "Community",
+      "about": "About us",
+      "townHalls": "Town councils"
+    },
+    "information": {
+      "title": "Information",
+      "support": "Support",
+      "faq": "Frequently asked questions",
+      "contact": "Contact"
+    },
+    "contact": {
+      "title": "Contact",
+      "phone": "Phone: +34 91 000 00 00",
+      "region": "Metropolitan Region"
+    },
+    "follow": {
+      "title": "Follow us",
+      "instagram": "Instagram"
+    },
+    "legal": {
+      "title": "Legal",
+      "legalNotice": "Legal notice",
+      "privacyPolicy": "Privacy policy",
+      "cookies": "Cookies",
+      "accessibility": "Accessibility"
+    },
+    "cta": {
+      "title": "Do you have an event?",
+      "publish": "Publish it here",
+      "subscribe": "Subscribe to the Weekly Agenda"
+    },
+    "copyright": "2026 Planzo, your journey in your community. All rights reserved"
+  },
+  "cookiesPolicy": {
+    "title": "Cookies Policy",
+    "section1": {
+      "title": "1. What cookies are",
+      "paragraph1": "Cookies are small text files that are stored on the user's device when visiting a website. Their purpose is to improve the browsing experience, analyze site usage, and offer content adapted to the user's interests."
+    },
+    "section2": {
+      "title": "2. Types of cookies used",
+      "paragraph1": "This website may use the following types of cookies:",
+      "technical": {
+        "title": "Technical cookies",
+        "text": "They allow the basic functioning of the website and access to certain features."
+      },
+      "analytics": {
+        "title": "Analytics cookies",
+        "text": "They allow the analysis of user behavior on the website in order to improve the browsing experience and optimize content."
+      },
+      "customization": {
+        "title": "Customization cookies",
+        "text": "They allow remembering user preferences, such as language or browsing settings."
+      },
+      "thirdParty": {
+        "title": "Third-party cookies",
+        "text": "In some cases, third-party services may be used to analyze website usage or improve certain services."
+      }
+    },
+    "section3": {
+      "title": "3. Cookie management",
+      "paragraph1": "The user may allow, block, or delete the cookies installed on their device through the settings of the browser they use.",
+      "paragraph2": "Each browser provides specific options for managing cookies."
+    },
+    "section4": {
+      "title": "4. Acceptance of the cookies policy",
+      "paragraph1": "When accessing the website, the user will see an informational notice about the use of cookies. By continuing to browse, it is considered that the user accepts their use under the conditions described in this policy."
+    },
+    "section5": {
+      "title": "5. Updating the cookies policy",
+      "paragraph1": "The person responsible for the website may modify this cookies policy according to legislative or technical changes. It is recommended to review this section periodically."
+    }
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "section1": {
+      "title": "1. Information for the user",
+      "paragraph1": "In compliance with Regulation (EU) 2016/679 (GDPR) and Organic Law 3/2018 on Personal Data Protection, we inform users about the processing of their personal data.",
+      "paragraph2": {
+        "before": "The person responsible for processing the data collected through this website is",
+        "after": "."
+      }
+    },
+    "section2": {
+      "title": "2. Personal data collected",
+      "paragraph1": "Through this website, data may be collected through:",
+      "item1": "Contact forms",
+      "item2": "Registration forms",
+      "item3": "Emails",
+      "item4": "Browsing through cookies"
+    },
+    "section3": {
+      "title": "3. Purpose of data processing",
+      "paragraph1": "Personal data is used to:",
+      "item1": "Manage inquiries",
+      "item2": "Respond to requests",
+      "item3": "Improve the operation of the website"
+    },
+    "section4": {
+      "title": "4. Data retention",
+      "paragraph1": "Data will only be kept for the time necessary to fulfill the purpose for which it was collected."
+    },
+    "section5": {
+      "title": "5. User rights",
+      "paragraph1": "The user may exercise the rights of access, rectification, deletion, objection, restriction, and portability of their data."
+    },
+    "section6": {
+      "title": "6. Data security",
+      "paragraph1": "The person responsible adopts the necessary technical measures to protect personal data from unauthorized access."
+    }
+  },
+  "section": {
+    "backgroundAlt": "Main background",
+    "images": {
+      "exp1": "Experience 1",
+      "exp2": "Experience 2",
+      "exp3": "Experience 3",
+      "exp4": "Experience 4",
+      "plan1": "Plan 1",
+      "plan2": "Plan 2",
+      "plan3": "Plan 3"
+    },
+    "top": {
+      "titleLine1": "Discover",
+      "titleHighlight": "your community",
+      "subtitle": "PLANS WITH HISTORY",
+      "description": "Cultural, gastronomic, and nature experiences to enjoy your surroundings like never before. Book in minutes and save your favorites."
+    },
+    "bottom": {
+      "title": "FEATURED EXPERIENCES THIS MONTH",
+      "text1": "Every month we select unique plans so you can discover your surroundings from a different perspective: history, gastronomy, nature, and traditions worth telling.",
+      "text2": "Check the calendar and book your next experience",
+      "button": "VIEW THIS MONTH'S HIGHLIGHTS"
+    }
+  },
+  "about": {
+    "title": "Who We Are",
+    "paragraph1": {
+      "before": "At",
+      "after": "we believe that the best plans are not always found in guides, big cities, or in algorithms that decide for us."
+    },
+    "paragraph2": "Often, they are much closer: in a village, in a neighborhood, in a square where someone has decided to keep a tradition alive.",
+    "paragraph3": {
+      "before": "",
+      "after": "was born with a clear idea: to give visibility to those local events that are part of our culture, but often go unnoticed. Popular festivals, local fairs, pilgrimages, traditional celebrations that, without visibility, risk being lost over time."
+    },
+    "paragraph4": "We are a collaborative platform that connects people, places, and traditions. A space where any user can discover authentic experiences or share those worth living. Every published event goes through a review process, because we believe that quality and respect for local culture are essential.",
+    "paragraph5": "Our goal goes beyond informing: we seek to promote more conscious, decentralized, and human tourism that supports small towns and helps keep their customs alive.",
+    "highlight": "is not just an events agenda.",
+    "paragraph6": "It is a community that believes in authenticity, closeness, and the value of what is not always visible.",
+    "cta": "Because sometimes, the best plan… is the one you still don't know."
+  },
+  "eventsSearch": {
+    "placeholder": "Search by event, municipality or address...",
+    "allCategories": "All categories",
+    "allTypes": "All types",
+    "onlyUpcoming": "Upcoming only",
+    "clear": "Clear",
+    "loading": "Loading events...",
+    "noResults": "No events were found with those filters.",
+    "errors": {
+      "loadFilters": "Filters could not be loaded",
+      "search": "Error searching events"
+    },
+    "sort": {
+      "upcomingFirst": "Upcoming first",
+      "farthestFirst": "Farthest first",
+      "mostRecent": "Most recent",
+      "titleAZ": "Title A-Z",
+      "titleZA": "Title Z-A"
+    }
+  },
+  "calendar": {
+    "title": "Plans",
+    "addEvent": "Add event",
+    "loading": "Loading events...",
+    "noEventsForDay": "There are no events for this day.",
+    "success": {
+      "eventSubmitted": "🎉 Event submitted successfully."
+    },
+    "errors": {
+      "loadEvents": "Error loading events",
+      "submitEvent": "Error submitting the event"
+    }
+  },
+  "eventCard": {
+    "meta": {
+      "date": "Date",
+      "time": "Time",
+      "category": "Category"
+    },
+    "sections": {
+      "description": "Description",
+      "location": "Location",
+      "comments": "Comments",
+      "yourComment": "Your comment"
+    },
+    "buttons": {
+      "showLess": "Show less",
+      "readMore": "Read more",
+      "removeFavorite": "Remove from favorites",
+      "saveFavorite": "Save to favorites",
+      "viewDetails": "View details",
+      "favorite": "❤️ Favorite",
+      "save": "🤍 Save",
+      "viewOnMaps": "View on Google Maps",
+      "toggleMap": "Show / Hide map",
+      "hide": "Hide",
+      "view": "View",
+      "comment": "Comment",
+      "send": "Send",
+      "cancel": "Cancel"
+    },
+    "placeholders": {
+      "comment": "Write your comment..."
+    },
+    "errors": {
+      "loginToSave": "Log in to save favorites",
+      "updateFavorite": "Could not update favorite",
+      "loginToComment": "Log in to comment",
+      "selectStars": "Select 1-5 stars",
+      "commentError": "Error while commenting"
+    },
+    "success": {
+      "commentSaved": "Comment saved"
+    },
+    "noLocation": "No location available.",
+    "noComments": "There are no comments yet.",
+    "defaultUser": "User",
+    "tip": "Tip: use “Save” for favorites and “View on Google Maps” to get there quickly.",
+    "alt": {
+      "avatar": "avatar"
+    }
+  },
+  "addEvent": {
+    "title": "Submit plan",
+    "submit": "Send request",
+    "uploadButton": "Upload image (max 2MB)",
+    "imageMax": "Maximum 2MB",
+    "hint": "* Start time is required so the calendar and recommendations work properly.",
+    "labels": {
+      "category": "Category (theme)",
+      "detail": "Detail (optional)",
+      "startDate": "Start date",
+      "startTime": "Start time *",
+      "endDate": "End date",
+      "endTime": "End time (optional)",
+      "province": "Province",
+      "city": "City / Municipality",
+      "address": "Address (optional)",
+      "tags": "Tags (optional)"
+    },
+    "placeholders": {
+      "title": "Title (e.g. Techno concert in Malasaña)",
+      "description": "Description (atmosphere, price, requirements...)",
+      "detail": "E.g. \"techno\", \"flamenco\", \"guided tour\", \"museum\"...",
+      "city": "E.g. Madrid, Alcalá, Getafe...",
+      "address": "Street, number, venue / meeting point...",
+      "tags": "E.g. free, tourists, terrace, free entry (separate with commas)",
+      "imageUrl": "Image URL (optional)"
+    },
+    "categories": {
+      "music": "Music",
+      "cultural": "Cultural",
+      "history": "History",
+      "gastronomy": "Gastronomy",
+      "sport": "Sport",
+      "art": "Art / Exhibitions",
+      "nightlife": "Nightlife / Party",
+      "family": "Family / Kids",
+      "nature": "Nature",
+      "cinema": "Cinema / Theatre",
+      "markets": "Markets / Fairs",
+      "networking": "Networking / Social",
+      "other": "Other"
+    },
+    "errors": {
+      "imageTooLarge": "The image is too large. Maximum 2MB.",
+      "titleRequired": "Title is required.",
+      "descriptionRequired": "Description is required.",
+      "startDateRequired": "Start date is required.",
+      "endDateRequired": "End date is required.",
+      "startTimeRequired": "Start time is required.",
+      "invalidDateTime": "Invalid date/time.",
+      "endBeforeStart": "The end date/time cannot be earlier than the start.",
+      "otherNeedsDetail": "If you choose \"Other\", write a detail (e.g. \"guided tour\", \"workshop\", etc.)",
+      "checkForm": "Check the form data."
+    }
+  },
+  "requestPlan": {
+    "title": "Request a plan",
+    "subtitle": "Send us an event and we will review it to add it.",
+    "hint": "* Start time is required",
+    "labels": {
+      "category": "Category",
+      "detail": "Detail (optional)",
+      "startDate": "Start date",
+      "startTime": "Start time *",
+      "endDate": "End date",
+      "endTime": "End time (optional)",
+      "municipality": "Municipality (optional)",
+      "address": "Address (optional)",
+      "tags": "Tags (optional)",
+      "image": "Image (optional)"
+    },
+    "placeholders": {
+      "title": "Event title",
+      "description": "Description",
+      "detail": "E.g. \"techno\", \"workshop\", \"guided tour\"...",
+      "municipality": "E.g. Madrid, Getafe...",
+      "address": "Street, number, venue...",
+      "tags": "E.g. free, terrace, free entry",
+      "imageUrl": "Image URL"
+    },
+    "buttons": {
+      "uploadImage": "Upload image",
+      "sending": "Sending...",
+      "submit": "Send request"
+    },
+    "categories": {
+      "music": "Music",
+      "cultural": "Cultural",
+      "history": "History",
+      "gastronomy": "Gastronomy",
+      "sport": "Sport",
+      "art": "Art / Exhibitions",
+      "nightlife": "Nightlife / Party",
+      "family": "Family / Kids",
+      "nature": "Nature",
+      "cinema": "Cinema / Theatre",
+      "markets": "Markets / Fairs",
+      "networking": "Networking / Social",
+      "other": "Other"
+    },
+    "success": {
+      "sent": "Request sent ✅"
+    },
+    "errors": {
+      "imageTooLarge": "The image is too large. Maximum 2MB.",
+      "titleRequired": "Title is required.",
+      "descriptionRequired": "Description is required.",
+      "startDateRequired": "Start date is required.",
+      "startTimeRequired": "Start time is required.",
+      "invalidDateTime": "Invalid date/time.",
+      "endBeforeStart": "The end date/time cannot be earlier than the start.",
+      "otherNeedsDetail": "If you choose \"Other\", write a detail.",
+      "submitFailed": "The request could not be sent.",
+      "sendError": "Error while sending."
+    }
+  },
+  "chatbot": {
+    "initialMessage": "Hi, do you need help finding plans?",
+    "placeholder": "Type something...",
+    "labels": {
+      "currentLocation": "Current location"
+    },
+    "buttons": {
+      "saveHome": "Save home",
+      "saveCurrentLocation": "Save current location",
+      "send": "Send"
+    },
+    "quick": {
+      "thisWeekend": "What's on this weekend?",
+      "plansInMadrid": "Recommend plans in Madrid",
+      "technoThisMonth": "Techno plans this month",
+      "howToGet": "How do I get to this plan?"
+    },
+    "prompts": {
+      "homeAddress": "Enter your home address:",
+      "saveHomePrefix": "Save my home",
+      "currentLocation": "Where are you now? You can enter a hotel, street, or address:",
+      "currentLocationPrefix": "My current location"
+    },
+    "responses": {
+      "homeSavedWithAddress": "Perfect. I have saved your home as {{address}}.",
+      "homeSaved": "I have saved your home location.",
+      "currentLocationSavedWithAddress": "Perfect. I will use {{address}} as your current location for future searches.",
+      "currentLocationSaved": "I have saved your current location."
+    },
+    "suggestions": {
+      "location1": "I'm at Gran Vía 33, Madrid",
+      "location2": "I'm at Hotel Meliá Madrid",
+      "location3": "I'm at Plaza de España, Madrid",
+      "area1": "I want a route in Madrid this weekend",
+      "area2": "I want a route in El Escorial this weekend",
+      "area3": "Route in Alcalá de Henares this afternoon"
+    },
+    "fallback": {
+      "noResponse": "I couldn't find an answer."
+    },
+    "errors": {
+      "connect": "Error connecting to the chatbot.",
+      "saveHome": "I couldn't save your home. Try a more specific address.",
+      "saveCurrentLocation": "I couldn't save your current location. Try a more specific address or place name."
+    }
+  },
+  "chatbotWidget": {
+    "title": "Plans assistant",
+    "subtitle": "Find events, routes, and how to get there",
+    "needHelp": "Need help?",
+    "open": "Open chat",
+    "close": "Close chat"
+  },
+  "chatEventItem": {
+    "dateUnavailable": "Date not available",
+    "noTitle": "Untitled event",
+    "viewEvent": "View event",
+    "howToGet": "How to get there?"
+  },
+  "chatMessage": {
+    "helpers": {
+      "location": {
+        "title": "You can type, for example:",
+        "example1": "Gran Vía 33, Madrid",
+        "example2": "Hotel Meliá Madrid",
+        "example3": "Plaza de España, Madrid"
+      },
+      "area": {
+        "title": "Try something like:",
+        "example1": "Route in El Escorial this weekend",
+        "example2": "Route in Madrid this afternoon",
+        "example3": "Cultural route in Alcalá this week"
+      }
+    },
+    "route": {
+      "stop": "Stop",
+      "distanceFromPrevious": "Distance from previous stop:"
+    },
+    "routeInfo": {
+      "distance": "Distance:",
+      "walking": "Walking:",
+      "byCar": "By car:",
+      "publicTransport": "Public transport:",
+      "recommended": "Recommended:"
+    },
+    "links": {
+      "walking": "View walking route",
+      "driving": "View driving route",
+      "transit": "View public transport"
+    },
+    "location": {
+      "defaultLabel": "Location"
+    }
+  },
+  "commentsPanel": {
+    "title": "📝 Comments",
+    "alt": {
+      "avatar": "avatar"
+    },
+    "labels": {
+      "from": "From:"
+    },
+    "tabs": {
+      "received": "Received",
+      "sent": "Sent"
+    },
+    "summary": {
+      "average": "⭐ Average rating:",
+      "total": "Total comments:",
+      "noRatings": "There are no ratings yet."
+    },
+    "empty": {
+      "received": "There are no received comments.",
+      "sent": "There are no sent comments."
+    },
+    "chart": {
+      "starsLabel": "{{count}} ⭐"
+    }
+  },
+  "favorites": {
+    "title": "My favorites",
+    "refresh": "Refresh",
+    "loadingShort": "Loading...",
+    "loading": "Loading favorites...",
+    "empty": "You don't have any saved favorites yet.",
+    "errors": {
+      "load": "Error loading favorites"
+    }
+  },
+  "login": {
+    "title": "Log in",
+    "adminRedirecting": "Loading admin panel...",
+    "labels": {
+      "email": "Email",
+      "password": "Password"
+    },
+    "placeholders": {
+      "email": "Enter your email",
+      "password": "Enter your password"
+    },
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot your password?",
+    "submit": "Log in",
+    "noAccount": "Don't have an account?",
+    "register": "Sign up",
+    "orContinueWith": "Or continue with",
+    "errors": {
+      "invalidCredentials": "Incorrect email or password",
+      "tooManyRequests": "Too many attempts. Wait a moment and try again.",
+      "generic": "Error trying to log in",
+      "google": "Error logging in with Google"
+    }
+  },
+  "forgotPassword": {
+    "title": "Reset password",
+    "subtitle": "Enter your email and we will send you a link to change your password.",
+    "placeholder": "Email address",
+    "success": "If the email exists, we have sent you a link. Check your email (and spam folder).",
+    "loginInfo": "If the email exists, a link has been sent to reset your password. Check your email (and spam folder).",
+    "buttons": {
+      "sending": "Sending...",
+      "sendLink": "Send link"
+    },
+    "errors": {
+      "invalidEmail": "Enter a valid email address."
+    }
+  },
+  "register": {
+    "title": "Create account",
+    "submit": "Sign up",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Log in",
+    "labels": {
+      "name": "Name",
+      "username": "Username",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm password"
+    },
+    "placeholders": {
+      "name": "Enter your name",
+      "username": "Enter a username",
+      "email": "Enter your email",
+      "password": "Enter your password",
+      "confirmPassword": "Repeat your password"
+    },
+    "emailStatus": {
+      "valid": "✔ Valid email format",
+      "invalid": "✘ Invalid email"
+    },
+    "passwordRules": {
+      "title": "The password must include:",
+      "length": "At least 8 characters",
+      "uppercase": "At least one uppercase letter",
+      "number": "At least one number",
+      "special": "At least one special character"
+    },
+    "success": {
+      "verificationSent": "Registration completed ✅. We have sent you a verification email. Check your inbox (and spam folder)."
+    },
+    "errors": {
+      "invalidEmailFormat": "The email format is invalid",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "passwordRequirements": "The password does not meet all requirements",
+      "emailInUse": "This email is already registered",
+      "invalidEmail": "Invalid email",
+      "weakPassword": "Weak password (minimum 6). Keep your 8+ requirements.",
+      "generic": "Error registering the account"
+    }
+  },
+  "support": {
+    "title": "Technical support",
+    "subtitle": "If something is not working as it should, we are here to help.",
+    "text1": {
+      "before": "At",
+      "after": "we work so that technology is a tool, not a problem. This space is designed to solve technical issues quickly, simply, and effectively, so you can continue enjoying the platform without interruptions."
+    },
+    "text2": "⚙️ What kind of issues do we solve? Problems accessing your account, errors in bookings or payments, difficulties accessing courses or content, loading or display issues, and problems when publishing or managing events.",
+    "successMessage": "Your message has been sent successfully.",
+    "loadingSession": "Loading session...",
+    "form": {
+      "subject": "SUBJECT",
+      "message": "MESSAGE",
+      "send": "SEND"
+    },
+    "history": {
+      "title": "Previous messages",
+      "subjectLabel": "Subject:",
+      "messageLabel": "Message:"
+    },
+    "toasts": {
+      "loginRequiredAccess": "You need to log in to access support.",
+      "loginRequiredSend": "You must log in to send a message.",
+      "sentOk": "Message sent successfully ✅",
+      "sendError": "Error sending the message.",
+      "serverError": "Could not connect to the server."
+    }
+  },
+  "profile": {
+    "title": "User profile",
+    "avatarAlt": "Avatar",
+    "chooseAvatar": "Choose avatar",
+    "unsavedChanges": "You have unsaved changes",
+    "labels": {
+      "name": "Name",
+      "username": "Username",
+      "email": "Email address"
+    },
+    "buttons": {
+      "saving": "Saving...",
+      "save": "Save changes",
+      "cancel": "Cancel",
+      "backHome": "← Back to Home"
+    },
+    "toasts": {
+      "loginRequired": "You need to log in to access your profile.",
+      "noChanges": "There are no changes to save",
+      "updated": "Profile updated",
+      "updateError": "Error updating profile",
+      "discarded": "Changes discarded"
+    }
+  },
+  "ayuntamientos": {
+  "titulo": "Town halls",
+  "descripcion": "Discover the municipalities of the Community of Madrid, their history, heritage, nature and featured plans.",
+  "cargando": "Loading town halls...",
+  "sinAyuntamientos": "No town halls available.",
+  "verInformacion": "View information",
+  "verPlanes": "View plans",
+  "ocultarPlanes": "Hide plans",
+  "cargandoPlanes": "Loading plans...",
+  "sinPlanesMunicipio": "No plans available for this municipality.",
+  "verEvento": "View event",
+  "cerrar": "Close",
+  "ubicacion": "Location",
+  "mapaDe": "Map of {{municipio}}",
+  "verGoogleMaps": "View on Google Maps",
+  "campos": {
+    "datosClave": "Key facts",
+    "entornoNatural": "Natural environment",
+    "patrimonioArquitectura": "Heritage and architecture",
+    "turismoHistoriaActividades": "Tourism, history and activities",
+    "vidaLocal": "Local life",
+    "vidaLocalTradiciones": "Local life and traditions",
+    "economiaTurismo": "Economy and tourism"
+  }
+}
+
+
+
+}
