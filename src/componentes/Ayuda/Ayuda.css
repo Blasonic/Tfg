@@ -1,33 +1,80 @@
-/* ===== Estilo base (pantallas grandes por defecto) ===== */
+/* ===========================
+   CONTENEDOR PRINCIPAL
+=========================== */
 
 .ayuda-container {
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 30px 40px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  margin: 0;
+  padding: 40px 24px 50px;
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: none;
+  line-height: 1.7;
+  font-family: inherit;
 }
+
+/* ===========================
+   BLOQUE INTERIOR
+=========================== */
+
+.ayuda-container > .container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ===========================
+   TÍTULO
+=========================== */
 
 .ayuda-container h1 {
   text-align: center;
+  font-size: 2.2rem;
   color: #FF751F;
-  margin-bottom: 40px;
-  font-size: 2.5rem;
+  margin-bottom: 35px;
+  font-weight: 700;
 }
+
+.ayuda-container h1::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 4px;
+  background: #FF751F;
+  margin: 15px auto;
+  border-radius: 5px;
+}
+
+/* ===========================
+   SECCIONES FAQ
+=========================== */
 
 .faq-section {
   margin-bottom: 40px;
 }
 
 .faq-section h2 {
+  font-size: 1.5rem;
   color: #FF751F;
-  font-size: 1.8rem;
+  margin-top: 40px;
   margin-bottom: 15px;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 5px;
+  padding-left: 15px;
+  position: relative;
+  border-bottom: none;
 }
+
+.faq-section h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  height: 22px;
+  width: 4px;
+  background: #FF751F;
+}
+
+/* ===========================
+   LISTA FAQ
+=========================== */
 
 .faq-section ul {
   list-style: none;
@@ -40,61 +87,53 @@
   cursor: pointer;
 }
 
+/* ===========================
+   PREGUNTAS
+=========================== */
+
 .faq-question h3 {
-  color: #FF751F;
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-  padding: 10px;
-  background-color: #f4f4f4;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+  color: black;
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  transition: color 0.3s;
+  font-weight: 700;
 }
 
 .faq-question h3:hover {
-  background-color: #e0e0e0;
+  background: transparent;
+  color: #d95f12;
 }
+
+/* ===========================
+   RESPUESTAS
+=========================== */
 
 .faq-answer {
-  color: #666;
-  font-size: 1.1rem;
-  padding: 10px 15px;
-  background-color: #ffffff;
-  border-radius: 5px;
-  margin-top: 10px;
-  border-left: 3px solid #ccc;
+  color: #333;
+  font-size: 1rem;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  margin-top: 0;
+  border-left: none;
+  text-align: justify;
+  line-height: 1.7;
 }
 
-/* ===== Tablets (481px – 1024px) ===== */
-@media (max-width: 1024px) {
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 768px) {
   .ayuda-container {
-    padding: 25px 30px;
+    padding: 28px 16px 40px;
   }
 
   .ayuda-container h1 {
-    font-size: 2.2rem;
-  }
-
-  .faq-section h2 {
-    font-size: 1.6rem;
-  }
-
-  .faq-question h3,
-  .faq-answer {
-    font-size: 1.05rem;
-  }
-}
-
-/* ===== Móviles (hasta 480px) ===== */
-@media (max-width: 480px) {
-  .ayuda-container {
-    margin: 20px 10px;
-    padding: 20px 15px;
-    border-radius: 8px;
-  }
-
-  .ayuda-container h1 {
-    font-size: 1.8rem;
-    margin-bottom: 25px;
+    font-size: 2rem;
   }
 
   .faq-section h2 {
@@ -104,9 +143,5 @@
   .faq-question h3,
   .faq-answer {
     font-size: 1rem;
-  }
-
-  .faq-answer {
-    padding: 10px;
   }
 }
